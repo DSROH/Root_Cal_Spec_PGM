@@ -581,7 +581,7 @@ def start(
             msgbox.showwarning("ERROR", "옵션을 선택하세요")
             return
 
-    except FileExistsError as e:
+    except Exception as e:
         msgbox.showwarning("ERROR", e)
 
     msgbox.showwarning("Message", "작업 완료")
