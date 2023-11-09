@@ -125,6 +125,11 @@
 #   - 2G Cal 결과 참조해서 index 수정하도록 변경
 #   - Data 저장 시 Max/Min 항목 삭제
 # 
+# - V 1.1.5
+#   - 3G ETSAPT Psat/Power 항목 Min/Max 체크 후 ±3dB 비교해서 더 큰 range Spec 적용하도록 수정
+#   - NR ETSAPT Psat/Pgain 항목 Min/Max 체크 후 Min - Spec, Min + spec을 Spec으로 적용하도록 수정
+#     - ET Psat, Pgain spec 1.5로 tight 하게 변경
+# 
 # 
 # </font>
 # 
@@ -143,7 +148,7 @@ from openpyxl.styles import Alignment, Font
 from ttkbootstrap.constants import *
 
 import Common_function as func
-import LSI_start as L_start
+import LSI_start as Lstart
 
 # %%
 font_style = Font(
@@ -182,7 +187,7 @@ def WB_Format(filename):
     wb.save(filename)
 
 # %%
-Win_GUI = ttkbst.Window(title="S24 Eureka LSI Root Cal Spec PGM V1.1.4", themename="cosmo")
+Win_GUI = ttkbst.Window(title="S24 Eureka LSI Root Cal Spec PGM V1.1.5", themename="cosmo")
 Win_GUI.attributes("-topmost", True)
 Win_GUI.geometry("1425x600")  # py : 1407x560 ipynb : 1635x670
 # Win_GUI.option_add("*Font", "Consolas 10")
@@ -347,7 +352,7 @@ Blue_nr_ch.insert(tk.END, "9410")
 
 Blue_nr_offs = ttkbst.Entry(radio_Btn_frame, justify="right")
 Blue_nr_offs.place(x=323, y=45, width=25, height=25)
-Blue_nr_offs.insert(tk.END, "2")
+Blue_nr_offs.insert(tk.END, "3")
 Blue_label_nroffs = ttkbst.Label(radio_Btn_frame, text="dB", anchor="w")
 Blue_label_nroffs.place(x=348, y=45, width=20, height=25)
 # ? ======================================== Bluetick for 호주향 ========================================
@@ -382,7 +387,7 @@ Cable_Spec_label = ttkbst.Label(cal_spec_frame, text="Cable Check", anchor="e")
 Cable_Spec_label.place(x=10, y=10, width=75, height=25)
 Cable_Spec_var = ttkbst.Entry(cal_spec_frame, justify="right")
 Cable_Spec_var.place(x=90, y=10, width=40, height=25)
-Cable_Spec_var.insert(tk.END, "3")
+Cable_Spec_var.insert(tk.END, "2")
 
 RFIC_Spec_label = ttkbst.Label(cal_spec_frame, text="RFIC_Gain", anchor="e")
 RFIC_Spec_label.place(x=10, y=45, width=75, height=25)
@@ -478,13 +483,13 @@ ET_Psat_label = ttkbst.Label(cal_spec_frame, text="ET_Psat", anchor="e")
 ET_Psat_label.place(x=515, y=10, width=60, height=25)
 ET_Psat_var = ttkbst.Entry(cal_spec_frame, justify="right")
 ET_Psat_var.place(x=580, y=10, width=40, height=25)
-ET_Psat_var.insert(tk.END, "3")
+ET_Psat_var.insert(tk.END, "1.5")
 
 ET_Pgain_label = ttkbst.Label(cal_spec_frame, text="ET_Pgain", anchor="e")
 ET_Pgain_label.place(x=515, y=45, width=60, height=25)
 ET_Pgain_var = ttkbst.Entry(cal_spec_frame, justify="right")
 ET_Pgain_var.place(x=580, y=45, width=40, height=25)
-ET_Pgain_var.insert(tk.END, "3")
+ET_Pgain_var.insert(tk.END, "1.5")
 
 ET_Freq_label = ttkbst.Label(cal_spec_frame, text="ET_Freq", anchor="e")
 ET_Freq_label.place(x=515, y=80, width=60, height=25)
@@ -517,7 +522,7 @@ btn_start = ttkbst.Button(
     text="시작 (F5)",
     command=lambda: [
         threading.Thread(
-            target=L_start.start,
+            target=Lstart.start,
             args=(
                 list_file,
                 Option_var,
@@ -564,7 +569,7 @@ Win_GUI.bind(
     "<F5>",
     lambda event: [
         threading.Thread(
-            target=L_start.start,
+            target=Lstart.start,
             args=(
                 list_file,
                 Option_var,
