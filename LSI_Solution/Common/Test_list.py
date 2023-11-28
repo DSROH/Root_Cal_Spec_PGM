@@ -58,4 +58,4 @@ def get_test_list(Selected_spc):
         else:
             continue
 
-    return Test_List, read_stage, data_lines
+    return Test_List, read_stage
