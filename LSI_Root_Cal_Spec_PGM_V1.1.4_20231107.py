@@ -1,47 +1,47 @@
 # %% [markdown]
 # > # SM-S921B/S926B S24 EUR Auto Cal Spec 변경 PGM
-# 
+#
 
 # %% [markdown]
 # <font size ="2">
-# 
+#
 # === Pamir ===
-# 
+#
 # - V 1
-# 
+#
 #   MIMO/CA Path 추가
-# 
+#
 #   - MAIN_PRX / DRX: 기본 MAIN path
 #   - 4RX_PRX / DRX: 기본 MIMO path
 #   - 6RX : CA / ENDC 조건에서 사용하기 위한 RFIC, LNA 예비 port #1의 MAIN path
 #   - 12RX : CA / ENDC 조건에서 사용하기 위한 RFIC, LNA 예비 port #1의 MIMO path
 #   - 8RX : CA / ENDC 조건에서 사용하기 위한 RFIC, LNA 예비 port #2의 MAIN path
-# 
+#
 #   ***
-# 
+#
 #   ![image.png](attachment:image.png)
-# 
+#
 #   Pamir 8RX 까지 지원 가능
-# 
+#
 #   - 10RX : CA / ENDC 조건에서 사용하기 위한 RFIC, LNA 예비 port #2의 MIMO path
 #   - 10RX : CA / ENDC 조건에서 사용하기 위한 RFIC, LNA 예비 port #3의 MAIN path
 #   - 16RX : CA / ENDC 조건에서 사용하기 위한 RFIC, LNA 예비 port #3의 MIMO path
-# 
+#
 #   ***
-# 
+#
 #   - 2G Cal Spec Only option
 #     - Rx_AGCOffset 항목 추가
 #     - GMSK_Ref_Power, GMSK_Power_TxL, EPSK_Power_TxL 추가
-# 
+#
 # - V 1.1
-# 
+#
 #   - RFIC Gain cal spec 적용
 #   - MTM Calibration log 읽어서 NR/HSPA 따로 Spec 적용
 #   - RX Gainstage 넘버 읽어서 Stage 갯수 설정
 #   - BW Power Cal 구현 완료
 #   - MTM / Daseul Spec 수정 분리/동시 가능하도록 수정
 #   - FBRX LPM 구현 예정
-# 
+#
 # - V 1.2
 #   - RFIC Gain Cal index 가변에 따라 Data 분리 후 개별 처리
 #   - RFIC Gain Cal index 없을 때 keyError -> df.get()으로 Multi-index key 체크 후 있는 경우에만 평균값 반영 or 이전값 - 5
@@ -50,111 +50,111 @@
 #   - TX2 RFIC Gain cal 항목 누락 수정
 #   - MTM RX Default data 진행 시 RFIC Cal cal data 누락 수정
 # - V 1.2.2
-# 
+#
 #   - Data Export 시 Exported_Data Folder 생성 후 저장
 #   - Save Data to Excel 시 Format 변경
-# 
+#
 # - V 1.2.3
 #   - MTM RX Default data 반영 시 호주 블루틱 offset option 추가
-# 
+#
 # === Root ===
-# 
+#
 # - V 1.0.0
-# 
+#
 #   - Sub6 RX Gain stage 갯수 Stage6 고정 -> Parameter read로 수정
 #   - MTM Default cal data 적용 시
 #     - Option check dictionary : SPC 파일 Cal parameter header 읽어서 처리하는 방식에서 CSV 파일 읽어서 생성하는 방식으로 수정
 #     - SPC 파일에는 있지만 CSV 파일에 없는 밴드의 경우
 #       Error 발생 -> Error 없으나, Default update 미동작
-# 
+#
 # - V 1.0.1
-# 
+#
 #   - ET Cal data 없을 경우 return 5개 -> 6개로 수정
 #   - RX Gain stage 7 case 추가
 #   - 16RX Cal 지원
-# 
+#
 # - V 1.0.2
 #   - Retry Cal log drop 후 dataframe 생성 시 column 결측시 drop 처리 (Meas, Code)
 #   - Mixer Cal Path 0 설정 -> 신규 Path 지정 시 오류 수정
 # - V 1.0.3
-# 
+#
 #   - RX Freq offset display name 수정 반영
-# 
+#
 # - V 1.0.4
-# 
+#
 #   - RX Gain Cal 수정전 값을 0 으로 출력하는 문제 수정
-# 
+#
 # - V 1.0.5
-# 
+#
 #   - FBRX Code Spec 분리
 #     - FBRX Gain cal 시 code offset 0 에서 Step size 3dB over
 #     - index 선정 차이로 인한 3dB + Upper Spec 3dB / Lower Spec 3dB 적용 시 총 9dB 발생
 #     - FBRX Power 산포 보다 큰 Code Spec 적용 필요
-# 
+#
 # - V 1.0.6
 #   - EPSK Code 스펙 수정 안되는 문제 수정
 #   - EPSK Code 스펙 적용 시 EPSK 평균값을 참조해야 하나, GMSK 평균값을 참조하는 문제 수정
 # - V 1.0.7
-# 
+#
 #   - Thermistor GPADC 항목 Spec 반영 추가
-# 
+#
 # - V 1.0.8
-# 
+#
 #   - APT Cal Slim화 적용
-# 
+#
 # - V 1.0.9
-# 
+#
 #   - TX2 미지원 모델 동작하도록 수정 (한국향)
-# 
+#
 # - V 1.1.0
-# 
+#
 #   - Root CA1 Freq. Cal 오류 수정 (Pamir 기지원)
 #   - Mixer cal default data 저장 시 Sorting 하지 않고 저장하도록 수정
-# 
+#
 # - V 1.1.1
-# 
+#
 #   - SPC 파일 Cal spec 만 수정 옵션
 #     - 3G FBRX 항목 추가
 #     - APT Spec 조정 시 Target word 중복 출력 수정
 #     - 3G/Sub6 ET_S-APT PSat/Pgain 항목 추가
 #     - Sub6 ET_S-APT Freq Pwr index 항목 추가
 #     - Sub6 ET_S-APT Pwr index 항목 추가
-# 
+#
 # - V 1.1.2
-# 
+#
 #   - 3G FBRX Spec 적용 시 ±200 offset 추가 적용
 #   - Daseul log 중 MSTS Message로 index 밀림 -> MSTS관련 Message Drop 하도록 수정
-# 
+#
 # - V 1.1.3
-# 
+#
 #   - MSTS 관련 index 밀림으로 Meas data 수집구간 변경
-# 
+#
 # - V 1.1.4
-# 
+#
 #   - 3G TxP Channel Comp Spec 항목 추가
 #   - 2G Cal 결과 참조해서 index 수정하도록 변경
 #   - Data 저장 시 Max/Min 항목 삭제
-# 
+#
 # - V 1.1.5
-# 
+#
 #   - 3G ETSAPT Psat/Power 항목 Min/Max 체크 후 ±3dB 비교해서 더 큰 range Spec 적용하도록 수정
 #   - NR ETSAPT Psat/Pgain 항목 Min/Max 체크 후 Min - Spec, Min + spec을 Spec으로 적용하도록 수정
 #     - ET Psat, Pgain spec 1.5로 tight 하게 변경
-# 
+#
 # - V 1.1.6
 #   - Sub6 RX Gain 10RX, 12RX, 14RX, 16RX 지원 추가
 #   - Sub6 RSRP Offset Main DRX, 4RX PRX/DRX, 6RX PRX/DRX, 8RX PRX/DRX, 10RX PRX/DRX, 12RX PRX/DRX, 14RX PRX/DRX, 16RX PRX/DRX 추가
 #   - Sub6 FREQ Offset Main DRX, 4RX PRX/DRX, 6RX PRX/DRX, 8RX PRX/DRX, 10RX PRX/DRX 추가
 #   - 저장 Directory Program 경로 -> Daseul cal log 경로 변경
-# 
+#
 # - V 1.1.7
 #   - Daseul Get_Data Option 추가
-#   
+#
 # - V 1.1.8
 #   - DC Cal & IIP2 Cal Data 저장
-#   
+#
 # </font>
-# 
+#
 
 # %%
 import glob
@@ -185,6 +185,7 @@ font_style = Font(
     color="00000000",  # 블랙, # 00FF0000 Red, # 000000FF Blue
 )
 
+
 # %%
 def Common_save_Excel(filename, tab1, tab2):
     # Save Data to Excel
@@ -208,6 +209,7 @@ def WB_Format(filename):
                 wb[sheet].cell(row=i, column=j).number_format = "#,##0.0"
                 # wb[sheet].cell(row=i, column=j).number_format = builtin_format_code(2)
     wb.save(filename)
+
 
 # %%
 Win_GUI = ttkbst.Window(title="S24 Eureka LSI Root Cal Spec PGM V1.1.8", themename="cosmo")
@@ -337,6 +339,7 @@ btn_Option2.invoke()
 btn_Option3 = ttkbst.Radiobutton(radio_Btn_frame, text="MTM Default Cal Data", value=3, variable=Option_var)
 btn_Option3.place(x=230, y=10, width=140, height=25)
 
+# ! Get Data option을 4로 처리해서 get_data 리턴이 없도록 한다.
 Get_Data_btn = ttkbst.Button(
     radio_Btn_frame,
     text="Get_data\n    (F8)",
@@ -344,7 +347,7 @@ Get_Data_btn = ttkbst.Button(
         get_data_var.set(True),
         threading.Thread(
             target=Lget.get_data,
-            args=(list_file, Select_op, Save_data_var, debug_var, raw_data_var, get_data_var, text_area),
+            args=(list_file, Select_op, 4, Save_data_var, debug_var, raw_data_var, get_data_var, text_area),
         ).start(),
     ],
 )
@@ -356,7 +359,7 @@ Win_GUI.bind(
         get_data_var.set(True),
         threading.Thread(
             target=Lget.get_data,
-            args=(list_file, Select_op, Save_data_var, debug_var, raw_data_var, get_data_var, text_area),
+            args=(list_file, Select_op, 4, Save_data_var, debug_var, raw_data_var, get_data_var, text_area),
         ).start(),
     ],
 )
@@ -673,5 +676,3 @@ Win_GUI.bind(
 
 Win_GUI.resizable(False, False)
 Win_GUI.mainloop()
-
-
