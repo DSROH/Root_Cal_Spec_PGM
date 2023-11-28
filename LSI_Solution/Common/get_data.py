@@ -268,64 +268,9 @@ def get_data(list_file, Select_op, Selected_Option, Save_data_var, debug_var, ra
         # ! Plotly
         # Ldraw.Drawing_dc_cal(DC_Cal_Mean)
 
-        if get_data_var.get() & (Selected_Option == 2):
-            return (
-                CableCheck,
-                RFIC_gain,
-                TxP_Channel_comp_ave,
-                FBRX_Gain_Meas_3G,
-                FBRX_Gain_Meas_sub6,
-                FBRX_Gain_Code_3G,
-                FBRX_Gain_Code_sub6,
-                FBRX_Freq_Meas_3G,
-                FBRX_Freq_Meas_3G_Max,
-                FBRX_Freq_Meas_3G_Min,
-                FBRX_Freq_Meas_sub6,
-                FBRX_Freq_Meas_sub6_Max,
-                FBRX_Freq_Meas_sub6_Min,
-                FBRX_Freq_Code_sub6,
-                FBRX_Freq_Code_sub6_Max,
-                FBRX_Freq_Code_sub6_Min,
-                PRX_Gain_2G,
-                Ripple_2G,
-                RXGain_3G,
-                RXComp_3G,
-                RXGain_sub6,
-                RXRSRP_sub6,
-                RXComp_sub6,
-                GMSK_Mean,
-                GMSK_TXL_Mean,
-                GMSK_Code_Mean,
-                EPSK_Mean,
-                EPSK_TXL_Mean,
-                EPSK_Code_Mean,
-                ETSAPT_3G_Psat_Ave,
-                ETSAPT_3G_Psat_Max,
-                ETSAPT_3G_Psat_Min,
-                ETSAPT_3G_Power_Ave,
-                ETSAPT_3G_Power_Max,
-                ETSAPT_3G_Power_Min,
-                thermistor,
-                APT_3G_Ave,
-                APT_Sub6_Ave,
-                APT_Sub6_Max,
-                APT_Sub6_Min,
-                ETSAPT_sub6_Psat_Ave,
-                ETSAPT_sub6_Psat_Max,
-                ETSAPT_sub6_Psat_Min,
-                ETSAPT_sub6_Freq_Ave,
-                ETSAPT_sub6_Freq_Max,
-                ETSAPT_sub6_Freq_Min,
-                ETSAPT_sub6_Pgain_Ave,
-                ETSAPT_sub6_Pgain_Max,
-                ETSAPT_sub6_Pgain_Min,
-                ETSAPT_sub6_Power_Ave,
-                ETSAPT_sub6_Power_Max,
-                ETSAPT_sub6_Power_Min,
-                BW_Cal,
-            )
-        elif get_data_var.get():
+        if get_data_var.get() & (Selected_Option == 4):
             msgbox.showwarning("Message", "작업 완료")
+            get_data_var.set(False)
         else:
             return (
                 CableCheck,
