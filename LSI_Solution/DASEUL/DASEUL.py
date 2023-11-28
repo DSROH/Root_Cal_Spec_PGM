@@ -21,6 +21,7 @@ def daseul(
     debug_var,
     raw_data_var,
     get_data_var,
+    Selected_Option,
     Selected_spc,
     Cable_Spec_var,
     RX_Gain_Spec_var,
@@ -44,7 +45,7 @@ def daseul(
     ECode_Spec_var,
     text_area,
 ):
-    Test_List, read_stage, data_lines = Ltestlist.get_test_list(Selected_spc)
+    Test_List, read_stage = Ltestlist.get_test_list(Selected_spc)
 
     (
         CableCheck,
@@ -100,7 +101,7 @@ def daseul(
         ETSAPT_sub6_Power_Max,
         ETSAPT_sub6_Power_Min,
         BW_Cal,
-    ) = Lget.get_data(list_file, Select_op, Save_data_var, debug_var, raw_data_var, get_data_var, text_area)
+    ) = Lget.get_data(list_file, Select_op, Selected_Option, Save_data_var, debug_var, raw_data_var, get_data_var, text_area)
 
     # Average data save 전에 chdir 실행
 
