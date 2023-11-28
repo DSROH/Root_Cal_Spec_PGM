@@ -67,7 +67,7 @@ def start(
                     return
 
         if daseul_select.get():
-            Test_List, read_stage, data_lines = Ltestlist.get_test_list(Selected_spc)
+            Test_List, read_stage = Ltestlist.get_test_list(Selected_spc)
 
         # ! Spec only
         if daseul_select.get() & (Selected_Option == 1):
@@ -109,9 +109,8 @@ def start(
                 debug_var,
                 raw_data_var,
                 get_data_var,
+                Selected_Option,
                 Selected_spc,
-                data_lines,
-                read_stage,
                 Cable_Spec_var,
                 RX_Gain_Spec_var,
                 FBRX_Meas_var,
