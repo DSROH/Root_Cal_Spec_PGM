@@ -212,10 +212,25 @@ def initialize_cf(df_TXDC, df_IIP2, df_Cable):
     # 페이지 레이아웃을 초기화합니다.
     layout = html.Div(
         [
-            dbc.Row([dbc.Col(drop_TXDC_rat), dbc.Col(drop_TXDC_band)]),
+            dbc.Row(
+                [
+                    dbc.Col(html.H2("TXDC Cal", className="display-7"), width=4),
+                    dbc.Col(drop_TXDC_rat, width=4),
+                    dbc.Col(drop_TXDC_band, width=4),
+                ],
+            ),
+            html.Br(),
             dbc.Row([dbc.Col(dcc.Graph(id="TXDC_grp_Scatt")), dbc.Col(dcc.Graph(id="TXDC_grp_Histo"))]),
             dbc.Row([dbc.Col(create_range_slider("sld_TXDC_scat", df_TXDC, use_min_max=False))]),
-            dbc.Row([dbc.Col(drop_IIP2_rat), dbc.Col(drop_IIP2_band)]),
+            html.Hr(),
+            dbc.Row(
+                [
+                    dbc.Col(html.H2("IIP2 Cal", className="display-7"), width=4),
+                    dbc.Col(drop_IIP2_rat),
+                    dbc.Col(drop_IIP2_band),
+                ]
+            ),
+            html.Br(),
             dbc.Row([dbc.Col(dcc.Graph(id="IIP2_grp_Scatt")), dbc.Col(dcc.Graph(id="IIP2_grp_Histo"))]),
             dbc.Row([dbc.Col(create_range_slider("sld_IIP2_scat", df_IIP2, use_min_max=False))]),
         ]
