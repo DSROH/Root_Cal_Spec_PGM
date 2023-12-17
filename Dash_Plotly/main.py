@@ -32,9 +32,4 @@ if __name__ == "__main__":
         df_fbrxfm_NR,
         df_fbrxfc_NR,
     )
-    app.run()  # 데이터프레임은 여기서 사용하지 않습니다.
-
-    # pg1.py 파일에 데이터프레임 전달
-    layout_cf = initialize_cf(df_TXDC, df_IIP2, df_Cable)
-    layout_3g = initialize_3g(df_3GTXCP, df_fbrxgm_3G, df_fbrxgc_3G, df_fbrxfm_3G)
-    layout_nr = initialize_nr(df_fbrxgm_NR, df_fbrxgc_NR, df_fbrxfm_NR, df_fbrxfc_NR)
+    app.run()
