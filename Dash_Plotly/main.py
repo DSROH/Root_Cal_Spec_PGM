@@ -1,8 +1,8 @@
 import pandas as pd
-from dash_app import MultiPageApp
-from pages.page_CF import initialize_cf
-from pages.page_3G import initialize_3g
-from pages.page_NR import initialize_nr
+from Dash_Plotly.pages.dash_app import MultiPageApp
+from pages.page_cf import initialize_cf
+from pages.page_3g import initialize_3g
+from pages.page_nr import initialize_nr
 
 # from pages.page_2G import initialize_2g
 
