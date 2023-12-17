@@ -17,10 +17,25 @@ def initialize_3g(df_3GTXCP, df_fbrxgm_3G, df_fbrxgc_3G, df_fbrxfm_3G):
 
     layout = html.Div(
         [
-            dbc.Row([dbc.Col(drop_3GTXCP_rat), dbc.Col(drop_3GTXCP_band)]),
+            dbc.Row(
+                [
+                    dbc.Col(html.H2("3G TX Channel Components", className="display-7")),
+                    dbc.Col(drop_3GTXCP_rat, width=4),
+                    dbc.Col(drop_3GTXCP_band, width=4),
+                ],
+            ),
+            html.Br(),
             dbc.Row([dbc.Col(dcc.Graph(id="3GTXCP_grp_scatt")), dbc.Col(dcc.Graph(id="3GTXCP_grp_histo"))]),
             dbc.Row([dbc.Col(create_range_slider("sld_3GTXCP_scat", df_3GTXCP, use_min_max=False))]),
-            dbc.Row([dbc.Col(drop_3GFBRXGain_rat), dbc.Col(drop_3GFBRXGain_band)]),
+            html.Hr(),
+            dbc.Row(
+                [
+                    dbc.Col(html.H2("3G FBRX Gain Cal", className="display-7")),
+                    dbc.Col(drop_3GFBRXGain_rat, width=4),
+                    dbc.Col(drop_3GFBRXGain_band, width=4),
+                ],
+            ),
+            html.Br(),
             dbc.Row(
                 [
                     dbc.Col(dcc.Graph(id="3GFBRX_GM_grp_scatt")),
@@ -35,9 +50,18 @@ def initialize_3g(df_3GTXCP, df_fbrxgm_3G, df_fbrxgc_3G, df_fbrxfm_3G):
                     dbc.Col(create_range_slider("sld_3GFBRX_GC_scat", df_fbrxgc_3G, use_min_max=False)),
                 ],
             ),
-            dbc.Row([dbc.Col(drop_3GFBRXFreq_rat), dbc.Col(drop_3GFBRXFreq_band)]),
+            html.Hr(),
+            dbc.Row(
+                [
+                    dbc.Col(html.H2("3G FBRX Gain Cal", className="display-7")),
+                    dbc.Col(drop_3GFBRXFreq_rat, width=4),
+                    dbc.Col(drop_3GFBRXFreq_band, width=4),
+                ],
+            ),
+            html.Br(),
             dbc.Row([dbc.Col(dcc.Graph(id="3GFBRX_FM_grp_scatt")), dbc.Col(dcc.Graph(id="3GFBRX_FM_grp_histo"))]),
             dbc.Row([dbc.Col(create_range_slider("sld_3GFBRX_FM_scat", df_fbrxfm_3G, use_min_max=False))]),
+            html.Hr(),
         ]
     )
 
