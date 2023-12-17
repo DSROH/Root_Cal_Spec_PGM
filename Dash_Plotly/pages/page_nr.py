@@ -15,7 +15,13 @@ def initialize_nr(df_fbrxgm_NR, df_fbrxgc_NR, df_fbrxfm_NR, df_fbrxfc_NR):
 
     layout = html.Div(
         [
-            dbc.Row([dbc.Col(drop_NRFBRXGain_rat), dbc.Col(drop_NRFBRXGain_band)]),
+            dbc.Row(
+                [
+                    dbc.Col(html.H2("Sub6 FBRX Gain Cal", className="display-7")),
+                    dbc.Col(drop_NRFBRXGain_rat),
+                    dbc.Col(drop_NRFBRXGain_band),
+                ]
+            ),
             dbc.Row(
                 [
                     dbc.Col(dcc.Graph(id="NRFBRX_GM_grp_scatt")),
@@ -26,11 +32,18 @@ def initialize_nr(df_fbrxgm_NR, df_fbrxgc_NR, df_fbrxfm_NR, df_fbrxfc_NR):
             ),
             dbc.Row(
                 [
-                    create_range_slider("sld_NRFBRX_GM_scat", df_fbrxgm_NR, use_min_max=False),
-                    create_range_slider("sld_NRFBRX_GC_scat", df_fbrxgc_NR, use_min_max=False),
+                    dbc.Col(create_range_slider("sld_NRFBRX_GM_scat", df_fbrxgm_NR, use_min_max=False)),
+                    dbc.Col(create_range_slider("sld_NRFBRX_GC_scat", df_fbrxgc_NR, use_min_max=False)),
                 ],
             ),
-            dbc.Row([dbc.Col(drop_NRFBRXFreq_rat), dbc.Col(drop_NRFBRXFreq_band)]),
+            html.Hr(),
+            dbc.Row(
+                [
+                    dbc.Col(html.H2("Sub6 FBRX Freq Cal", className="display-7")),
+                    dbc.Col(drop_NRFBRXFreq_rat),
+                    dbc.Col(drop_NRFBRXFreq_band),
+                ]
+            ),
             dbc.Row(
                 [
                     dbc.Col(dcc.Graph(id="NRFBRX_FM_grp_scatt")),
@@ -41,8 +54,8 @@ def initialize_nr(df_fbrxgm_NR, df_fbrxgc_NR, df_fbrxfm_NR, df_fbrxfc_NR):
             ),
             dbc.Row(
                 [
-                    create_range_slider("sld_NRFBRX_FM_scat", df_fbrxfm_NR, use_min_max=False),
-                    create_range_slider("sld_NRFBRX_FC_scat", df_fbrxfc_NR, use_min_max=False),
+                    dbc.Col(create_range_slider("sld_NRFBRX_FM_scat", df_fbrxfm_NR, use_min_max=False)),
+                    dbc.Col(create_range_slider("sld_NRFBRX_FC_scat", df_fbrxfc_NR, use_min_max=False)),
                 ],
             ),
         ]
@@ -67,7 +80,7 @@ def initialize_nr(df_fbrxgm_NR, df_fbrxgc_NR, df_fbrxfm_NR, df_fbrxfc_NR):
             Input("sld_NRFBRX_FC_scat", "value"),
         ],
     )
-    def update_FBRXGain(Sel_rat, Sel_band, scatt_range1,scatt_range2):
+    def update_FBRXGain(Sel_rat, Sel_band, scatt_range1, scatt_range2):
         band_opt, scatter_fig1, histogram_fig1 = update_band_and_graph(df_fbrxgm_NR, Sel_rat, Sel_band, scatt_range1)
         band_opt, scatter_fig2, histogram_fig2 = update_band_and_graph(df_fbrxgc_NR, Sel_rat, Sel_band, scatt_range2)
         return band_opt, scatter_fig1, histogram_fig1, scatter_fig2, histogram_fig2
