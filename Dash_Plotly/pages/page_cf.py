@@ -1,7 +1,7 @@
 import dash
-from dash import dcc, html, callback, Output, Input
 import plotly.graph_objects as go
 import dash_bootstrap_components as dbc
+from dash import dcc, html, callback, Output, Input
 
 
 def Trans_dataframe(df):
@@ -28,6 +28,7 @@ def Trans_dataframe(df):
             "CH",
             "Index",
             "index",
+            "PA Stage",
             "FBRX",
             "BW",
             "Item",
@@ -63,8 +64,8 @@ def create_dropdown(drop_id, default_value, options):
             "marginRight": "10px",
             "display": "inline-block",
         },
-        optionHeight=30,
-        maxHeight=300,
+        # optionHeight=30,
+        # maxHeight=300,
     )
 
 
@@ -184,11 +185,14 @@ def update_band_and_graph(df, Sel_rat, Sel_band, scatt_range):
         )
         histogram_fig.update_layout(title="Histogram", barmode="overlay")
         value = df_Transposed.values
-        Cpk = min(
-            ((value.max() - value.mean()) / (3 * value.std())), ((value.mean() - value.min()) / (3 * value.std()))
-        )
-        lsl = round(value.mean() - (12 * value.std() * Cpk))
-        usl = round(value.mean() + (12 * value.std() * Cpk))
+
+        if (value.mean() == value.min()) or (value.max() == value.mean()):
+            lsl = round(value.mean() - (12 * value.std()))
+            usl = round(value.mean() + (12 * value.std()))
+        else:
+            Cpk = min(((value.max() - value.mean()) / (3 * value.std())), ((value.mean() - value.min()) / (3 * value.std())))
+            lsl = round(value.mean() - (12 * value.std() * Cpk))
+            usl = round(value.mean() + (12 * value.std() * Cpk))
 
         update_axes(scatter_fig, scatt_range, None)
         update_axes(histogram_fig, [lsl, usl], None)
@@ -205,37 +209,85 @@ def initialize_cf(df_TXDC, df_IIP2, df_Cable):
     # create_dropdown 메서드를 사용하여 드롭다운 생성
     drop_TXDC_rat = create_dropdown("TXDC_RAT", "B", rat_options)
     drop_IIP2_rat = create_dropdown("IIP2_RAT", "n", [{"label": "NR", "value": "n"}])
+    drop_Cable_rat = create_dropdown("Cable_RAT", "n", [{"label": "NR", "value": "n"}])
 
     drop_TXDC_band = create_dropdown("TXDC_band", "", band_opt)
     drop_IIP2_band = create_dropdown("IIP2_band", "", band_opt)
+    drop_Cable_band = create_dropdown("Cable_band", "", band_opt)
 
     # 페이지 레이아웃을 초기화합니다.
     layout = html.Div(
         [
+            # ! TXDC Cal
             dbc.Row(
                 [
-                    dbc.Col(html.H2("TXDC Cal", className="display-7"), width=4),
-                    dbc.Col(drop_TXDC_rat, width=4),
-                    dbc.Col(drop_TXDC_band, width=4),
+                    dbc.Col(html.H2("TXDC Cal", className="display-7"), width="auto"),
+                    dbc.Col(drop_TXDC_rat, width=1),
+                    dbc.Col(drop_TXDC_band, width=1),
                 ],
+                align="center",
             ),
             html.Br(),
-            dbc.Row([dbc.Col(dcc.Graph(id="TXDC_grp_Scatt")), dbc.Col(dcc.Graph(id="TXDC_grp_Histo"))]),
-            dbc.Row([dbc.Col(create_range_slider("sld_TXDC_scat", df_TXDC, use_min_max=False))]),
-            html.Hr(),
             dbc.Row(
                 [
-                    dbc.Col(html.H2("IIP2 Cal", className="display-7"), width=4),
-                    dbc.Col(drop_IIP2_rat),
-                    dbc.Col(drop_IIP2_band),
-                ]
+                    dbc.Col(dcc.Graph(id="TXDC_grp_Scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="TXDC_grp_Histo"), width={"size": 6, "offset": 0}),
+                ],
+                align="center",
+            ),
+            dbc.Row(
+                [dbc.Col(create_range_slider("sld_TXDC_scat", df_TXDC, use_min_max=False), width={"size": 6, "offset": 0})],
+                align="center",
+            ),
+            html.Hr(),
+            # ! IIP2 Cal
+            dbc.Row(
+                [
+                    dbc.Col(html.H2("IIP2 Cal", className="display-7"), width="auto"),
+                    dbc.Col(drop_IIP2_rat, width=1),
+                    dbc.Col(drop_IIP2_band, width=1),
+                ],
+                align="center",
             ),
             html.Br(),
-            dbc.Row([dbc.Col(dcc.Graph(id="IIP2_grp_Scatt")), dbc.Col(dcc.Graph(id="IIP2_grp_Histo"))]),
-            dbc.Row([dbc.Col(create_range_slider("sld_IIP2_scat", df_IIP2, use_min_max=False))]),
+            dbc.Row(
+                [
+                    dbc.Col(dcc.Graph(id="IIP2_grp_Scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="IIP2_grp_Histo"), width={"size": 6, "offset": 0}),
+                ],
+                align="center",
+            ),
+            dbc.Row(
+                [dbc.Col(create_range_slider("sld_IIP2_scat", df_IIP2, use_min_max=False), width={"size": 6, "offset": 0})],
+                align="center",
+            ),
+            html.Hr(),
+            # ! Cable Check
+            dbc.Row(
+                [
+                    dbc.Col(html.H2("RF Cable Check", className="display-7"), width="auto"),
+                    dbc.Col(drop_Cable_rat, width=1),
+                    dbc.Col(drop_Cable_band, width=1),
+                ],
+                align="center",
+            ),
+            html.Br(),
+            dbc.Row(
+                [
+                    dbc.Col(dcc.Graph(id="Cable_grp_Scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="Cable_grp_Histo"), width={"size": 6, "offset": 0}),
+                ],
+                align="center",
+            ),
+            dbc.Row(
+                [dbc.Col(create_range_slider("sld_IIP2_scat", df_Cable, use_min_max=False), width={"size": 6, "offset": 0})],
+                align="center",
+            ),
+            html.Hr(),
         ]
     )
 
+    # ! TXDC Cal
     @callback(Output("TXDC_band", "value"), Input("TXDC_RAT", "value"))
     def TXDC_band(Sel_rat):
         return Initialize_band(Sel_rat, df_TXDC)
@@ -248,6 +300,7 @@ def initialize_cf(df_TXDC, df_IIP2, df_Cable):
         band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_TXDC, Sel_rat, Sel_band, scatt_range)
         return band_opt, scatter_fig, histogram_fig
 
+    # ! TXDC Cal
     @callback(Output("IIP2_band", "value"), Input("IIP2_RAT", "value"))
     def IIP2_band(Sel_rat):
         return Initialize_band(Sel_rat, df_IIP2)
@@ -260,14 +313,20 @@ def initialize_cf(df_TXDC, df_IIP2, df_Cable):
         band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_IIP2, Sel_rat, Sel_band, scatt_range)
         return band_opt, scatter_fig, histogram_fig
 
-    # 페이지 등록
-    dash.register_page(
-        __name__,
-        path="/",  # 페이지 경로
-        name="Common Func",  # 페이지 이름
-        title="Common Func",  # 페이지 타이틀
-        description="Description of Common Function Page",
-        layout=layout,  # 초기화한 레이아웃 등록
-    )
+    # ! RF Cable Check
+    @callback(Output("Cable_band", "value"), Input("Cable_RAT", "value"))
+    def Cable_band(Sel_rat):
+        return Initialize_band(Sel_rat, df_Cable)
 
-    return layout  # 이 레이아웃을 반환하여 페이지를 초기화합니다.
+    @callback(
+        [Output("Cable_band", "options"), Output("Cable_grp_Scatt", "figure"), Output("Cable_grp_Histo", "figure")],
+        [Input("Cable_RAT", "value"), Input("Cable_band", "value"), Input("sld_IIP2_scat", "value")],
+    )
+    def update_Cable(Sel_rat, Sel_band, scatt_range):
+        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_Cable, Sel_rat, Sel_band, scatt_range)
+        return band_opt, scatter_fig, histogram_fig
+
+    # 페이지 등록
+    dash.register_page(__name__, path="/", name="Common Func", title="Common Func", layout=layout)
+
+    return layout
