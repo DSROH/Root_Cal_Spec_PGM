@@ -4,7 +4,10 @@ from dash import dcc, html, callback, Output, Input
 from LSI_Solution.pages.page_cf import create_dropdown, create_range_slider, Initialize_band, update_band_and_graph
 
 
-def initialize_2g(df_PRX_Gain_2G, df_Ripple_2G):
+def initialize_2g(dict_2g):
+    df_PRX_Gain_2G = dict_2g["RXGain"]
+    df_Ripple_2G = dict_2g["RXRipp"]
+
     band_opt = [{"label": "", "value": ""}]
 
     drop_2GRXGain_rat = create_dropdown("2GRXGain_RAT", "G", [{"label": "2G", "value": "G"}])
