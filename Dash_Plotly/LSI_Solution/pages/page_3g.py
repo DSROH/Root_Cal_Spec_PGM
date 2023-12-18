@@ -4,18 +4,18 @@ from dash import dcc, html, callback, Output, Input
 from LSI_Solution.pages.page_cf import create_dropdown, create_range_slider, Initialize_band, update_band_and_graph
 
 
-def initialize_3g(
-    df_3GTXCP,
-    df_fbrxgm_3G,
-    df_fbrxgc_3G,
-    df_fbrxfm_3G,
-    df_fbrxfm_3G_ch,
-    df_RXGain_3G,
-    df_RXComp_3G,
-    df_APT_Meas_3G,
-    df_3G_ETSAPT_Pst,
-    df_3G_ETSAPT_Power,
-):
+def initialize_3g(dict_3g):
+    df_3GTXCP = dict_3g["TxP_CC"]
+    df_RXGain_3G = dict_3g["RX_Gain"]
+    df_RXComp_3G = dict_3g["RX_Comp"]
+    df_fbrxgm_3G = dict_3g["FBRX_GM"]
+    df_fbrxgc_3G = dict_3g["FBRX_GC"]
+    df_fbrxfm_3G = dict_3g["FBRX_FM"]
+    df_fbrxfm_3G_ch = dict_3g["FBRX_FM_Ch"]
+    df_APT_Meas_3G = dict_3g["APT_Meas"]
+    df_3G_ETSAPT_Pst = dict_3g["ET_Psat"]
+    df_3G_ETSAPT_Power = dict_3g["ET_Pgain"]
+
     band_opt = [{"label": "", "value": ""}]
 
     drop_TXCP_rat = create_dropdown("3G_TXCP_RAT", "B", [{"label": "3G", "value": "B"}])
@@ -58,7 +58,12 @@ def initialize_3g(
                 align="center",
             ),
             dbc.Row(
-                [dbc.Col(create_range_slider("sld_3GTXCP_scat", df_3GTXCP, use_min_max=False), width={"size": 6, "offset": 0})],
+                [
+                    dbc.Col(
+                        create_range_slider("sld_3GTXCP_scat", df_3GTXCP, use_min_max=False),
+                        width={"size": 6, "offset": 0},
+                    )
+                ],
                 align="center",
             ),
             html.Hr(),
@@ -448,7 +453,9 @@ def initialize_3g(
         [Input("3G_ETPower_RAT", "value"), Input("3G_ETPower_band", "value"), Input("sld_3GETPower_scat", "value")],
     )
     def update_ETPower(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_3G_ETSAPT_Power, Sel_rat, Sel_band, scatt_range)
+        band_opt, scatter_fig, histogram_fig = update_band_and_graph(
+            df_3G_ETSAPT_Power, Sel_rat, Sel_band, scatt_range
+        )
         return band_opt, scatter_fig, histogram_fig
 
     dash.register_page(__name__, path="/WCDMA", name="WCDMA", title="WCDMA", layout=layout)
