@@ -5,15 +5,11 @@ from dash import dcc, html, callback, Output, Input
 
 
 def Trans_dataframe(df):
-    # nan 값을 포함한 행 제거
-    # 인덱스 제거
     df = df.reset_index(drop=True).dropna(axis=1)
 
-    # 컬럼 이름 생성
     col_name = [f"{a}_{b}_{c}_{d}" for a, b, c, d in df.iloc[:, :4].astype(str).values]
     col_name = [c.strip() for c in col_name]
 
-    # 필요한 컬럼 선택
     cols_to_keep = [
         c
         for c in df.columns
