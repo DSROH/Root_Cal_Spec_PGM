@@ -9,9 +9,16 @@ from LSI_Solution.pages.page_nr import initialize_nr
 
 
 def MultiPageApp(dict_cf, dict_2g, dict_3g, dict_nr):
+
+    print(os.getcwd())
     # app = dash.Dash(__name__, use_pages=True, pages_folder=pages_folder, external_stylesheets=[dbc.themes.COSMO])
-    app = dash.Dash(__name__, use_pages=True, pages_folder="", external_stylesheets=[dbc.themes.COSMO])
+    # app = dash.Dash(__name__, use_pages=True, pages_folder="LSI_Solution/pages", external_stylesheets=[dbc.themes.COSMO])
     # app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.COSMO])
+    # app = dash.Dash(__name__, use_pages=True, pages_folder="/Users/dsroh/Python/Multipage_dash/LSI_Solution/pages", external_stylesheets=[dbc.themes.COSMO])
+
+    current_directory = os.path.dirname(__file__)  # 현재 파일의 디렉토리 경로
+    app = dash.Dash(__name__, use_pages=True, pages_folder=current_directory, external_stylesheets=[dbc.themes.COSMO])
+
 
     initialize_cf(dict_cf)
     initialize_2g(dict_2g)
