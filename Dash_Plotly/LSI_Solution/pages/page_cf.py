@@ -202,7 +202,11 @@ def update_band_and_graph(df, Sel_rat, Sel_band, scatt_range):
         return band_opt_out, go.Figure(data=[]), go.Figure(data=[])
 
 
-def initialize_cf(df_TXDC, df_IIP2, df_Cable):
+def initialize_cf(dict_cf):
+    df_TXDC = dict_cf["TXDC"]
+    df_IIP2 = dict_cf["IIP2"]
+    df_Cable = dict_cf["Cable"]
+
     rat_options = [{"label": "3G", "value": "B"}, {"label": "2G", "value": "GSM"}, {"label": "NR", "value": "n"}]
     band_opt = [{"label": "", "value": ""}]
 
