@@ -4,21 +4,21 @@ from dash import dcc, html, callback, Output, Input
 from LSI_Solution.pages.page_cf import create_dropdown, create_range_slider, Initialize_band, update_band_and_graph
 
 
-def initialize_nr(
-    df_fbrxgm_NR,
-    df_fbrxgc_NR,
-    df_fbrxfm_NR,
-    df_fbrxfc_NR,
-    df_RXGain_sub6,
-    df_RXRSRP_sub6,
-    df_RXComp_sub6,
-    df_RXMixer_sub6,
-    df_APT_Meas_sub6,
-    df_ETSAPT_Psat,
-    df_ETSAPT_Pgain,
-    df_ETSAPT_Power,
-    df_ETSAPT_Freq,
-):
+def initialize_nr(dict_nr):
+    df_RXGain_sub6 = dict_nr["RX_Gain"]
+    df_RXRSRP_sub6 = dict_nr["RX_RSRP"]
+    df_RXComp_sub6 = dict_nr["RX_Comp"]
+    df_RXMixer_sub6 = dict_nr["RX_Mix"]
+    df_fbrxgm_NR = dict_nr["FBRX_GM"]
+    df_fbrxgc_NR = dict_nr["FBRX_GC"]
+    df_fbrxfm_NR = dict_nr["FBRX_FM"]
+    df_fbrxfc_NR = dict_nr["FBRX_FC"]
+    df_APT_Meas_sub6 = dict_nr["APT_Meas"]
+    df_ETSAPT_Psat = dict_nr["ET_Psat"]
+    df_ETSAPT_Pgain = dict_nr["ET_Pgain"]
+    df_ETSAPT_Power = dict_nr["ET_Power"]
+    df_ETSAPT_Freq = dict_nr["ET_Freq"]
+
     band_opt = [{"label": "", "value": ""}]
 
     drop_NRFBRXGain_rat = create_dropdown("NR_FBRXGain_RAT", "n", [{"label": "NR", "value": "n"}])
