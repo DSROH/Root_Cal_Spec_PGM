@@ -1,10 +1,6 @@
 import pandas as pd
 from Dash_Plotly.pages.dash_app import MultiPageApp
-from pages.page_cf import initialize_cf
-from pages.page_3g import initialize_3g
-from pages.page_nr import initialize_nr
 
-# from pages.page_2G import initialize_2g
 
 df_TXDC = pd.read_csv("Excel_DC_IIP2_Cal.csv")
 df_IIP2 = pd.read_csv("Excel_DC_IIP2_Cal.csv")
