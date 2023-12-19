@@ -7,17 +7,40 @@ from LSI_Solution.pages.page_cf import create_dropdown, create_range_slider, Ini
 def initialize_2g(dict_2g):
     df_PRX_Gain_2G = dict_2g["RXGain"]
     df_Ripple_2G = dict_2g["RXRipp"]
+    df_GMSK_Mean = dict_2g["GMSK"]
+    df_GMSK_TxL_Mean = dict_2g["GMSK_TxL"]
+    df_GMSK_Code_Mean = dict_2g["GMSK_Code"]
+    df_EPSK_Mean = dict_2g["EPSK"]
+    df_EPSK_TxL_Mean = dict_2g["EPSK_TxL"]
+    df_EPSK_Code_Mean = dict_2g["EPSK_Code"]
 
     band_opt = [{"label": "", "value": ""}]
 
-    drop_2GRXGain_rat = create_dropdown("2GRXGain_RAT", "G", [{"label": "2G", "value": "G"}])
-    drop_2GRXRipp_rat = create_dropdown("2GRXRipp_RAT", "G", [{"label": "2G", "value": "G"}])
+    drop_2GRXGain_rat = create_dropdown("2G_RXGain_RAT", "G", [{"label": "2G", "value": "G"}])
+    drop_2GRXRipp_rat = create_dropdown("2G_RXRipp_RAT", "G", [{"label": "2G", "value": "G"}])
 
-    drop_2GRXGain_band = create_dropdown("2GRXGain_band", "", band_opt)
-    drop_2GRXRipp_band = create_dropdown("2GRXRipp_band", "", band_opt)
+    drop_2G_GMSK_rat = create_dropdown("2G_GMSK_RAT", "G", [{"label": "2G", "value": "G"}])
+    drop_2G_GMSKTxL_rat = create_dropdown("2G_GMSKTxL_RAT", "G", [{"label": "2G", "value": "G"}])
+    drop_2G_GMSKCode_rat = create_dropdown("2G_GMSKCode_RAT", "G", [{"label": "2G", "value": "G"}])
+
+    drop_2G_EPSK_rat = create_dropdown("2G_EPSK_RAT", "G", [{"label": "2G", "value": "G"}])
+    drop_2G_EPSKTxL_rat = create_dropdown("2G_EPSKTxL_RAT", "G", [{"label": "2G", "value": "G"}])
+    drop_2G_EPSKCode_rat = create_dropdown("2G_EPSKCode_RAT", "G", [{"label": "2G", "value": "G"}])
+
+    drop_2GRXGain_band = create_dropdown("2G_RXGain_band", "", band_opt)
+    drop_2GRXRipp_band = create_dropdown("2G_RXRipp_band", "", band_opt)
+
+    drop_2G_GMSK_band = create_dropdown("2G_GMSK_band", "", band_opt)
+    drop_2G_GMSKTxL_band = create_dropdown("2G_GMSKTxL_band", "", band_opt)
+    drop_2G_GMSKCode_band = create_dropdown("2G_GMSKCode_band", "", band_opt)
+
+    drop_2G_EPSK_band = create_dropdown("2G_EPSK_band", "", band_opt)
+    drop_2G_EPSKTxL_band = create_dropdown("2G_EPSKTxL_band", "", band_opt)
+    drop_2G_EPSKCode_band = create_dropdown("2G_EPSKCode_band", "", band_opt)
 
     layout = html.Div(
         [
+            # ** ============================== 2G RX Cain cal ==============================
             dbc.Row(
                 [
                     dbc.Col(html.H2("2G RX Gain Cal", className="display-7"), width="auto"),
@@ -29,21 +52,22 @@ def initialize_2g(dict_2g):
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="2GRXGain_grp_scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="2GRXGain_grp_histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="2G_RXGain_grp_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="2G_RXGain_grp_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        create_range_slider("sld_2GRXGain_scat", df_PRX_Gain_2G, use_min_max=False),
+                        create_range_slider("sld_2G_RXGain_scat", df_PRX_Gain_2G, use_min_max=False),
                         width={"size": 6, "offset": 0},
                     )
                 ],
                 align="center",
             ),
             html.Hr(),
+            # ** ============================== 2G RX Ripple cal ==============================
             dbc.Row(
                 [
                     dbc.Col(html.H2("2G RX Ripple", className="display-7"), width="auto"),
@@ -55,15 +79,177 @@ def initialize_2g(dict_2g):
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="2GRXRipp_grp_scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="2GRXRipp_grp_histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="2G_RXRipp_grp_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="2G_RXRipp_grp_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        create_range_slider("sld_2GRXRipp_scat", df_Ripple_2G, use_min_max=False),
+                        create_range_slider("sld_2G_RXRipp_scat", df_Ripple_2G, use_min_max=False),
+                        width={"size": 6, "offset": 0},
+                    )
+                ],
+                align="center",
+            ),
+            html.Hr(),
+            # ** ============================== 2G TX GMSK Index ==============================
+            dbc.Row(
+                [
+                    dbc.Col(html.H2("2G TX GMSK Index", className="display-7"), width="auto"),
+                    dbc.Col(drop_2G_GMSK_rat, width=1),
+                    dbc.Col(drop_2G_GMSK_band, width=1),
+                ],
+                align="center",
+            ),
+            html.Br(),
+            dbc.Row(
+                [
+                    dbc.Col(dcc.Graph(id="2G_GMSK_grp_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="2G_GMSK_grp_histo"), width={"size": 6, "offset": 0}),
+                ],
+                align="center",
+            ),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        create_range_slider("sld_2G_GMSK_scat", df_GMSK_Mean, use_min_max=False),
+                        width={"size": 6, "offset": 0},
+                    )
+                ],
+                align="center",
+            ),
+            html.Hr(),
+            # ** ============================== 2G TX GMSK TxL ==============================
+            dbc.Row(
+                [
+                    dbc.Col(html.H2("2G TX GMSK TxL", className="display-7"), width="auto"),
+                    dbc.Col(drop_2G_GMSKTxL_rat, width=1),
+                    dbc.Col(drop_2G_GMSKTxL_band, width=1),
+                ],
+                align="center",
+            ),
+            html.Br(),
+            dbc.Row(
+                [
+                    dbc.Col(dcc.Graph(id="2G_GMSKTxL_grp_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="2G_GMSKTxL_grp_histo"), width={"size": 6, "offset": 0}),
+                ],
+                align="center",
+            ),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        create_range_slider("sld_2G_GMSKTxL_scat", df_GMSK_TxL_Mean, use_min_max=False),
+                        width={"size": 6, "offset": 0},
+                    )
+                ],
+                align="center",
+            ),
+            html.Hr(),
+            # ** ============================== 2G TX GMSK Code ==============================
+            dbc.Row(
+                [
+                    dbc.Col(html.H2("2G TX GMSK Code", className="display-7"), width="auto"),
+                    dbc.Col(drop_2G_GMSKCode_rat, width=1),
+                    dbc.Col(drop_2G_GMSKCode_band, width=1),
+                ],
+                align="center",
+            ),
+            html.Br(),
+            dbc.Row(
+                [
+                    dbc.Col(dcc.Graph(id="2G_GMSKCode_grp_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="2G_GMSKCode_grp_histo"), width={"size": 6, "offset": 0}),
+                ],
+                align="center",
+            ),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        create_range_slider("sld_2G_GMSKCode_scat", df_GMSK_Code_Mean, use_min_max=False),
+                        width={"size": 6, "offset": 0},
+                    )
+                ],
+                align="center",
+            ),
+            html.Hr(),
+            # ** ============================== 2G TX EPSK Index ==============================
+            dbc.Row(
+                [
+                    dbc.Col(html.H2("2G TX EPSK Index", className="display-7"), width="auto"),
+                    dbc.Col(drop_2G_EPSK_rat, width=1),
+                    dbc.Col(drop_2G_EPSK_band, width=1),
+                ],
+                align="center",
+            ),
+            html.Br(),
+            dbc.Row(
+                [
+                    dbc.Col(dcc.Graph(id="2G_EPSK_grp_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="2G_EPSK_grp_histo"), width={"size": 6, "offset": 0}),
+                ],
+                align="center",
+            ),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        create_range_slider("sld_2G_EPSK_scat", df_EPSK_Mean, use_min_max=False),
+                        width={"size": 6, "offset": 0},
+                    )
+                ],
+                align="center",
+            ),
+            html.Hr(),
+            # ** ============================== 2G TX EPSK TxL ==============================
+            dbc.Row(
+                [
+                    dbc.Col(html.H2("2G TX EPSK TxL", className="display-7"), width="auto"),
+                    dbc.Col(drop_2G_EPSKTxL_rat, width=1),
+                    dbc.Col(drop_2G_EPSKTxL_band, width=1),
+                ],
+                align="center",
+            ),
+            html.Br(),
+            dbc.Row(
+                [
+                    dbc.Col(dcc.Graph(id="2G_EPSKTxL_grp_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="2G_EPSKTxL_grp_histo"), width={"size": 6, "offset": 0}),
+                ],
+                align="center",
+            ),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        create_range_slider("sld_2G_EPSKTxL_scat", df_EPSK_TxL_Mean, use_min_max=False),
+                        width={"size": 6, "offset": 0},
+                    )
+                ],
+                align="center",
+            ),
+            html.Hr(),
+            # ** ============================== 2G TX EPSK Code ==============================
+            dbc.Row(
+                [
+                    dbc.Col(html.H2("2G TX EPSK Code", className="display-7"), width="auto"),
+                    dbc.Col(drop_2G_EPSKCode_rat, width=1),
+                    dbc.Col(drop_2G_EPSKCode_band, width=1),
+                ],
+                align="center",
+            ),
+            html.Br(),
+            dbc.Row(
+                [
+                    dbc.Col(dcc.Graph(id="2G_EPSKCode_grp_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="2G_EPSKCode_grp_histo"), width={"size": 6, "offset": 0}),
+                ],
+                align="center",
+            ),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        create_range_slider("sld_2G_EPSKCode_scat", df_EPSK_Code_Mean, use_min_max=False),
                         width={"size": 6, "offset": 0},
                     )
                 ],
@@ -73,36 +259,140 @@ def initialize_2g(dict_2g):
         ]
     )
 
-    @callback(Output("2GRXGain_band", "value"), Input("2GRXGain_RAT", "value"))
+    # ** ============================== 2G RX Cain cal ==============================
+    @callback(Output("2G_RXGain_band", "value"), Input("2G_RXGain_RAT", "value"))
     def RXGain_2G(Sel_rat):
         return Initialize_band(Sel_rat, df_PRX_Gain_2G)
 
     @callback(
         [
-            Output("2GRXGain_band", "options"),
-            Output("2GRXGain_grp_scatt", "figure"),
-            Output("2GRXGain_grp_histo", "figure"),
+            Output("2G_RXGain_band", "options"),
+            Output("2G_RXGain_grp_scatt", "figure"),
+            Output("2G_RXGain_grp_histo", "figure"),
         ],
-        [Input("2GRXGain_RAT", "value"), Input("2GRXGain_band", "value"), Input("sld_2GRXGain_scat", "value")],
+        [Input("2G_RXGain_RAT", "value"), Input("2G_RXGain_band", "value"), Input("sld_2G_RXGain_scat", "value")],
     )
-    def update_2GRXGain(Sel_rat, Sel_band, scatt_range):
+    def update_2G_RXGain(Sel_rat, Sel_band, scatt_range):
         band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_PRX_Gain_2G, Sel_rat, Sel_band, scatt_range)
         return band_opt, scatter_fig, histogram_fig
 
-    @callback(Output("2GRXRipp_band", "value"), Input("2GRXRipp_RAT", "value"))
+    # ** ============================== 2G RX Ripple cal ==============================
+    @callback(Output("2G_RXRipp_band", "value"), Input("2G_RXRipp_RAT", "value"))
     def RXRipp_2G(Sel_rat):
         return Initialize_band(Sel_rat, df_Ripple_2G)
 
     @callback(
         [
-            Output("2GRXRipp_band", "options"),
-            Output("2GRXRipp_grp_scatt", "figure"),
-            Output("2GRXRipp_grp_histo", "figure"),
+            Output("2G_RXRipp_band", "options"),
+            Output("2G_RXRipp_grp_scatt", "figure"),
+            Output("2G_RXRipp_grp_histo", "figure"),
         ],
-        [Input("2GRXRipp_RAT", "value"), Input("2GRXRipp_band", "value"), Input("sld_2GRXRipp_scat", "value")],
+        [Input("2G_RXRipp_RAT", "value"), Input("2G_RXRipp_band", "value"), Input("sld_2G_RXRipp_scat", "value")],
     )
-    def update_3GFBRXFreq(Sel_rat, Sel_band, scatt_range):
+    def update_2G_RXRipp(Sel_rat, Sel_band, scatt_range):
         band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_Ripple_2G, Sel_rat, Sel_band, scatt_range)
+        return band_opt, scatter_fig, histogram_fig
+
+    # ** ============================== 2G TX GMSK Index ==============================
+    @callback(Output("2G_GMSK_band", "value"), Input("2G_GMSK_RAT", "value"))
+    def GMSK_2G(Sel_rat):
+        return Initialize_band(Sel_rat, df_GMSK_Mean)
+
+    @callback(
+        [
+            Output("2G_GMSK_band", "options"),
+            Output("2G_GMSK_grp_scatt", "figure"),
+            Output("2G_GMSK_grp_histo", "figure"),
+        ],
+        [Input("2G_GMSK_RAT", "value"), Input("2G_GMSK_band", "value"), Input("sld_2G_GMSK_scat", "value")],
+    )
+    def update_2G_GMSK(Sel_rat, Sel_band, scatt_range):
+        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_GMSK_Mean, Sel_rat, Sel_band, scatt_range)
+        return band_opt, scatter_fig, histogram_fig
+
+    # ** ============================== 2G TX GMSK TxL ==============================
+    @callback(Output("2G_GMSKTxL_band", "value"), Input("2G_GMSKTxL_RAT", "value"))
+    def GMSKTxL_2G(Sel_rat):
+        return Initialize_band(Sel_rat, df_GMSK_TxL_Mean)
+
+    @callback(
+        [
+            Output("2G_GMSKTxL_band", "options"),
+            Output("2G_GMSKTxL_grp_scatt", "figure"),
+            Output("2G_GMSKTxL_grp_histo", "figure"),
+        ],
+        [Input("2G_GMSKTxL_RAT", "value"), Input("2G_GMSKTxL_band", "value"), Input("sld_2G_GMSKTxL_scat", "value")],
+    )
+    def update_2G_GMSKTxL(Sel_rat, Sel_band, scatt_range):
+        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_GMSK_TxL_Mean, Sel_rat, Sel_band, scatt_range)
+        return band_opt, scatter_fig, histogram_fig
+
+    # ** ============================== 2G TX GMSK Code ==============================
+    @callback(Output("2G_GMSKCode_band", "value"), Input("2G_GMSKCode_RAT", "value"))
+    def GMSKCode_2G(Sel_rat):
+        return Initialize_band(Sel_rat, df_GMSK_Code_Mean)
+
+    @callback(
+        [
+            Output("2G_GMSKCode_band", "options"),
+            Output("2G_GMSKCode_grp_scatt", "figure"),
+            Output("2G_GMSKCode_grp_histo", "figure"),
+        ],
+        [Input("2G_GMSKCode_RAT", "value"), Input("2G_GMSKCode_band", "value"), Input("sld_2G_GMSKCode_scat", "value")],
+    )
+    def update_2G_GMSKCode(Sel_rat, Sel_band, scatt_range):
+        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_GMSK_Code_Mean, Sel_rat, Sel_band, scatt_range)
+        return band_opt, scatter_fig, histogram_fig
+
+    # ** ============================== 2G TX EPSK Index ==============================
+    @callback(Output("2G_EPSK_band", "value"), Input("2G_EPSK_RAT", "value"))
+    def EPSK_2G(Sel_rat):
+        return Initialize_band(Sel_rat, df_EPSK_Mean)
+
+    @callback(
+        [
+            Output("2G_EPSK_band", "options"),
+            Output("2G_EPSK_grp_scatt", "figure"),
+            Output("2G_EPSK_grp_histo", "figure"),
+        ],
+        [Input("2G_EPSK_RAT", "value"), Input("2G_EPSK_band", "value"), Input("sld_2G_EPSK_scat", "value")],
+    )
+    def update_2G_EPSK(Sel_rat, Sel_band, scatt_range):
+        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_EPSK_Mean, Sel_rat, Sel_band, scatt_range)
+        return band_opt, scatter_fig, histogram_fig
+
+    # ** ============================== 2G TX EPSK TxL ==============================
+    @callback(Output("2G_EPSKTxL_band", "value"), Input("2G_EPSKTxL_RAT", "value"))
+    def EPSKTxL_2G(Sel_rat):
+        return Initialize_band(Sel_rat, df_EPSK_TxL_Mean)
+
+    @callback(
+        [
+            Output("2G_EPSKTxL_band", "options"),
+            Output("2G_EPSKTxL_grp_scatt", "figure"),
+            Output("2G_EPSKTxL_grp_histo", "figure"),
+        ],
+        [Input("2G_EPSKTxL_RAT", "value"), Input("2G_EPSKTxL_band", "value"), Input("sld_2G_EPSKTxL_scat", "value")],
+    )
+    def update_2G_EPSKTxL(Sel_rat, Sel_band, scatt_range):
+        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_EPSK_TxL_Mean, Sel_rat, Sel_band, scatt_range)
+        return band_opt, scatter_fig, histogram_fig
+
+    # ** ============================== 2G TX EPSK Code ==============================
+    @callback(Output("2G_EPSKCode_band", "value"), Input("2G_EPSKCode_RAT", "value"))
+    def EPSKCode_2G(Sel_rat):
+        return Initialize_band(Sel_rat, df_EPSK_Code_Mean)
+
+    @callback(
+        [
+            Output("2G_EPSKCode_band", "options"),
+            Output("2G_EPSKCode_grp_scatt", "figure"),
+            Output("2G_EPSKCode_grp_histo", "figure"),
+        ],
+        [Input("2G_EPSKCode_RAT", "value"), Input("2G_EPSKCode_band", "value"), Input("sld_2G_EPSKCode_scat", "value")],
+    )
+    def update_2G_EPSKCode(Sel_rat, Sel_band, scatt_range):
+        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_EPSK_Code_Mean, Sel_rat, Sel_band, scatt_range)
         return band_opt, scatter_fig, histogram_fig
 
     dash.register_page(__name__, path="/GSM", name="GSM", title="GSM", layout=layout)
