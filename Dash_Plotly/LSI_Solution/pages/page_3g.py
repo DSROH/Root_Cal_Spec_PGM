@@ -295,7 +295,7 @@ def initialize_3g(dict_3g):
 
     # ? 3G TxP Channel Components
     @callback(Output("3G_TXCP_band", "value"), Input("3G_TXCP_RAT", "value"))
-    def TXCP(Sel_rat):
+    def TXCP_3G(Sel_rat):
         return Initialize_band(Sel_rat, df_TXCP)
 
     @callback(
@@ -312,7 +312,7 @@ def initialize_3g(dict_3g):
 
     # ? 3G FBRX Gain Cal
     @callback(Output("3G_FBRXGain_band", "value"), Input("3G_FBRXGain_RAT", "value"))
-    def FBRXGain_band(Sel_rat):
+    def FBRXGain_3G(Sel_rat):
         return Initialize_band(Sel_rat, df_fbrxgm)
 
     @callback(
@@ -337,7 +337,7 @@ def initialize_3g(dict_3g):
 
     # ? 3G FBRX Freq Cal
     @callback(Output("3G_FBRXFreq_band", "value"), Input("3G_FBRXFreq_RAT", "value"))
-    def FBRXFreq_band(Sel_rat):
+    def FBRXFreq_3G(Sel_rat):
         return Initialize_band(Sel_rat, df_fbrxfm)
 
     @callback(
@@ -354,7 +354,7 @@ def initialize_3g(dict_3g):
 
     # ? 3G FBRX Freq Cal - Channel
     # @callback(Output("3G_FBRXFreq_ch_band", "value"), Input("3G_FBRXFreq_ch_RAT", "value"))
-    # def FBRXFreq_Ch_band(Sel_rat):
+    # def FBRXFreq_Ch_3G(Sel_rat):
     #     return Initialize_band(Sel_rat, df_fbrxfm_ch)
 
     # @callback(
@@ -371,7 +371,7 @@ def initialize_3g(dict_3g):
 
     # ? 3G RX Gain Cal
     @callback(Output("3G_RXGain_band", "value"), Input("3G_RXGain_RAT", "value"))
-    def RXGain_band(Sel_rat):
+    def RXGain_3G(Sel_rat):
         return Initialize_band(Sel_rat, df_RXGain)
 
     @callback(
@@ -388,7 +388,7 @@ def initialize_3g(dict_3g):
 
     # ? 3G RX Channel components
     @callback(Output("3G_RXComp_band", "value"), Input("3G_RXComp_RAT", "value"))
-    def RXComp_band(Sel_rat):
+    def RXComp_3G(Sel_rat):
         return Initialize_band(Sel_rat, df_RXComp)
 
     @callback(
@@ -407,7 +407,7 @@ def initialize_3g(dict_3g):
 
     # ? 3G APT Measuremnet
     @callback(Output("3G_APTMeas_band", "value"), Input("3G_APTMeas_RAT", "value"))
-    def APT_Meas_band(Sel_rat):
+    def APT_Meas_3G(Sel_rat):
         return Initialize_band(Sel_rat, df_APT_Meas)
 
     @callback(
@@ -424,7 +424,7 @@ def initialize_3g(dict_3g):
 
     # ? 3G ET Psat
     @callback(Output("3G_ETPsat_band", "value"), Input("3G_ETPsat_RAT", "value"))
-    def ETPsat_band(Sel_rat):
+    def ETPsat_3G(Sel_rat):
         return Initialize_band(Sel_rat, df_ET_Pst)
 
     @callback(
@@ -441,7 +441,7 @@ def initialize_3g(dict_3g):
 
     # ? 3G ET Power
     @callback(Output("3G_ETPower_band", "value"), Input("3G_ETPower_RAT", "value"))
-    def ETPower_band(Sel_rat):
+    def ETPower_3G(Sel_rat):
         return Initialize_band(Sel_rat, df_ET_Power)
 
     @callback(
@@ -453,9 +453,7 @@ def initialize_3g(dict_3g):
         [Input("3G_ETPower_RAT", "value"), Input("3G_ETPower_band", "value"), Input("sld_ETPower_scat", "value")],
     )
     def update_ETPower(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatter_fig, histogram_fig = update_band_and_graph(
-            df_ET_Power, Sel_rat, Sel_band, scatt_range
-        )
+        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_ET_Power, Sel_rat, Sel_band, scatt_range)
         return band_opt, scatter_fig, histogram_fig
 
     dash.register_page(__name__, path="/WCDMA", name="WCDMA", title="WCDMA", layout=layout)
