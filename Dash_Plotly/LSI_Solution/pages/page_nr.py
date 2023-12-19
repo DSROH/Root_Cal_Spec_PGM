@@ -361,7 +361,7 @@ def initialize_nr(dict_nr):
 
     # ! Sub6 FBRX Gain Cal
     @callback(Output("NR_FBRXGain_band", "value"), Input("NR_FBRXGain_RAT", "value"))
-    def FBRXGain_(Sel_rat):
+    def FBRXGain_NR(Sel_rat):
         return Initialize_band(Sel_rat, df_fbrxgm)
 
     @callback(
@@ -386,7 +386,7 @@ def initialize_nr(dict_nr):
 
     # ! Sub6 FBRX Freq Cal
     @callback(Output("NR_FBRXFreq_band", "value"), Input("NR_FBRXFreq_RAT", "value"))
-    def FBRXFreq__band(Sel_rat):
+    def FBRXFreq_NR(Sel_rat):
         return Initialize_band(Sel_rat, df_fbrxfm)
 
     @callback(
@@ -411,7 +411,7 @@ def initialize_nr(dict_nr):
 
     # ! Sub6 RX Gain Cal
     @callback(Output("NR_RXGain_band", "value"), Input("NR_RXGain_RAT", "value"))
-    def RXGain__band(Sel_rat):
+    def RXGain_NR(Sel_rat):
         return Initialize_band(Sel_rat, df_RXGain)
 
     @callback(
@@ -432,7 +432,7 @@ def initialize_nr(dict_nr):
 
     # ! Sub6 RX RSRP Cal
     @callback(Output("NR_RXRSRP_band", "value"), Input("NR_RXRSRP_RAT", "value"))
-    def RXGain__band(Sel_rat):
+    def RXGain_NR(Sel_rat):
         return Initialize_band(Sel_rat, df_RXRSRP)
 
     @callback(
@@ -453,7 +453,7 @@ def initialize_nr(dict_nr):
 
     # ! Sub6 RX Freq Cal
     @callback(Output("NR_RXComp_band", "value"), Input("NR_RXComp_RAT", "value"))
-    def RXGain__band(Sel_rat):
+    def RXGain_NR(Sel_rat):
         return Initialize_band(Sel_rat, df_RXComp)
 
     @callback(
@@ -474,7 +474,7 @@ def initialize_nr(dict_nr):
 
     # ! Sub6 RX Mixer Cal
     @callback(Output("NR_RXMixer_band", "value"), Input("NR_RXMixer_RAT", "value"))
-    def RXGain__band(Sel_rat):
+    def RXGain_NR(Sel_rat):
         return Initialize_band(Sel_rat, df_RXMixer)
 
     @callback(
@@ -495,7 +495,7 @@ def initialize_nr(dict_nr):
 
     # ! Sub6 APT Measuremnt
     @callback(Output("NR_APTMeas_band", "value"), Input("NR_APTMeas_RAT", "value"))
-    def APTMeas__band(Sel_rat):
+    def APTMeas_NR(Sel_rat):
         return Initialize_band(Sel_rat, df_APT_Meas)
 
     @callback(
@@ -516,7 +516,7 @@ def initialize_nr(dict_nr):
 
     # ! Sub6 ET-SAPT Psat
     @callback(Output("NR_ETPSat_band", "value"), Input("NR_ETPsat_RAT", "value"))
-    def ET_Psat__band(Sel_rat):
+    def ET_Psat_NR(Sel_rat):
         return Initialize_band(Sel_rat, df_ET_Psat)
 
     @callback(
@@ -537,7 +537,7 @@ def initialize_nr(dict_nr):
 
     # ! Sub6 ET-SAPT Pgain
     @callback(Output("NR_ETPgain_band", "value"), Input("NR_ETPgain_RAT", "value"))
-    def ET_Pgain__band(Sel_rat):
+    def ET_Pgain_NR(Sel_rat):
         return Initialize_band(Sel_rat, df_ET_Pgain)
 
     @callback(
@@ -558,12 +558,12 @@ def initialize_nr(dict_nr):
 
     # ! Sub6 ET-SAPT Power
     @callback(Output("NR_ETPower_band", "value"), Input("NR_ETPower_RAT", "value"))
-    def ET_Power__band(Sel_rat):
+    def ET_Power_NR(Sel_rat):
         return Initialize_band(Sel_rat, df_ET_Power)
 
     @callback(
         [
-            Output("NR_ETPower_RAT", "options"),
+            Output("NR_ETPower_band", "options"),
             Output("NR_ET_Power_scatt", "figure"),
             Output("NR_ET_Power_histo", "figure"),
         ],
@@ -579,7 +579,7 @@ def initialize_nr(dict_nr):
 
     # ! Sub6 ET-SAPT Freq
     @callback(Output("NR_ETFreq_band", "value"), Input("NR_ETFreq_RAT", "value"))
-    def ET_Freq__band(Sel_rat):
+    def ET_Freq_NR(Sel_rat):
         return Initialize_band(Sel_rat, df_ET_Freq)
 
     @callback(
