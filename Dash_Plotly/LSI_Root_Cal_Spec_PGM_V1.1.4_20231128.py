@@ -3,7 +3,7 @@
 #
 
 # %% [markdown]
-# <font size ="2">
+#  <font size ="2">
 #
 # === Pamir ===
 #
@@ -18,8 +18,6 @@
 #   - 8RX : CA / ENDC 조건에서 사용하기 위한 RFIC, LNA 예비 port #2의 MAIN path
 #
 #   ***
-#
-#   ![image.png](attachment:image.png)
 #
 #   Pamir 8RX 까지 지원 가능
 #
@@ -142,32 +140,37 @@
 #     - ET Psat, Pgain spec 1.5로 tight 하게 변경
 #
 # - V 1.1.6
+#
 #   - Sub6 RX Gain 10RX, 12RX, 14RX, 16RX 지원 추가
 #   - Sub6 RSRP Offset Main DRX, 4RX PRX/DRX, 6RX PRX/DRX, 8RX PRX/DRX, 10RX PRX/DRX, 12RX PRX/DRX, 14RX PRX/DRX, 16RX PRX/DRX 추가
 #   - Sub6 FREQ Offset Main DRX, 4RX PRX/DRX, 6RX PRX/DRX, 8RX PRX/DRX, 10RX PRX/DRX 추가
 #   - 저장 Directory Program 경로 -> Daseul cal log 경로 변경
 #
 # - V 1.1.7
+#
 #   - Daseul Get_Data Option 추가
 #
 # - V 1.1.8
+#
 #   - DC Cal & IIP2 Cal Data 저장
 #
-# </font>
+# - V 1.1.9
+#   - Meas/Code length over 조건 추가
+#   - Get_Data 복수파일 첫번째 데이터 획득 시 Count 1로 처리되는 문제 수정
+#   - Get_Data only option 추가
+#
+#  </font>
 #
 
 # %%
 import glob
-import os
 import threading
 import tkinter as tk
 import tkinter.scrolledtext as st
-
-import pandas as pd
 import ttkbootstrap as ttkbst
-from openpyxl import load_workbook
-from openpyxl.styles import Alignment, Font
 from ttkbootstrap.constants import *
+
+from openpyxl.styles import Font
 
 import LSI_Solution.Common.Function as func
 import LSI_Solution.Common.get_data as Lget
@@ -185,34 +188,8 @@ font_style = Font(
     color="00000000",  # 블랙, # 00FF0000 Red, # 000000FF Blue
 )
 
-
 # %%
-def Common_save_Excel(filename, tab1, tab2):
-    # Save Data to Excel
-    Tabname = filename.replace("Excel_", "")
-    Tabname = f"{os.path.splitext(Tabname)[0]}"
-    with pd.ExcelWriter(filename) as writer:
-        tab1.to_excel(writer, sheet_name=f"{Tabname}_Mean")
-        tab2.to_excel(writer, sheet_name=f"{Tabname}_Data")
-
-
-def WB_Format(filename):
-    wb = load_workbook(filename)
-    ws = wb.sheetnames
-    for sheet in ws:
-        col_max = wb[sheet].max_column
-        row_max = wb[sheet].max_row
-        for i in range(2, row_max + 1, 1):
-            for j in range(3, col_max + 1, 1):
-                wb[sheet].cell(row=i, column=j).font = font_style
-                wb[sheet].cell(row=i, column=j).alignment = Alignment(horizontal="right")
-                wb[sheet].cell(row=i, column=j).number_format = "#,##0.0"
-                # wb[sheet].cell(row=i, column=j).number_format = builtin_format_code(2)
-    wb.save(filename)
-
-
-# %%
-Win_GUI = ttkbst.Window(title="S24 Eureka LSI Root Cal Spec PGM V1.1.8", themename="cosmo")
+Win_GUI = ttkbst.Window(title="S24 Eureka LSI Root Cal Spec PGM V1.1.9", themename="cosmo")
 Win_GUI.attributes("-topmost", True)
 Win_GUI.geometry("1425x600")  # py : 1407x560 ipynb : 1635x670
 # Win_GUI.option_add("*Font", "Consolas 10")
@@ -265,7 +242,6 @@ mtm_select = ttkbst.BooleanVar()
 daseul_select.set(False)
 mtm_select.set(False)
 
-
 # 저장 경로 프레임
 path_frame = ttkbst.Labelframe(Left_frame, text=" SPC File Path ", bootstyle=PRIMARY)
 path_frame.place(x=5, y=135, width=630, height=120)
@@ -286,7 +262,6 @@ btn_spc = ttkbst.Button(
 )
 btn_spc.place(x=530, y=10, width=90, height=30)
 
-
 mtm_chkbox = ttkbst.Checkbutton(path_frame, text="MTM", style="info.TCheckbutton", variable=mtm_select)
 mtm_chkbox.place(x=10, y=55, width=45, height=30)
 
@@ -299,7 +274,6 @@ btn_mtm = ttkbst.Button(
     path_frame, text="MTM (F3)", style="info.TButton", command=lambda: [func.browse_mtm_path(mtm_folder, mtm_select, text_area)]
 )
 btn_mtm.place(x=530, y=55, width=90, height=30)
-
 
 Win_GUI.bind("<F3>", lambda event: [func.browse_mtm_path(mtm_folder, text_area)])
 
@@ -380,7 +354,6 @@ chkbox3 = ttkbst.Checkbutton(radio_Btn_frame, text="Debug Option", variable=debu
 chkbox3.place(x=495, y=50, width=120, height=25)
 debug_var.set(False)
 # chkbox2.configure(state="!selected")
-
 
 # ? ======================================== Bluetick for 호주향 ========================================
 Bluetick_var = ttkbst.BooleanVar()
