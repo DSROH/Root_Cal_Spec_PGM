@@ -25,7 +25,10 @@ def Trans_dataframe(df):
             "Index",
             "index",
             "PA Stage",
+            "Gain",
+            "Type",
             "FBRX",
+            "TxL",
             "BW",
             "Item",
             "Ant",
@@ -40,8 +43,8 @@ def Trans_dataframe(df):
             "Min-Max",
         ]
     ]
-    Copied_df = df.loc[:, cols_to_keep]
 
+    Copied_df = df.loc[:, cols_to_keep]
     df_Transposed = Copied_df.T
     df_Transposed.columns = col_name
 
@@ -289,7 +292,7 @@ def initialize_cf(dict_cf):
 
     # ! TXDC Cal
     @callback(Output("TXDC_band", "value"), Input("TXDC_RAT", "value"))
-    def TXDC_band(Sel_rat):
+    def TXDC_CF(Sel_rat):
         return Initialize_band(Sel_rat, df_TXDC)
 
     @callback(
@@ -302,7 +305,7 @@ def initialize_cf(dict_cf):
 
     # ! TXDC Cal
     @callback(Output("IIP2_band", "value"), Input("IIP2_RAT", "value"))
-    def IIP2_band(Sel_rat):
+    def IIP2_CF(Sel_rat):
         return Initialize_band(Sel_rat, df_IIP2)
 
     @callback(
@@ -315,7 +318,7 @@ def initialize_cf(dict_cf):
 
     # ! RF Cable Check
     @callback(Output("Cable_band", "value"), Input("Cable_RAT", "value"))
-    def Cable_band(Sel_rat):
+    def Cable_CF(Sel_rat):
         return Initialize_band(Sel_rat, df_Cable)
 
     @callback(
