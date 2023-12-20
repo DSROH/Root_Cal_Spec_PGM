@@ -122,20 +122,26 @@ def update_axes(fig, x_range=None, y_range=None):
     )
 
 
-def Initialize_band(Sel_rat, df):
-    filtered_df = df[df["Band"].str.contains(Sel_rat)].reset_index(drop=True)
+def Initialize_band(selected_rat, df):
+    filtered_df = df[df["Band"].str.contains(selected_rat)].reset_index(drop=True)
     band_opt = filtered_df["Band"].unique()
 
     return band_opt[0] if len(band_opt) > 0 else ""
 
 
-def update_band_and_graph(df, Sel_rat, Sel_band, scatt_range):
-    filtered_df = df[df["Band"].str.contains(Sel_rat)].reset_index(drop=True)
+def Band_list(df, selected_rat):
+    filtered_df = df[df["Band"].str.contains(selected_rat)].reset_index(drop=True)
     band_opt = filtered_df["Band"].unique()
     band_opt_out = [{"label": i, "value": i} for i in band_opt]
 
+    return band_opt_out
+
+
+def update_band_and_graph(df, selected_rat, selected_band, scatt_range):
+    filtered_df = df[df["Band"].str.contains(selected_rat)].reset_index(drop=True)
+
     if not filtered_df.empty:
-        filtered_df = df[df["Band"] == Sel_band].reset_index(drop=True)
+        filtered_df = df[df["Band"] == selected_band].reset_index(drop=True)
         scatter_fig = go.Figure()
         histogram_fig = go.Figure()
 
@@ -196,9 +202,9 @@ def update_band_and_graph(df, Sel_rat, Sel_band, scatt_range):
         update_axes(scatter_fig, scatt_range, None)
         update_axes(histogram_fig, [lsl, usl], None)
 
-        return band_opt_out, scatter_fig, histogram_fig
+        return scatter_fig, histogram_fig
     else:
-        return band_opt_out, go.Figure(data=[]), go.Figure(data=[])
+        return go.Figure(data=[]), go.Figure(data=[])
 
 
 def initialize_cf(dict_cf):
@@ -292,41 +298,47 @@ def initialize_cf(dict_cf):
 
     # ! TXDC Cal
     @callback(Output("TXDC_band", "value"), Input("TXDC_RAT", "value"))
-    def TXDC_CF(Sel_rat):
-        return Initialize_band(Sel_rat, df_TXDC)
+    def TXDC_CF(selected_rat):
+        return Initialize_band(selected_rat, df_TXDC)
 
     @callback(
         [Output("TXDC_band", "options"), Output("TXDC_grp_Scatt", "figure"), Output("TXDC_grp_Histo", "figure")],
         [Input("TXDC_RAT", "value"), Input("TXDC_band", "value"), Input("sld_TXDC_scat", "value")],
     )
-    def update_TXDC(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_TXDC, Sel_rat, Sel_band, scatt_range)
+    def update_TXDC(selected_rat, selected_band, scatt_range):
+        scatter_fig, histogram_fig = update_band_and_graph(df_TXDC, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_TXDC, selected_rat)
+
         return band_opt, scatter_fig, histogram_fig
 
     # ! TXDC Cal
     @callback(Output("IIP2_band", "value"), Input("IIP2_RAT", "value"))
-    def IIP2_CF(Sel_rat):
-        return Initialize_band(Sel_rat, df_IIP2)
+    def IIP2_CF(selected_rat):
+        return Initialize_band(selected_rat, df_IIP2)
 
     @callback(
         [Output("IIP2_band", "options"), Output("IIP2_grp_Scatt", "figure"), Output("IIP2_grp_Histo", "figure")],
         [Input("IIP2_RAT", "value"), Input("IIP2_band", "value"), Input("sld_IIP2_scat", "value")],
     )
-    def update_IIP2_cal(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_IIP2, Sel_rat, Sel_band, scatt_range)
+    def update_IIP2_cal(selected_rat, selected_band, scatt_range):
+        scatter_fig, histogram_fig = update_band_and_graph(df_IIP2, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_IIP2, selected_rat)
+
         return band_opt, scatter_fig, histogram_fig
 
     # ! RF Cable Check
     @callback(Output("Cable_band", "value"), Input("Cable_RAT", "value"))
-    def Cable_CF(Sel_rat):
-        return Initialize_band(Sel_rat, df_Cable)
+    def Cable_CF(selected_rat):
+        return Initialize_band(selected_rat, df_Cable)
 
     @callback(
         [Output("Cable_band", "options"), Output("Cable_grp_Scatt", "figure"), Output("Cable_grp_Histo", "figure")],
         [Input("Cable_RAT", "value"), Input("Cable_band", "value"), Input("sld_IIP2_scat", "value")],
     )
-    def update_Cable(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_Cable, Sel_rat, Sel_band, scatt_range)
+    def update_Cable(selected_rat, selected_band, scatt_range):
+        scatter_fig, histogram_fig = update_band_and_graph(df_Cable, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_Cable, selected_rat)
+
         return band_opt, scatter_fig, histogram_fig
 
     # 페이지 등록
