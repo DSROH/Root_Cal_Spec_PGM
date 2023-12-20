@@ -21,29 +21,29 @@ def initialize_nr(dict_nr):
 
     band_opt = [{"label": "", "value": ""}]
 
-    drop_FBRXGain_rat = create_dropdown("NR_FBRXGain_RAT", "n", [{"label": "NR", "value": "n"}])
-    drop_FBRXFreq_rat = create_dropdown("NR_FBRXFreq_RAT", "n", [{"label": "NR", "value": "n"}])
-    drop_RXGain_rat = create_dropdown("NR_RXGain_RAT", "n", [{"label": "NR", "value": "n"}])
-    drop_RXRSRP_rat = create_dropdown("NR_RXRSRP_RAT", "n", [{"label": "NR", "value": "n"}])
-    drop_RXComp_rat = create_dropdown("NR_RXComp_RAT", "n", [{"label": "NR", "value": "n"}])
-    drop_RXMixer_rat = create_dropdown("NR_RXMixer_RAT", "n", [{"label": "NR", "value": "n"}])
-    drop_APTMeas_rat = create_dropdown("NR_APTMeas_RAT", "n", [{"label": "NR", "value": "n"}])
-    drop_ET_Psat_rat = create_dropdown("NR_ETPsat_RAT", "n", [{"label": "NR", "value": "n"}])
-    drop_ET_Pgain_rat = create_dropdown("NR_ETPgain_RAT", "n", [{"label": "NR", "value": "n"}])
-    drop_ET_Power_rat = create_dropdown("NR_ETPower_RAT", "n", [{"label": "NR", "value": "n"}])
-    drop_ET_Freq_rat = create_dropdown("NR_ETFreq_RAT", "n", [{"label": "NR", "value": "n"}])
+    drop_FBRXGain_rat = create_dropdown("NR_FBRX_Gain_rat", "n", [{"label": "NR", "value": "n"}])
+    drop_FBRXFreq_rat = create_dropdown("NR_FBRX_Freq_rat", "n", [{"label": "NR", "value": "n"}])
+    drop_RXGain_rat = create_dropdown("NR_RX_Gain_rat", "n", [{"label": "NR", "value": "n"}])
+    drop_RXRSRP_rat = create_dropdown("NR_RX_RSRP_rat", "n", [{"label": "NR", "value": "n"}])
+    drop_RXComp_rat = create_dropdown("NR_RX_Comp_rat", "n", [{"label": "NR", "value": "n"}])
+    drop_RXMixer_rat = create_dropdown("NR_RX_Mixer_rat", "n", [{"label": "NR", "value": "n"}])
+    drop_APT_Meas_rat = create_dropdown("NR_APT_Meas_rat", "n", [{"label": "NR", "value": "n"}])
+    drop_ET_Psat_rat = create_dropdown("NR_ET_Psat_rat", "n", [{"label": "NR", "value": "n"}])
+    drop_ET_Pgain_rat = create_dropdown("NR_ET_Pgain_rat", "n", [{"label": "NR", "value": "n"}])
+    drop_ET_Power_rat = create_dropdown("NR_ET_Power_rat", "n", [{"label": "NR", "value": "n"}])
+    drop_ET_Freq_rat = create_dropdown("NR_ET_Freq_rat", "n", [{"label": "NR", "value": "n"}])
 
-    drop_FBRXGain_band = create_dropdown("NR_FBRXGain_band", "", band_opt)
-    drop_FBRXFreq_band = create_dropdown("NR_FBRXFreq_band", "", band_opt)
-    drop_RXGain_band = create_dropdown("NR_RXGain_band", "", band_opt)
-    drop_RXRSRP_band = create_dropdown("NR_RXRSRP_band", "", band_opt)
-    drop_RXComp_band = create_dropdown("NR_RXComp_band", "", band_opt)
-    drop_RXMixer_band = create_dropdown("NR_RXMixer_band", "", band_opt)
-    drop_APTMeas_band = create_dropdown("NR_APTMeas_band", "", band_opt)
-    drop_ET_Psat_band = create_dropdown("NR_ETPSat_band", "", band_opt)
-    drop_ET_Pgain_band = create_dropdown("NR_ETPgain_band", "", band_opt)
-    drop_ET_Power_band = create_dropdown("NR_ETPower_band", "", band_opt)
-    drop_ET_Freq_band = create_dropdown("NR_ETFreq_band", "", band_opt)
+    drop_FBRXGain_band = create_dropdown("NR_FBRX_Gain_band", "", band_opt)
+    drop_FBRXFreq_band = create_dropdown("NR_FBRX_Freq_band", "", band_opt)
+    drop_RXGain_band = create_dropdown("NR_RX_Gain_band", "", band_opt)
+    drop_RXRSRP_band = create_dropdown("NR_RX_RSRP_band", "", band_opt)
+    drop_RXComp_band = create_dropdown("NR_RX_Comp_band", "", band_opt)
+    drop_RXMixer_band = create_dropdown("NR_RX_Mixer_band", "", band_opt)
+    drop_APT_Meas_band = create_dropdown("NR_APT_Meas_band", "", band_opt)
+    drop_ET_Psat_band = create_dropdown("NR_ET_PSat_band", "", band_opt)
+    drop_ET_Pgain_band = create_dropdown("NR_ET_Pgain_band", "", band_opt)
+    drop_ET_Power_band = create_dropdown("NR_ET_Power_band", "", band_opt)
+    drop_ET_Freq_band = create_dropdown("NR_ET_Freq_band", "", band_opt)
 
     layout = html.Div(
         [
@@ -125,15 +125,15 @@ def initialize_nr(dict_nr):
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="NR_RXGain_scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_RXGain_histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="NR_RX_Gain_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="NR_RX_Gain_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        create_range_slider("sld_RXGain_scat", df_RXGain, use_min_max=False),
+                        create_range_slider("sld_RX_Gain_scat", df_RXGain, use_min_max=False),
                         width={"size": 6, "offset": 0},
                     )
                 ],
@@ -152,15 +152,15 @@ def initialize_nr(dict_nr):
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="NR_RXRSRP_scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_RXRSRP_histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="NR_RX_RSRP_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="NR_RX_RSRP_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        create_range_slider("sld_RXRSRP_scat", df_RXRSRP, use_min_max=False),
+                        create_range_slider("sld_RX_RSRP_scat", df_RXRSRP, use_min_max=False),
                         width={"size": 6, "offset": 0},
                     )
                 ],
@@ -179,15 +179,15 @@ def initialize_nr(dict_nr):
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="NR_RXComp_scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_RXComp_histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="NR_RX_Comp_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="NR_RX_Comp_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        create_range_slider("sld_RXComp_scat", df_RXComp, use_min_max=False),
+                        create_range_slider("sld_RX_Comp_scat", df_RXComp, use_min_max=False),
                         width={"size": 6, "offset": 0},
                     )
                 ],
@@ -206,15 +206,15 @@ def initialize_nr(dict_nr):
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="NR_RXMixer_scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_RXMixer_histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="NR_RX_Mixer_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="NR_RX_Mixer_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        create_range_slider("sld_RXMixer_scat", df_RXComp, use_min_max=False),
+                        create_range_slider("sld_RX_Mixer_scat", df_RXComp, use_min_max=False),
                         width={"size": 6, "offset": 0},
                     )
                 ],
@@ -225,23 +225,23 @@ def initialize_nr(dict_nr):
             dbc.Row(
                 [
                     dbc.Col(html.H2("Sub6 APT Measurement", className="display-7"), width="auto"),
-                    dbc.Col(drop_APTMeas_rat, width=1),
-                    dbc.Col(drop_APTMeas_band, width=1),
+                    dbc.Col(drop_APT_Meas_rat, width=1),
+                    dbc.Col(drop_APT_Meas_band, width=1),
                 ],
                 align="center",
             ),
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="NR_APTMeas_scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_APTMeas_histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="NR_APT_Meas_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="NR_APT_Meas_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        create_range_slider("sld_APTMeas_scat", df_APT_Meas, use_min_max=False),
+                        create_range_slider("sld_APT_Meas_scat", df_APT_Meas, use_min_max=False),
                         width={"size": 6, "offset": 0},
                     )
                 ],
@@ -356,25 +356,26 @@ def initialize_nr(dict_nr):
                 align="center",
             ),
             html.Hr(),
+            dbc.Row(html.Div(id="ET_Freq_Scc"))
         ]
     )
 
     # ** ================================= Sub6 FBRX Gain Cal =================================
-    @callback(Output("NR_FBRXGain_band", "value"), Input("NR_FBRXGain_RAT", "value"))
+    @callback(Output("NR_FBRX_Gain_band", "value"), Input("NR_FBRX_Gain_rat", "value"))
     def FBRXGain_NR(selected_rat):
         return Initialize_band(selected_rat, df_fbrxgm)
 
     @callback(
         [
-            Output("NR_FBRXGain_band", "options"),
+            Output("NR_FBRX_Gain_band", "options"),
             Output("NR_FBRX_GM_grp_scatt", "figure"),
             Output("NR_FBRX_GM_grp_histo", "figure"),
             Output("NR_FBRX_GC_grp_scatt", "figure"),
             Output("NR_FBRX_GC_grp_histo", "figure"),
         ],
         [
-            Input("NR_FBRXGain_RAT", "value"),
-            Input("NR_FBRXGain_band", "value"),
+            Input("NR_FBRX_Gain_rat", "value"),
+            Input("NR_FBRX_Gain_band", "value"),
             Input("sld_FBRX_GM_scat", "value"),
             Input("sld_FBRX_FC_scat", "value"),
         ],
@@ -387,21 +388,21 @@ def initialize_nr(dict_nr):
         return band_opt, scatter_fig1, histogram_fig1, scatter_fig2, histogram_fig2
 
     # ** ================================= Sub6 FBRX Freq Cal =================================
-    @callback(Output("NR_FBRXFreq_band", "value"), Input("NR_FBRXFreq_RAT", "value"))
+    @callback(Output("NR_FBRX_Freq_band", "value"), Input("NR_FBRX_Freq_rat", "value"))
     def FBRXFreq_NR(selected_rat):
         return Initialize_band(selected_rat, df_fbrxfm)
 
     @callback(
         [
-            Output("NR_FBRXFreq_band", "options"),
+            Output("NR_FBRX_Freq_band", "options"),
             Output("NR_FBRX_FM_grp_scatt", "figure"),
             Output("NR_FBRX_FM_grp_histo", "figure"),
             Output("NR_FBRX_FC_grp_scatt", "figure"),
             Output("NR_FBRX_FC_grp_histo", "figure"),
         ],
         [
-            Input("NR_FBRXFreq_RAT", "value"),
-            Input("NR_FBRXFreq_band", "value"),
+            Input("NR_FBRX_Freq_rat", "value"),
+            Input("NR_FBRX_Freq_band", "value"),
             Input("sld_FBRX_FM_scat", "value"),
             Input("sld_FBRX_FC_scat", "value"),
         ],
@@ -414,20 +415,20 @@ def initialize_nr(dict_nr):
         return band_opt, scatt_fig1, histo_fig1, scatt_fig2, histo_fig2
 
     # ** ================================= Sub6 RX Gain Cal =================================
-    @callback(Output("NR_RXGain_band", "value"), Input("NR_RXGain_RAT", "value"))
+    @callback(Output("NR_RX_Gain_band", "value"), Input("NR_RX_Gain_rat", "value"))
     def RXGain_NR(selected_rat):
         return Initialize_band(selected_rat, df_RXGain)
 
     @callback(
         [
-            Output("NR_RXGain_band", "options"),
-            Output("NR_RXGain_scatt", "figure"),
-            Output("NR_RXGain_histo", "figure"),
+            Output("NR_RX_Gain_band", "options"),
+            Output("NR_RX_Gain_scatt", "figure"),
+            Output("NR_RX_Gain_histo", "figure"),
         ],
         [
-            Input("NR_RXGain_RAT", "value"),
-            Input("NR_RXGain_band", "value"),
-            Input("sld_RXGain_scat", "value"),
+            Input("NR_RX_Gain_rat", "value"),
+            Input("NR_RX_Gain_band", "value"),
+            Input("sld_RX_Gain_scat", "value"),
         ],
     )
     def update_RXGain(selected_rat, selected_band, scatt_range):
@@ -437,20 +438,20 @@ def initialize_nr(dict_nr):
         return band_opt, scatt_fig, histo_fig
 
     # ** ================================= Sub6 RX RSRP Cal =================================
-    @callback(Output("NR_RXRSRP_band", "value"), Input("NR_RXRSRP_RAT", "value"))
+    @callback(Output("NR_RX_RSRP_band", "value"), Input("NR_RX_RSRP_rat", "value"))
     def RXGain_NR(selected_rat):
         return Initialize_band(selected_rat, df_RXRSRP)
 
     @callback(
         [
-            Output("NR_RXRSRP_band", "options"),
-            Output("NR_RXRSRP_scatt", "figure"),
-            Output("NR_RXRSRP_histo", "figure"),
+            Output("NR_RX_RSRP_band", "options"),
+            Output("NR_RX_RSRP_scatt", "figure"),
+            Output("NR_RX_RSRP_histo", "figure"),
         ],
         [
-            Input("NR_RXRSRP_RAT", "value"),
-            Input("NR_RXRSRP_band", "value"),
-            Input("sld_RXRSRP_scat", "value"),
+            Input("NR_RX_RSRP_rat", "value"),
+            Input("NR_RX_RSRP_band", "value"),
+            Input("sld_RX_RSRP_scat", "value"),
         ],
     )
     def update_RXGain(selected_rat, selected_band, scatt_range):
@@ -460,20 +461,20 @@ def initialize_nr(dict_nr):
         return band_opt, scatt_fig, histo_fig
 
     # ** ================================= Sub6 RX Freq Cal =================================
-    @callback(Output("NR_RXComp_band", "value"), Input("NR_RXComp_RAT", "value"))
+    @callback(Output("NR_RX_Comp_band", "value"), Input("NR_RX_Comp_rat", "value"))
     def RXGain_NR(selected_rat):
         return Initialize_band(selected_rat, df_RXComp)
 
     @callback(
         [
-            Output("NR_RXComp_band", "options"),
-            Output("NR_RXComp_scatt", "figure"),
-            Output("NR_RXComp_histo", "figure"),
+            Output("NR_RX_Comp_band", "options"),
+            Output("NR_RX_Comp_scatt", "figure"),
+            Output("NR_RX_Comp_histo", "figure"),
         ],
         [
-            Input("NR_RXComp_RAT", "value"),
-            Input("NR_RXComp_band", "value"),
-            Input("sld_RXComp_scat", "value"),
+            Input("NR_RX_Comp_rat", "value"),
+            Input("NR_RX_Comp_band", "value"),
+            Input("sld_RX_Comp_scat", "value"),
         ],
     )
     def update_RXGain(selected_rat, selected_band, scatt_range):
@@ -483,20 +484,20 @@ def initialize_nr(dict_nr):
         return band_opt, scatt_fig, histo_fig
 
     # ** ================================= Sub6 RX Mixer Cal =================================
-    @callback(Output("NR_RXMixer_band", "value"), Input("NR_RXMixer_RAT", "value"))
+    @callback(Output("NR_RX_Mixer_band", "value"), Input("NR_RX_Mixer_rat", "value"))
     def RXGain_NR(selected_rat):
         return Initialize_band(selected_rat, df_RXMixer)
 
     @callback(
         [
-            Output("NR_RXMixer_band", "options"),
-            Output("NR_RXMixer_scatt", "figure"),
-            Output("NR_RXMixer_histo", "figure"),
+            Output("NR_RX_Mixer_band", "options"),
+            Output("NR_RX_Mixer_scatt", "figure"),
+            Output("NR_RX_Mixer_histo", "figure"),
         ],
         [
-            Input("NR_RXMixer_RAT", "value"),
-            Input("NR_RXMixer_band", "value"),
-            Input("sld_RXMixer_scat", "value"),
+            Input("NR_RX_Mixer_rat", "value"),
+            Input("NR_RX_Mixer_band", "value"),
+            Input("sld_RX_Mixer_scat", "value"),
         ],
     )
     def update_RXGain(selected_rat, selected_band, scatt_range):
@@ -506,20 +507,20 @@ def initialize_nr(dict_nr):
         return band_opt, scatt_fig, histo_fig
 
     # ** ================================= Sub6 APT Measuremnt =================================
-    @callback(Output("NR_APTMeas_band", "value"), Input("NR_APTMeas_RAT", "value"))
+    @callback(Output("NR_APT_Meas_band", "value"), Input("NR_APT_Meas_rat", "value"))
     def APTMeas_NR(selected_rat):
         return Initialize_band(selected_rat, df_APT_Meas)
 
     @callback(
         [
-            Output("NR_APTMeas_band", "options"),
-            Output("NR_APTMeas_scatt", "figure"),
-            Output("NR_APTMeas_histo", "figure"),
+            Output("NR_APT_Meas_band", "options"),
+            Output("NR_APT_Meas_scatt", "figure"),
+            Output("NR_APT_Meas_histo", "figure"),
         ],
         [
-            Input("NR_APTMeas_RAT", "value"),
-            Input("NR_APTMeas_band", "value"),
-            Input("sld_APTMeas_scat", "value"),
+            Input("NR_APT_Meas_rat", "value"),
+            Input("NR_APT_Meas_band", "value"),
+            Input("sld_APT_Meas_scat", "value"),
         ],
     )
     def update_APTMeas(selected_rat, selected_band, scatt_range):
@@ -529,19 +530,19 @@ def initialize_nr(dict_nr):
         return band_opt, scatt_fig, histo_fig
 
     # ** ================================= Sub6 ET-SAPT Psat =================================
-    @callback(Output("NR_ETPSat_band", "value"), Input("NR_ETPsat_RAT", "value"))
+    @callback(Output("NR_ET_PSat_band", "value"), Input("NR_ET_Psat_rat", "value"))
     def ET_Psat_NR(selected_rat):
         return Initialize_band(selected_rat, df_ET_Psat)
 
     @callback(
         [
-            Output("NR_ETPSat_band", "options"),
+            Output("NR_ET_PSat_band", "options"),
             Output("NR_ET_Psat_scatt", "figure"),
             Output("NR_ET_Psat_histo", "figure"),
         ],
         [
-            Input("NR_ETPsat_RAT", "value"),
-            Input("NR_ETPSat_band", "value"),
+            Input("NR_ET_Psat_rat", "value"),
+            Input("NR_ET_PSat_band", "value"),
             Input("sld_ET_Psat_scat", "value"),
         ],
     )
@@ -552,19 +553,19 @@ def initialize_nr(dict_nr):
         return band_opt, scatt_fig, histo_fig
 
     # ** ================================= Sub6 ET-SAPT Pgain =================================
-    @callback(Output("NR_ETPgain_band", "value"), Input("NR_ETPgain_RAT", "value"))
+    @callback(Output("NR_ET_Pgain_band", "value"), Input("NR_ET_Pgain_rat", "value"))
     def ET_Pgain_NR(selected_rat):
         return Initialize_band(selected_rat, df_ET_Pgain)
 
     @callback(
         [
-            Output("NR_ETPgain_band", "options"),
+            Output("NR_ET_Pgain_band", "options"),
             Output("NR_ET_Pgain_scatt", "figure"),
             Output("NR_ET_Pgain_histo", "figure"),
         ],
         [
-            Input("NR_ETPgain_RAT", "value"),
-            Input("NR_ETPgain_band", "value"),
+            Input("NR_ET_Pgain_rat", "value"),
+            Input("NR_ET_Pgain_band", "value"),
             Input("sld_ET_Pgain_scat", "value"),
         ],
     )
@@ -575,19 +576,19 @@ def initialize_nr(dict_nr):
         return band_opt, scatt_fig, histo_fig
 
     # ** ================================= Sub6 ET-SAPT Power =================================
-    @callback(Output("NR_ETPower_band", "value"), Input("NR_ETPower_RAT", "value"))
+    @callback(Output("NR_ET_Power_band", "value"), Input("NR_ET_Power_rat", "value"))
     def ET_Power_NR(selected_rat):
         return Initialize_band(selected_rat, df_ET_Power)
 
     @callback(
         [
-            Output("NR_ETPower_band", "options"),
+            Output("NR_ET_Power_band", "options"),
             Output("NR_ET_Power_scatt", "figure"),
             Output("NR_ET_Power_histo", "figure"),
         ],
         [
-            Input("NR_ETPower_RAT", "value"),
-            Input("NR_ETPower_band", "value"),
+            Input("NR_ET_Power_rat", "value"),
+            Input("NR_ET_Power_band", "value"),
             Input("sld_ET_Power_scat", "value"),
         ],
     )
@@ -598,19 +599,19 @@ def initialize_nr(dict_nr):
         return band_opt, scatt_fig, histo_fig
 
     # ** ================================= Sub6 ET-SAPT Freq =================================
-    @callback(Output("NR_ETFreq_band", "value"), Input("NR_ETFreq_RAT", "value"))
+    @callback(Output("NR_ET_Freq_band", "value"), Input("NR_ET_Freq_rat", "value"))
     def ET_Freq_NR(selected_rat):
         return Initialize_band(selected_rat, df_ET_Freq)
 
     @callback(
         [
-            Output("NR_ETFreq_band", "options"),
+            Output("NR_ET_Freq_band", "options"),
             Output("NR_ET_Freq_scatt", "figure"),
             Output("NR_ET_Freq_histo", "figure"),
         ],
         [
-            Input("NR_ETFreq_RAT", "value"),
-            Input("NR_ETFreq_band", "value"),
+            Input("NR_ET_Freq_rat", "value"),
+            Input("NR_ET_Freq_band", "value"),
             Input("sld_ET_Freq_scat", "value"),
         ],
     )
@@ -620,6 +621,6 @@ def initialize_nr(dict_nr):
 
         return band_opt, scatt_fig, histo_fig
 
-    dash.register_page(__name__, path="/NR", name="NR_ Sub6", title="NR_ Sub6", layout=layout)
+    dash.register_page(__name__, path="/NR_Sub6", name="NR_Sub6", title="NR_Sub6", layout=layout)
 
     return layout
