@@ -1,7 +1,7 @@
 import dash
 import dash_bootstrap_components as dbc
 from dash import dcc, html, callback, Output, Input
-from LSI_Solution.pages.page_cf import create_dropdown, create_range_slider, Initialize_band, update_band_and_graph
+from LSI_Solution.pages.page_cf import create_dropdown, create_range_slider, Initialize_band, Band_list, update_band_and_graph
 
 
 def initialize_nr(dict_nr):
@@ -47,7 +47,7 @@ def initialize_nr(dict_nr):
 
     layout = html.Div(
         [
-            # ! Sub6 FBRX Gain Cal
+            # ** ================================= Sub6 FBRX Gain Cal =================================
             dbc.Row(
                 [
                     dbc.Col(html.H2("Sub6 FBRX Gain Cal", className="display-7"), width="auto"),
@@ -80,7 +80,7 @@ def initialize_nr(dict_nr):
                 align="center",
             ),
             html.Hr(),
-            # ! Sub6 FBRX Freq Cal
+            # ** ================================= Sub6 FBRX Freq Cal =================================
             dbc.Row(
                 [
                     dbc.Col(html.H2("Sub6 FBRX Freq Cal", className="display-7"), width="auto"),
@@ -113,7 +113,7 @@ def initialize_nr(dict_nr):
                 align="center",
             ),
             html.Hr(),
-            # ! Sub6 RX Gain Cal
+            # ** ================================= Sub6 RX Gain Cal =================================
             dbc.Row(
                 [
                     dbc.Col(html.H2("Sub6 RX Gain Cal", className="display-7"), width="auto"),
@@ -140,7 +140,7 @@ def initialize_nr(dict_nr):
                 align="center",
             ),
             html.Hr(),
-            # ! Sub6 RX RSRP Cal
+            # ** ================================= Sub6 RX RSRP Cal =================================
             dbc.Row(
                 [
                     dbc.Col(html.H2("Sub6 RX RSRP Cal", className="display-7"), width="auto"),
@@ -167,7 +167,7 @@ def initialize_nr(dict_nr):
                 align="center",
             ),
             html.Hr(),
-            # ! Sub6 RX Freq Cal
+            # ** ================================= Sub6 RX Freq Cal =================================
             dbc.Row(
                 [
                     dbc.Col(html.H2("Sub6 RX Freq Cal", className="display-7"), width="auto"),
@@ -194,7 +194,7 @@ def initialize_nr(dict_nr):
                 align="center",
             ),
             html.Hr(),
-            # ! Sub6 RX Mixer Cal
+            # ** ================================= Sub6 RX Mixer Cal =================================
             dbc.Row(
                 [
                     dbc.Col(html.H2("Sub6 RX Mixer Cal", className="display-7"), width="auto"),
@@ -221,7 +221,7 @@ def initialize_nr(dict_nr):
                 align="center",
             ),
             html.Hr(),
-            # ! Sub6 APT Measuremnt
+            # ** ================================= Sub6 APT Measuremnt =================================
             dbc.Row(
                 [
                     dbc.Col(html.H2("Sub6 APT Measurement", className="display-7"), width="auto"),
@@ -248,7 +248,7 @@ def initialize_nr(dict_nr):
                 align="center",
             ),
             html.Hr(),
-            # ! Sub6 ET Psat
+            # ** ================================= Sub6 ET Psat =================================
             dbc.Row(
                 [
                     dbc.Col(html.H2("Sub6 ET-SAPT Psat", className="display-7"), width="auto"),
@@ -275,7 +275,7 @@ def initialize_nr(dict_nr):
                 align="center",
             ),
             html.Hr(),
-            # ! Sub6 ET Pgain
+            # ** ================================= Sub6 ET Pgain =================================
             dbc.Row(
                 [
                     dbc.Col(html.H2("Sub6 ET-SAPT Pgain", className="display-7"), width="auto"),
@@ -302,7 +302,7 @@ def initialize_nr(dict_nr):
                 align="center",
             ),
             html.Hr(),
-            # ! Sub6 ET Power
+            # ** ================================= Sub6 ET Power =================================
             dbc.Row(
                 [
                     dbc.Col(html.H2("Sub6 ET-SAPT Power", className="display-7"), width="auto"),
@@ -329,7 +329,7 @@ def initialize_nr(dict_nr):
                 align="center",
             ),
             html.Hr(),
-            # ! Sub6 ET Freq
+            # ** ================================= Sub6 ET Freq =================================
             dbc.Row(
                 [
                     dbc.Col(html.H2("Sub6 ET-SAPT Freq", className="display-7"), width="auto"),
@@ -359,10 +359,10 @@ def initialize_nr(dict_nr):
         ]
     )
 
-    # ! Sub6 FBRX Gain Cal
+    # ** ================================= Sub6 FBRX Gain Cal =================================
     @callback(Output("NR_FBRXGain_band", "value"), Input("NR_FBRXGain_RAT", "value"))
-    def FBRXGain_NR(Sel_rat):
-        return Initialize_band(Sel_rat, df_fbrxgm)
+    def FBRXGain_NR(selected_rat):
+        return Initialize_band(selected_rat, df_fbrxgm)
 
     @callback(
         [
@@ -379,15 +379,17 @@ def initialize_nr(dict_nr):
             Input("sld_FBRX_FC_scat", "value"),
         ],
     )
-    def update_FBRXGain(Sel_rat, Sel_band, scatt_range1, scatt_range2):
-        band_opt, scatter_fig1, histogram_fig1 = update_band_and_graph(df_fbrxgm, Sel_rat, Sel_band, scatt_range1)
-        band_opt, scatter_fig2, histogram_fig2 = update_band_and_graph(df_fbrxgc, Sel_rat, Sel_band, scatt_range2)
+    def update_FBRXGain(selected_rat, selected_band, scatt_range1, scatt_range2):
+        scatter_fig1, histogram_fig1 = update_band_and_graph(df_fbrxgm, selected_rat, selected_band, scatt_range1)
+        scatter_fig2, histogram_fig2 = update_band_and_graph(df_fbrxgc, selected_rat, selected_band, scatt_range2)
+        band_opt = Band_list(df_fbrxgm, selected_rat)
+
         return band_opt, scatter_fig1, histogram_fig1, scatter_fig2, histogram_fig2
 
-    # ! Sub6 FBRX Freq Cal
+    # ** ================================= Sub6 FBRX Freq Cal =================================
     @callback(Output("NR_FBRXFreq_band", "value"), Input("NR_FBRXFreq_RAT", "value"))
-    def FBRXFreq_NR(Sel_rat):
-        return Initialize_band(Sel_rat, df_fbrxfm)
+    def FBRXFreq_NR(selected_rat):
+        return Initialize_band(selected_rat, df_fbrxfm)
 
     @callback(
         [
@@ -404,15 +406,17 @@ def initialize_nr(dict_nr):
             Input("sld_FBRX_FC_scat", "value"),
         ],
     )
-    def update_FBRXFreq(Sel_rat, Sel_band, scatt_range1, scatt_range2):
-        band_opt, scatt_fig1, histo_fig1 = update_band_and_graph(df_fbrxfm, Sel_rat, Sel_band, scatt_range1)
-        band_opt, scatt_fig2, histo_fig2 = update_band_and_graph(df_fbrxfc, Sel_rat, Sel_band, scatt_range2)
+    def update_FBRXFreq(selected_rat, selected_band, scatt_range1, scatt_range2):
+        scatt_fig1, histo_fig1 = update_band_and_graph(df_fbrxfm, selected_rat, selected_band, scatt_range1)
+        scatt_fig2, histo_fig2 = update_band_and_graph(df_fbrxfc, selected_rat, selected_band, scatt_range2)
+        band_opt = Band_list(df_fbrxfm, selected_rat)
+
         return band_opt, scatt_fig1, histo_fig1, scatt_fig2, histo_fig2
 
-    # ! Sub6 RX Gain Cal
+    # ** ================================= Sub6 RX Gain Cal =================================
     @callback(Output("NR_RXGain_band", "value"), Input("NR_RXGain_RAT", "value"))
-    def RXGain_NR(Sel_rat):
-        return Initialize_band(Sel_rat, df_RXGain)
+    def RXGain_NR(selected_rat):
+        return Initialize_band(selected_rat, df_RXGain)
 
     @callback(
         [
@@ -426,14 +430,16 @@ def initialize_nr(dict_nr):
             Input("sld_RXGain_scat", "value"),
         ],
     )
-    def update_RXGain(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatt_fig, histo_fig = update_band_and_graph(df_RXGain, Sel_rat, Sel_band, scatt_range)
+    def update_RXGain(selected_rat, selected_band, scatt_range):
+        scatt_fig, histo_fig = update_band_and_graph(df_RXGain, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_RXGain, selected_rat)
+
         return band_opt, scatt_fig, histo_fig
 
-    # ! Sub6 RX RSRP Cal
+    # ** ================================= Sub6 RX RSRP Cal =================================
     @callback(Output("NR_RXRSRP_band", "value"), Input("NR_RXRSRP_RAT", "value"))
-    def RXGain_NR(Sel_rat):
-        return Initialize_band(Sel_rat, df_RXRSRP)
+    def RXGain_NR(selected_rat):
+        return Initialize_band(selected_rat, df_RXRSRP)
 
     @callback(
         [
@@ -447,14 +453,16 @@ def initialize_nr(dict_nr):
             Input("sld_RXRSRP_scat", "value"),
         ],
     )
-    def update_RXGain(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatt_fig, histo_fig = update_band_and_graph(df_RXRSRP, Sel_rat, Sel_band, scatt_range)
+    def update_RXGain(selected_rat, selected_band, scatt_range):
+        scatt_fig, histo_fig = update_band_and_graph(df_RXRSRP, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_RXRSRP, selected_rat)
+
         return band_opt, scatt_fig, histo_fig
 
-    # ! Sub6 RX Freq Cal
+    # ** ================================= Sub6 RX Freq Cal =================================
     @callback(Output("NR_RXComp_band", "value"), Input("NR_RXComp_RAT", "value"))
-    def RXGain_NR(Sel_rat):
-        return Initialize_band(Sel_rat, df_RXComp)
+    def RXGain_NR(selected_rat):
+        return Initialize_band(selected_rat, df_RXComp)
 
     @callback(
         [
@@ -468,14 +476,16 @@ def initialize_nr(dict_nr):
             Input("sld_RXComp_scat", "value"),
         ],
     )
-    def update_RXGain(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatt_fig, histo_fig = update_band_and_graph(df_RXComp, Sel_rat, Sel_band, scatt_range)
+    def update_RXGain(selected_rat, selected_band, scatt_range):
+        scatt_fig, histo_fig = update_band_and_graph(df_RXComp, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_RXComp, selected_rat)
+
         return band_opt, scatt_fig, histo_fig
 
-    # ! Sub6 RX Mixer Cal
+    # ** ================================= Sub6 RX Mixer Cal =================================
     @callback(Output("NR_RXMixer_band", "value"), Input("NR_RXMixer_RAT", "value"))
-    def RXGain_NR(Sel_rat):
-        return Initialize_band(Sel_rat, df_RXMixer)
+    def RXGain_NR(selected_rat):
+        return Initialize_band(selected_rat, df_RXMixer)
 
     @callback(
         [
@@ -489,14 +499,16 @@ def initialize_nr(dict_nr):
             Input("sld_RXMixer_scat", "value"),
         ],
     )
-    def update_RXGain(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatt_fig, histo_fig = update_band_and_graph(df_RXMixer, Sel_rat, Sel_band, scatt_range)
+    def update_RXGain(selected_rat, selected_band, scatt_range):
+        scatt_fig, histo_fig = update_band_and_graph(df_RXMixer, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_RXMixer, selected_rat)
+
         return band_opt, scatt_fig, histo_fig
 
-    # ! Sub6 APT Measuremnt
+    # ** ================================= Sub6 APT Measuremnt =================================
     @callback(Output("NR_APTMeas_band", "value"), Input("NR_APTMeas_RAT", "value"))
-    def APTMeas_NR(Sel_rat):
-        return Initialize_band(Sel_rat, df_APT_Meas)
+    def APTMeas_NR(selected_rat):
+        return Initialize_band(selected_rat, df_APT_Meas)
 
     @callback(
         [
@@ -510,14 +522,16 @@ def initialize_nr(dict_nr):
             Input("sld_APTMeas_scat", "value"),
         ],
     )
-    def update_APTMeas(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatt_fig, histo_fig = update_band_and_graph(df_APT_Meas, Sel_rat, Sel_band, scatt_range)
+    def update_APTMeas(selected_rat, selected_band, scatt_range):
+        scatt_fig, histo_fig = update_band_and_graph(df_APT_Meas, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_APT_Meas, selected_rat)
+
         return band_opt, scatt_fig, histo_fig
 
-    # ! Sub6 ET-SAPT Psat
+    # ** ================================= Sub6 ET-SAPT Psat =================================
     @callback(Output("NR_ETPSat_band", "value"), Input("NR_ETPsat_RAT", "value"))
-    def ET_Psat_NR(Sel_rat):
-        return Initialize_band(Sel_rat, df_ET_Psat)
+    def ET_Psat_NR(selected_rat):
+        return Initialize_band(selected_rat, df_ET_Psat)
 
     @callback(
         [
@@ -531,14 +545,16 @@ def initialize_nr(dict_nr):
             Input("sld_ET_Psat_scat", "value"),
         ],
     )
-    def update_ET_Psat(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatt_fig, histo_fig = update_band_and_graph(df_ET_Psat, Sel_rat, Sel_band, scatt_range)
+    def update_ET_Psat(selected_rat, selected_band, scatt_range):
+        scatt_fig, histo_fig = update_band_and_graph(df_ET_Psat, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_ET_Psat, selected_rat)
+
         return band_opt, scatt_fig, histo_fig
 
-    # ! Sub6 ET-SAPT Pgain
+    # ** ================================= Sub6 ET-SAPT Pgain =================================
     @callback(Output("NR_ETPgain_band", "value"), Input("NR_ETPgain_RAT", "value"))
-    def ET_Pgain_NR(Sel_rat):
-        return Initialize_band(Sel_rat, df_ET_Pgain)
+    def ET_Pgain_NR(selected_rat):
+        return Initialize_band(selected_rat, df_ET_Pgain)
 
     @callback(
         [
@@ -552,14 +568,16 @@ def initialize_nr(dict_nr):
             Input("sld_ET_Pgain_scat", "value"),
         ],
     )
-    def update_ET_Pgain(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatt_fig, histo_fig = update_band_and_graph(df_ET_Pgain, Sel_rat, Sel_band, scatt_range)
+    def update_ET_Pgain(selected_rat, selected_band, scatt_range):
+        scatt_fig, histo_fig = update_band_and_graph(df_ET_Pgain, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_ET_Pgain, selected_rat)
+
         return band_opt, scatt_fig, histo_fig
 
-    # ! Sub6 ET-SAPT Power
+    # ** ================================= Sub6 ET-SAPT Power =================================
     @callback(Output("NR_ETPower_band", "value"), Input("NR_ETPower_RAT", "value"))
-    def ET_Power_NR(Sel_rat):
-        return Initialize_band(Sel_rat, df_ET_Power)
+    def ET_Power_NR(selected_rat):
+        return Initialize_band(selected_rat, df_ET_Power)
 
     @callback(
         [
@@ -573,14 +591,16 @@ def initialize_nr(dict_nr):
             Input("sld_ET_Power_scat", "value"),
         ],
     )
-    def update_ET_Power(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatt_fig, histo_fig = update_band_and_graph(df_ET_Power, Sel_rat, Sel_band, scatt_range)
+    def update_ET_Power(selected_rat, selected_band, scatt_range):
+        scatt_fig, histo_fig = update_band_and_graph(df_ET_Power, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_ET_Power, selected_rat)
+
         return band_opt, scatt_fig, histo_fig
 
-    # ! Sub6 ET-SAPT Freq
+    # ** ================================= Sub6 ET-SAPT Freq =================================
     @callback(Output("NR_ETFreq_band", "value"), Input("NR_ETFreq_RAT", "value"))
-    def ET_Freq_NR(Sel_rat):
-        return Initialize_band(Sel_rat, df_ET_Freq)
+    def ET_Freq_NR(selected_rat):
+        return Initialize_band(selected_rat, df_ET_Freq)
 
     @callback(
         [
@@ -594,8 +614,10 @@ def initialize_nr(dict_nr):
             Input("sld_ET_Freq_scat", "value"),
         ],
     )
-    def update_ET_Freq(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatt_fig, histo_fig = update_band_and_graph(df_ET_Freq, Sel_rat, Sel_band, scatt_range)
+    def update_ET_Freq(selected_rat, selected_band, scatt_range):
+        scatt_fig, histo_fig = update_band_and_graph(df_ET_Freq, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_ET_Freq, selected_rat)
+
         return band_opt, scatt_fig, histo_fig
 
     dash.register_page(__name__, path="/NR", name="NR_ Sub6", title="NR_ Sub6", layout=layout)
