@@ -1,7 +1,7 @@
 import dash
 import dash_bootstrap_components as dbc
 from dash import dcc, html, callback, Output, Input
-from LSI_Solution.pages.page_cf import create_dropdown, create_range_slider, Initialize_band, update_band_and_graph
+from LSI_Solution.pages.page_cf import create_dropdown, create_range_slider, Initialize_band, Band_list, update_band_and_graph
 
 
 def initialize_2g(dict_2g):
@@ -261,8 +261,8 @@ def initialize_2g(dict_2g):
 
     # ** ============================== 2G RX Cain cal ==============================
     @callback(Output("2G_RXGain_band", "value"), Input("2G_RXGain_RAT", "value"))
-    def RXGain_2G(Sel_rat):
-        return Initialize_band(Sel_rat, df_PRX_Gain_2G)
+    def RXGain_2G(selected_rat):
+        return Initialize_band(selected_rat, df_PRX_Gain_2G)
 
     @callback(
         [
@@ -272,14 +272,15 @@ def initialize_2g(dict_2g):
         ],
         [Input("2G_RXGain_RAT", "value"), Input("2G_RXGain_band", "value"), Input("sld_2G_RXGain_scat", "value")],
     )
-    def update_2G_RXGain(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_PRX_Gain_2G, Sel_rat, Sel_band, scatt_range)
+    def update_2G_RXGain(selected_rat, selected_band, scatt_range):
+        scatter_fig, histogram_fig = update_band_and_graph(df_PRX_Gain_2G, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_PRX_Gain_2G, selected_rat)
         return band_opt, scatter_fig, histogram_fig
 
     # ** ============================== 2G RX Ripple cal ==============================
     @callback(Output("2G_RXRipp_band", "value"), Input("2G_RXRipp_RAT", "value"))
-    def RXRipp_2G(Sel_rat):
-        return Initialize_band(Sel_rat, df_Ripple_2G)
+    def RXRipp_2G(selected_rat):
+        return Initialize_band(selected_rat, df_Ripple_2G)
 
     @callback(
         [
@@ -289,14 +290,16 @@ def initialize_2g(dict_2g):
         ],
         [Input("2G_RXRipp_RAT", "value"), Input("2G_RXRipp_band", "value"), Input("sld_2G_RXRipp_scat", "value")],
     )
-    def update_2G_RXRipp(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_Ripple_2G, Sel_rat, Sel_band, scatt_range)
+    def update_2G_RXRipp(selected_rat, selected_band, scatt_range):
+        scatter_fig, histogram_fig = update_band_and_graph(df_Ripple_2G, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_Ripple_2G, selected_rat)
+
         return band_opt, scatter_fig, histogram_fig
 
     # ** ============================== 2G TX GMSK Index ==============================
     @callback(Output("2G_GMSK_band", "value"), Input("2G_GMSK_RAT", "value"))
-    def GMSK_2G(Sel_rat):
-        return Initialize_band(Sel_rat, df_GMSK_Mean)
+    def GMSK_2G(selected_rat):
+        return Initialize_band(selected_rat, df_GMSK_Mean)
 
     @callback(
         [
@@ -306,14 +309,16 @@ def initialize_2g(dict_2g):
         ],
         [Input("2G_GMSK_RAT", "value"), Input("2G_GMSK_band", "value"), Input("sld_2G_GMSK_scat", "value")],
     )
-    def update_2G_GMSK(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_GMSK_Mean, Sel_rat, Sel_band, scatt_range)
+    def update_2G_GMSK(selected_rat, selected_band, scatt_range):
+        scatter_fig, histogram_fig = update_band_and_graph(df_GMSK_Mean, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_GMSK_Mean, selected_rat)
+
         return band_opt, scatter_fig, histogram_fig
 
     # ** ============================== 2G TX GMSK TxL ==============================
     @callback(Output("2G_GMSKTxL_band", "value"), Input("2G_GMSKTxL_RAT", "value"))
-    def GMSKTxL_2G(Sel_rat):
-        return Initialize_band(Sel_rat, df_GMSK_TxL_Mean)
+    def GMSKTxL_2G(selected_rat):
+        return Initialize_band(selected_rat, df_GMSK_TxL_Mean)
 
     @callback(
         [
@@ -323,14 +328,16 @@ def initialize_2g(dict_2g):
         ],
         [Input("2G_GMSKTxL_RAT", "value"), Input("2G_GMSKTxL_band", "value"), Input("sld_2G_GMSKTxL_scat", "value")],
     )
-    def update_2G_GMSKTxL(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_GMSK_TxL_Mean, Sel_rat, Sel_band, scatt_range)
+    def update_2G_GMSKTxL(selected_rat, selected_band, scatt_range):
+        scatter_fig, histogram_fig = update_band_and_graph(df_GMSK_TxL_Mean, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_GMSK_TxL_Mean, selected_rat)
+
         return band_opt, scatter_fig, histogram_fig
 
     # ** ============================== 2G TX GMSK Code ==============================
     @callback(Output("2G_GMSKCode_band", "value"), Input("2G_GMSKCode_RAT", "value"))
-    def GMSKCode_2G(Sel_rat):
-        return Initialize_band(Sel_rat, df_GMSK_Code_Mean)
+    def GMSKCode_2G(selected_rat):
+        return Initialize_band(selected_rat, df_GMSK_Code_Mean)
 
     @callback(
         [
@@ -340,14 +347,16 @@ def initialize_2g(dict_2g):
         ],
         [Input("2G_GMSKCode_RAT", "value"), Input("2G_GMSKCode_band", "value"), Input("sld_2G_GMSKCode_scat", "value")],
     )
-    def update_2G_GMSKCode(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_GMSK_Code_Mean, Sel_rat, Sel_band, scatt_range)
+    def update_2G_GMSKCode(selected_rat, selected_band, scatt_range):
+        scatter_fig, histogram_fig = update_band_and_graph(df_GMSK_Code_Mean, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_GMSK_Code_Mean, selected_rat)
+
         return band_opt, scatter_fig, histogram_fig
 
     # ** ============================== 2G TX EPSK Index ==============================
     @callback(Output("2G_EPSK_band", "value"), Input("2G_EPSK_RAT", "value"))
-    def EPSK_2G(Sel_rat):
-        return Initialize_band(Sel_rat, df_EPSK_Mean)
+    def EPSK_2G(selected_rat):
+        return Initialize_band(selected_rat, df_EPSK_Mean)
 
     @callback(
         [
@@ -357,14 +366,16 @@ def initialize_2g(dict_2g):
         ],
         [Input("2G_EPSK_RAT", "value"), Input("2G_EPSK_band", "value"), Input("sld_2G_EPSK_scat", "value")],
     )
-    def update_2G_EPSK(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_EPSK_Mean, Sel_rat, Sel_band, scatt_range)
+    def update_2G_EPSK(selected_rat, selected_band, scatt_range):
+        scatter_fig, histogram_fig = update_band_and_graph(df_EPSK_Mean, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_EPSK_Mean, selected_rat)
+
         return band_opt, scatter_fig, histogram_fig
 
     # ** ============================== 2G TX EPSK TxL ==============================
     @callback(Output("2G_EPSKTxL_band", "value"), Input("2G_EPSKTxL_RAT", "value"))
-    def EPSKTxL_2G(Sel_rat):
-        return Initialize_band(Sel_rat, df_EPSK_TxL_Mean)
+    def EPSKTxL_2G(selected_rat):
+        return Initialize_band(selected_rat, df_EPSK_TxL_Mean)
 
     @callback(
         [
@@ -374,14 +385,16 @@ def initialize_2g(dict_2g):
         ],
         [Input("2G_EPSKTxL_RAT", "value"), Input("2G_EPSKTxL_band", "value"), Input("sld_2G_EPSKTxL_scat", "value")],
     )
-    def update_2G_EPSKTxL(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_EPSK_TxL_Mean, Sel_rat, Sel_band, scatt_range)
+    def update_2G_EPSKTxL(selected_rat, selected_band, scatt_range):
+        scatter_fig, histogram_fig = update_band_and_graph(df_EPSK_TxL_Mean, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_EPSK_TxL_Mean, selected_rat)
+
         return band_opt, scatter_fig, histogram_fig
 
     # ** ============================== 2G TX EPSK Code ==============================
     @callback(Output("2G_EPSKCode_band", "value"), Input("2G_EPSKCode_RAT", "value"))
-    def EPSKCode_2G(Sel_rat):
-        return Initialize_band(Sel_rat, df_EPSK_Code_Mean)
+    def EPSKCode_2G(selected_rat):
+        return Initialize_band(selected_rat, df_EPSK_Code_Mean)
 
     @callback(
         [
@@ -391,8 +404,10 @@ def initialize_2g(dict_2g):
         ],
         [Input("2G_EPSKCode_RAT", "value"), Input("2G_EPSKCode_band", "value"), Input("sld_2G_EPSKCode_scat", "value")],
     )
-    def update_2G_EPSKCode(Sel_rat, Sel_band, scatt_range):
-        band_opt, scatter_fig, histogram_fig = update_band_and_graph(df_EPSK_Code_Mean, Sel_rat, Sel_band, scatt_range)
+    def update_2G_EPSKCode(selected_rat, selected_band, scatt_range):
+        scatter_fig, histogram_fig = update_band_and_graph(df_EPSK_Code_Mean, selected_rat, selected_band, scatt_range)
+        band_opt = Band_list(df_EPSK_Code_Mean, selected_rat)
+
         return band_opt, scatter_fig, histogram_fig
 
     dash.register_page(__name__, path="/GSM", name="GSM", title="GSM", layout=layout)
