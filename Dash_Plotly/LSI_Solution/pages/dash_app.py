@@ -2,10 +2,10 @@ import os
 import dash
 from dash import html
 import dash_bootstrap_components as dbc
-from LSI_Solution.pages.page_cf import initialize_cf
-from LSI_Solution.pages.page_2g import initialize_2g
-from LSI_Solution.pages.page_3g import initialize_3g
-from LSI_Solution.pages.page_nr import initialize_nr
+from LSI_Solution.pages.page_cf import Initialize_cf
+from LSI_Solution.pages.page_2g import Initialize_2g
+from LSI_Solution.pages.page_3g import Initialize_3g
+from LSI_Solution.pages.page_nr import Initialize_nr
 
 
 def MultiPageApp(dict_cf, dict_2g, dict_3g, dict_nr):
@@ -13,10 +13,10 @@ def MultiPageApp(dict_cf, dict_2g, dict_3g, dict_nr):
     current_directory = os.path.dirname(__file__)  # 현재 파일의 디렉토리 경로
     app = dash.Dash(__name__, use_pages=True, pages_folder=current_directory, external_stylesheets=[dbc.themes.COSMO])
 
-    initialize_cf(dict_cf)
-    initialize_2g(dict_2g)
-    initialize_3g(dict_3g)
-    initialize_nr(dict_nr)
+    Initialize_cf(dict_cf)
+    Initialize_2g(dict_2g)
+    Initialize_3g(dict_3g)
+    Initialize_nr(dict_nr)
 
     sidebar = dbc.Nav(
         [
