@@ -1,10 +1,10 @@
 import dash
 import dash_bootstrap_components as dbc
 from dash import dcc, html, callback, Output, Input
-from LSI_Solution.pages.page_cf import create_dropdown, create_range_slider, Initialize_band, Band_list, update_band_and_graph
+from LSI_Solution.pages.page_cf import Create_dropdown, Create_range_slider, Initialize_band, Band_list, Update_band_and_graph
 
 
-def initialize_2g(dict_2g):
+def Initialize_2g(dict_2g):
     df_PRX_Gain_2G = dict_2g["RXGain"]
     df_Ripple_2G = dict_2g["RXRipp"]
     df_GMSK_Mean = dict_2g["GMSK"]
@@ -16,27 +16,27 @@ def initialize_2g(dict_2g):
 
     band_opt = [{"label": "", "value": ""}]
 
-    drop_2GRXGain_rat = create_dropdown("2G_RXGain_RAT", "G", [{"label": "2G", "value": "G"}])
-    drop_2GRXRipp_rat = create_dropdown("2G_RXRipp_RAT", "G", [{"label": "2G", "value": "G"}])
+    drop_2GRXGain_rat = Create_dropdown("2G_RXGain_RAT", "G", [{"label": "2G", "value": "G"}])
+    drop_2GRXRipp_rat = Create_dropdown("2G_RXRipp_RAT", "G", [{"label": "2G", "value": "G"}])
 
-    drop_2G_GMSK_rat = create_dropdown("2G_GMSK_RAT", "G", [{"label": "2G", "value": "G"}])
-    drop_2G_GMSKTxL_rat = create_dropdown("2G_GMSKTxL_RAT", "G", [{"label": "2G", "value": "G"}])
-    drop_2G_GMSKCode_rat = create_dropdown("2G_GMSKCode_RAT", "G", [{"label": "2G", "value": "G"}])
+    drop_2G_GMSK_rat = Create_dropdown("2G_GMSK_RAT", "G", [{"label": "2G", "value": "G"}])
+    drop_2G_GMSKTxL_rat = Create_dropdown("2G_GMSKTxL_RAT", "G", [{"label": "2G", "value": "G"}])
+    drop_2G_GMSKCode_rat = Create_dropdown("2G_GMSKCode_RAT", "G", [{"label": "2G", "value": "G"}])
 
-    drop_2G_EPSK_rat = create_dropdown("2G_EPSK_RAT", "G", [{"label": "2G", "value": "G"}])
-    drop_2G_EPSKTxL_rat = create_dropdown("2G_EPSKTxL_RAT", "G", [{"label": "2G", "value": "G"}])
-    drop_2G_EPSKCode_rat = create_dropdown("2G_EPSKCode_RAT", "G", [{"label": "2G", "value": "G"}])
+    drop_2G_EPSK_rat = Create_dropdown("2G_EPSK_RAT", "G", [{"label": "2G", "value": "G"}])
+    drop_2G_EPSKTxL_rat = Create_dropdown("2G_EPSKTxL_RAT", "G", [{"label": "2G", "value": "G"}])
+    drop_2G_EPSKCode_rat = Create_dropdown("2G_EPSKCode_RAT", "G", [{"label": "2G", "value": "G"}])
 
-    drop_2GRXGain_band = create_dropdown("2G_RXGain_band", "", band_opt)
-    drop_2GRXRipp_band = create_dropdown("2G_RXRipp_band", "", band_opt)
+    drop_2GRXGain_band = Create_dropdown("2G_RXGain_band", "", band_opt)
+    drop_2GRXRipp_band = Create_dropdown("2G_RXRipp_band", "", band_opt)
 
-    drop_2G_GMSK_band = create_dropdown("2G_GMSK_band", "", band_opt)
-    drop_2G_GMSKTxL_band = create_dropdown("2G_GMSKTxL_band", "", band_opt)
-    drop_2G_GMSKCode_band = create_dropdown("2G_GMSKCode_band", "", band_opt)
+    drop_2G_GMSK_band = Create_dropdown("2G_GMSK_band", "", band_opt)
+    drop_2G_GMSKTxL_band = Create_dropdown("2G_GMSKTxL_band", "", band_opt)
+    drop_2G_GMSKCode_band = Create_dropdown("2G_GMSKCode_band", "", band_opt)
 
-    drop_2G_EPSK_band = create_dropdown("2G_EPSK_band", "", band_opt)
-    drop_2G_EPSKTxL_band = create_dropdown("2G_EPSKTxL_band", "", band_opt)
-    drop_2G_EPSKCode_band = create_dropdown("2G_EPSKCode_band", "", band_opt)
+    drop_2G_EPSK_band = Create_dropdown("2G_EPSK_band", "", band_opt)
+    drop_2G_EPSKTxL_band = Create_dropdown("2G_EPSKTxL_band", "", band_opt)
+    drop_2G_EPSKCode_band = Create_dropdown("2G_EPSKCode_band", "", band_opt)
 
     layout = html.Div(
         [
@@ -60,7 +60,7 @@ def initialize_2g(dict_2g):
             dbc.Row(
                 [
                     dbc.Col(
-                        create_range_slider("sld_2G_RXGain_scat", df_PRX_Gain_2G, use_min_max=False),
+                        Create_range_slider("sld_2G_RXGain_scat", df_PRX_Gain_2G, use_min_max=False),
                         width={"size": 6, "offset": 0},
                     )
                 ],
@@ -87,7 +87,7 @@ def initialize_2g(dict_2g):
             dbc.Row(
                 [
                     dbc.Col(
-                        create_range_slider("sld_2G_RXRipp_scat", df_Ripple_2G, use_min_max=False),
+                        Create_range_slider("sld_2G_RXRipp_scat", df_Ripple_2G, use_min_max=False),
                         width={"size": 6, "offset": 0},
                     )
                 ],
@@ -114,7 +114,7 @@ def initialize_2g(dict_2g):
             dbc.Row(
                 [
                     dbc.Col(
-                        create_range_slider("sld_2G_GMSK_scat", df_GMSK_Mean, use_min_max=False),
+                        Create_range_slider("sld_2G_GMSK_scat", df_GMSK_Mean, use_min_max=False),
                         width={"size": 6, "offset": 0},
                     )
                 ],
@@ -141,7 +141,7 @@ def initialize_2g(dict_2g):
             dbc.Row(
                 [
                     dbc.Col(
-                        create_range_slider("sld_2G_GMSKTxL_scat", df_GMSK_TxL_Mean, use_min_max=False),
+                        Create_range_slider("sld_2G_GMSKTxL_scat", df_GMSK_TxL_Mean, use_min_max=False),
                         width={"size": 6, "offset": 0},
                     )
                 ],
@@ -168,7 +168,7 @@ def initialize_2g(dict_2g):
             dbc.Row(
                 [
                     dbc.Col(
-                        create_range_slider("sld_2G_GMSKCode_scat", df_GMSK_Code_Mean, use_min_max=False),
+                        Create_range_slider("sld_2G_GMSKCode_scat", df_GMSK_Code_Mean, use_min_max=False),
                         width={"size": 6, "offset": 0},
                     )
                 ],
@@ -195,7 +195,7 @@ def initialize_2g(dict_2g):
             dbc.Row(
                 [
                     dbc.Col(
-                        create_range_slider("sld_2G_EPSK_scat", df_EPSK_Mean, use_min_max=False),
+                        Create_range_slider("sld_2G_EPSK_scat", df_EPSK_Mean, use_min_max=False),
                         width={"size": 6, "offset": 0},
                     )
                 ],
@@ -222,7 +222,7 @@ def initialize_2g(dict_2g):
             dbc.Row(
                 [
                     dbc.Col(
-                        create_range_slider("sld_2G_EPSKTxL_scat", df_EPSK_TxL_Mean, use_min_max=False),
+                        Create_range_slider("sld_2G_EPSKTxL_scat", df_EPSK_TxL_Mean, use_min_max=False),
                         width={"size": 6, "offset": 0},
                     )
                 ],
@@ -249,7 +249,7 @@ def initialize_2g(dict_2g):
             dbc.Row(
                 [
                     dbc.Col(
-                        create_range_slider("sld_2G_EPSKCode_scat", df_EPSK_Code_Mean, use_min_max=False),
+                        Create_range_slider("sld_2G_EPSKCode_scat", df_EPSK_Code_Mean, use_min_max=False),
                         width={"size": 6, "offset": 0},
                     )
                 ],
@@ -273,7 +273,7 @@ def initialize_2g(dict_2g):
         [Input("2G_RXGain_RAT", "value"), Input("2G_RXGain_band", "value"), Input("sld_2G_RXGain_scat", "value")],
     )
     def update_2G_RXGain(selected_rat, selected_band, scatt_range):
-        scatter_fig, histogram_fig = update_band_and_graph(df_PRX_Gain_2G, selected_rat, selected_band, scatt_range)
+        scatter_fig, histogram_fig = Update_band_and_graph(df_PRX_Gain_2G, selected_rat, selected_band, scatt_range)
         band_opt = Band_list(df_PRX_Gain_2G, selected_rat)
         return band_opt, scatter_fig, histogram_fig
 
@@ -291,7 +291,7 @@ def initialize_2g(dict_2g):
         [Input("2G_RXRipp_RAT", "value"), Input("2G_RXRipp_band", "value"), Input("sld_2G_RXRipp_scat", "value")],
     )
     def update_2G_RXRipp(selected_rat, selected_band, scatt_range):
-        scatter_fig, histogram_fig = update_band_and_graph(df_Ripple_2G, selected_rat, selected_band, scatt_range)
+        scatter_fig, histogram_fig = Update_band_and_graph(df_Ripple_2G, selected_rat, selected_band, scatt_range)
         band_opt = Band_list(df_Ripple_2G, selected_rat)
 
         return band_opt, scatter_fig, histogram_fig
@@ -310,7 +310,7 @@ def initialize_2g(dict_2g):
         [Input("2G_GMSK_RAT", "value"), Input("2G_GMSK_band", "value"), Input("sld_2G_GMSK_scat", "value")],
     )
     def update_2G_GMSK(selected_rat, selected_band, scatt_range):
-        scatter_fig, histogram_fig = update_band_and_graph(df_GMSK_Mean, selected_rat, selected_band, scatt_range)
+        scatter_fig, histogram_fig = Update_band_and_graph(df_GMSK_Mean, selected_rat, selected_band, scatt_range)
         band_opt = Band_list(df_GMSK_Mean, selected_rat)
 
         return band_opt, scatter_fig, histogram_fig
@@ -329,7 +329,7 @@ def initialize_2g(dict_2g):
         [Input("2G_GMSKTxL_RAT", "value"), Input("2G_GMSKTxL_band", "value"), Input("sld_2G_GMSKTxL_scat", "value")],
     )
     def update_2G_GMSKTxL(selected_rat, selected_band, scatt_range):
-        scatter_fig, histogram_fig = update_band_and_graph(df_GMSK_TxL_Mean, selected_rat, selected_band, scatt_range)
+        scatter_fig, histogram_fig = Update_band_and_graph(df_GMSK_TxL_Mean, selected_rat, selected_band, scatt_range)
         band_opt = Band_list(df_GMSK_TxL_Mean, selected_rat)
 
         return band_opt, scatter_fig, histogram_fig
@@ -348,7 +348,7 @@ def initialize_2g(dict_2g):
         [Input("2G_GMSKCode_RAT", "value"), Input("2G_GMSKCode_band", "value"), Input("sld_2G_GMSKCode_scat", "value")],
     )
     def update_2G_GMSKCode(selected_rat, selected_band, scatt_range):
-        scatter_fig, histogram_fig = update_band_and_graph(df_GMSK_Code_Mean, selected_rat, selected_band, scatt_range)
+        scatter_fig, histogram_fig = Update_band_and_graph(df_GMSK_Code_Mean, selected_rat, selected_band, scatt_range)
         band_opt = Band_list(df_GMSK_Code_Mean, selected_rat)
 
         return band_opt, scatter_fig, histogram_fig
@@ -367,7 +367,7 @@ def initialize_2g(dict_2g):
         [Input("2G_EPSK_RAT", "value"), Input("2G_EPSK_band", "value"), Input("sld_2G_EPSK_scat", "value")],
     )
     def update_2G_EPSK(selected_rat, selected_band, scatt_range):
-        scatter_fig, histogram_fig = update_band_and_graph(df_EPSK_Mean, selected_rat, selected_band, scatt_range)
+        scatter_fig, histogram_fig = Update_band_and_graph(df_EPSK_Mean, selected_rat, selected_band, scatt_range)
         band_opt = Band_list(df_EPSK_Mean, selected_rat)
 
         return band_opt, scatter_fig, histogram_fig
@@ -386,7 +386,7 @@ def initialize_2g(dict_2g):
         [Input("2G_EPSKTxL_RAT", "value"), Input("2G_EPSKTxL_band", "value"), Input("sld_2G_EPSKTxL_scat", "value")],
     )
     def update_2G_EPSKTxL(selected_rat, selected_band, scatt_range):
-        scatter_fig, histogram_fig = update_band_and_graph(df_EPSK_TxL_Mean, selected_rat, selected_band, scatt_range)
+        scatter_fig, histogram_fig = Update_band_and_graph(df_EPSK_TxL_Mean, selected_rat, selected_band, scatt_range)
         band_opt = Band_list(df_EPSK_TxL_Mean, selected_rat)
 
         return band_opt, scatter_fig, histogram_fig
@@ -405,7 +405,7 @@ def initialize_2g(dict_2g):
         [Input("2G_EPSKCode_RAT", "value"), Input("2G_EPSKCode_band", "value"), Input("sld_2G_EPSKCode_scat", "value")],
     )
     def update_2G_EPSKCode(selected_rat, selected_band, scatt_range):
-        scatter_fig, histogram_fig = update_band_and_graph(df_EPSK_Code_Mean, selected_rat, selected_band, scatt_range)
+        scatter_fig, histogram_fig = Update_band_and_graph(df_EPSK_Code_Mean, selected_rat, selected_band, scatt_range)
         band_opt = Band_list(df_EPSK_Code_Mean, selected_rat)
 
         return band_opt, scatter_fig, histogram_fig
