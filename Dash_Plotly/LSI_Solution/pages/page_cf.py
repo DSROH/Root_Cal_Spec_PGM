@@ -4,6 +4,11 @@ import dash_bootstrap_components as dbc
 from dash import dcc, html, callback, Output, Input
 
 
+def df_strip(dataframe):
+    df_data = dataframe.apply(lambda x: x.map(lambda y: y.strip()) if x.dtype == "object" else x)
+    return df_data
+
+
 def Trans_dataframe(df):
     df = df.reset_index(drop=True).dropna(axis=1)
 
@@ -51,6 +56,21 @@ def Trans_dataframe(df):
     return df_Transposed
 
 
+def Initialize_dropdowns(dict_nr, keys, band_opt=None):
+    if band_opt is None:
+        band_opt = [{"label": "", "value": ""}]
+
+    dropdowns = {}
+    dataframes = {}
+    for key in keys:
+        df = dict_nr[key].apply(lambda x: x.map(lambda y: y.strip()) if x.dtype == "object" else x)
+        dataframes[key] = df
+        dropdowns[key + "_r"] = Create_dropdown(f"NR_{key}_r", "n", [{"label": "NR", "value": "n"}])
+        dropdowns[key + "_b"] = Create_dropdown(f"NR_{key}_b", "", band_opt)
+
+    return dropdowns, dataframes
+
+
 def Create_dropdown(drop_id, default_value, options):
     return dcc.Dropdown(
         id=drop_id,
@@ -69,22 +89,35 @@ def Create_dropdown(drop_id, default_value, options):
 
 
 def Create_range_slider(sld_id, df, use_min_max=True):
-    df_Transposed = Trans_dataframe(df)
+    if "hist" in sld_id:
+        x_min = 0
+        x_max = 5
+        x_step = 0.05
 
-    if use_min_max:
-        x_min = df_Transposed.min()
-        x_max = df_Transposed.max()
+        return dcc.Slider(
+            id=sld_id,
+            marks={i: str(i) for i in range(0, x_max + 1, (x_max // 10) + 1)},
+            min=x_min,
+            max=x_max,
+            step=x_step,
+            value=2.5,
+        )
     else:
-        x_min, x_max = 0, len(df_Transposed.index) - 1
+        df_Transposed = Trans_dataframe(df)
+        if use_min_max:
+            x_min = df_Transposed.min()
+            x_max = df_Transposed.max()
+        else:
+            x_min, x_max = 0, len(df_Transposed.index) - 1
 
-    return dcc.RangeSlider(
-        id=sld_id,
-        marks={i: str(i) for i in range(1, len(df_Transposed.index) + 1, len(df_Transposed.index) // 10)},
-        min=x_min,
-        max=x_max,
-        value=[x_min, x_max],
-        step=1,
-    )
+        return dcc.RangeSlider(
+            id=sld_id,
+            marks={i: str(i) for i in range(1, len(df_Transposed.index) + 1, len(df_Transposed.index) // 10)},
+            min=x_min,
+            max=x_max,
+            step=1,
+            value=[x_min, x_max],
+        )
 
 
 def Update_axes(fig, x_range=None, y_range=None):
@@ -122,26 +155,26 @@ def Update_axes(fig, x_range=None, y_range=None):
     )
 
 
-def Initialize_band(selected_rat, df):
-    filtered_df = df[df["Band"].str.contains(selected_rat)].reset_index(drop=True)
+def Initialize_band(selected_r, df):
+    filtered_df = df[df["Band"].str.contains(selected_r)].reset_index(drop=True)
     band_opt = filtered_df["Band"].unique()
 
     return band_opt[0] if len(band_opt) > 0 else ""
 
 
-def Band_list(df, selected_rat):
-    filtered_df = df[df["Band"].str.contains(selected_rat)].reset_index(drop=True)
+def Band_list(df, selected_r):
+    filtered_df = df[df["Band"].str.contains(selected_r)].reset_index(drop=True)
     band_opt = filtered_df["Band"].unique()
     band_opt_out = [{"label": i, "value": i} for i in band_opt]
 
     return band_opt_out
 
 
-def Update_band_and_graph(df, selected_rat, selected_band, scatt_range):
-    filtered_df = df[df["Band"].str.contains(selected_rat)].reset_index(drop=True)
+def Update_band_and_graph(df, selected_r, selected_b, scatt_range=None, histo_range=None):
+    filtered_df = df[df["Band"].str.contains(selected_r)].reset_index(drop=True)
 
     if not filtered_df.empty:
-        filtered_df = df[df["Band"] == selected_band].reset_index(drop=True)
+        filtered_df = df[df["Band"] == selected_b].reset_index(drop=True)
         scatter_fig = go.Figure()
         histogram_fig = go.Figure()
 
@@ -162,7 +195,8 @@ def Update_band_and_graph(df, selected_rat, selected_band, scatt_range):
                 go.Histogram(
                     x=df_Transposed[f"{i}"],
                     showlegend=False,
-                    xbins=dict(size=len(df_Transposed.index) // 100),
+                    autobinx=False,
+                    xbins=dict(size=histo_range),
                     opacity=0.75,
                     name=f"{i}",
                 )
@@ -188,6 +222,7 @@ def Update_band_and_graph(df, selected_rat, selected_band, scatt_range):
                 # showticklabels=False,
             ),
         )
+
         histogram_fig.update_layout(title="Histogram", barmode="overlay")
         value = df_Transposed.values
 
@@ -207,59 +242,51 @@ def Update_band_and_graph(df, selected_rat, selected_band, scatt_range):
         return go.Figure(data=[]), go.Figure(data=[])
 
 
-def Drawing_pcc(selected_rat, selected_band, dataframe, scatt_range1=None, scatt_range2=None):
-    cols_to_drop = dataframe[dataframe["Path"].str.contains("Tx2")].index
-    selected_df = dataframe.drop(cols_to_drop)
+def Drawing_pcc(selected_r, selected_b, df, scatt_range1=None, histo_range1=None, scatt_range2=None, histo_range2=None):
+    cols_to_drop = df[df["Path"].str.contains("Tx2")].index
+    selected_df = df.drop(cols_to_drop)
     if scatt_range2 is not None:
-        scatter_fig1, histogram_fig1 = Update_band_and_graph(selected_df, selected_rat, selected_band, scatt_range1)
-        scatter_fig2, histogram_fig2 = Update_band_and_graph(selected_df, selected_rat, selected_band, scatt_range2)
-
+        scatter_fig1, histogram_fig1 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range1, histo_range1)
+        scatter_fig2, histogram_fig2 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range2, histo_range2)
         return scatter_fig1, histogram_fig1, scatter_fig2, histogram_fig2
     else:
-        scatter_fig1, histogram_fig1 = Update_band_and_graph(selected_df, selected_rat, selected_band, scatt_range1)
+        scatter_fig, histogram_fig = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range1, histo_range1)
+        return scatter_fig, histogram_fig
 
-        return scatter_fig1, histogram_fig1
 
-
-def Drawing_scc(selected_rat, selected_band, dataframe, st1, children, scatt_range1=None, scatt_range2=None):
-    selected_df = dataframe[dataframe["Path"].str.contains("Tx2")]
+def Drawing_scc(
+    selected_r, selected_b, df, st1, children, scatt_range1=None, histo_range1=None, scatt_range2=None, histo_range2=None
+):
+    selected_df = df[df["Path"].str.contains("Tx2")]
     item = selected_df.Item.iloc[0]
-    if scatt_range2 is not None:
-        scatter_fig1, histogram_fig1 = Update_band_and_graph(selected_df, selected_rat, selected_band, scatt_range1)
-        scatter_fig2, histogram_fig2 = Update_band_and_graph(selected_df, selected_rat, selected_band, scatt_range2)
 
+    if scatt_range2 is not None:
+        scatter_fig1, histogram_fig1 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range1, histo_range1)
+        scatter_fig2, histogram_fig2 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range2, histo_range2)
         layout = html.Div(
             [
                 dbc.Row([dbc.Col(html.H2(f"NR {st1} {item} SCC", className="display-7"), width="auto")]),
                 dbc.Row(
                     [
-                        dbc.Col(dcc.Graph(id={"type": "dynamic-output", "index": f"'{item}_scc_scatt1'"}, figure=scatter_fig1)),
-                        dbc.Col(
-                            dcc.Graph(id={"type": "dynamic-output", "index": f"'{item}_scc_histo1'"}, figure=histogram_fig1)
-                        ),
-                        dbc.Col(dcc.Graph(id={"type": "dynamic-output", "index": f"'{item}_scc_scatt2'"}, figure=scatter_fig2)),
-                        dbc.Col(
-                            dcc.Graph(id={"type": "dynamic-output", "index": f"'{item}_scc_histo2'"}, figure=histogram_fig2)
-                        ),
+                        dbc.Col(dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_scatt_1'"}, figure=scatter_fig1)),
+                        dbc.Col(dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_histo_1'"}, figure=histogram_fig1)),
+                        dbc.Col(dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_scatt_2'"}, figure=scatter_fig2)),
+                        dbc.Col(dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_histo_2'"}, figure=histogram_fig2)),
                     ],
                     align="center",
                 ),
             ]
         )
         children.append(layout)
-
     else:
-        scatter_fig1, histogram_fig1 = Update_band_and_graph(selected_df, selected_rat, selected_band, scatt_range1)
-
+        scatter_fig1, histogram_fig1 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range1, histo_range1)
         layout = html.Div(
             [
                 dbc.Row([dbc.Col(html.H2(f"NR {st1} {item} SCC", className="display-7"), width="auto")]),
                 dbc.Row(
                     [
-                        dbc.Col(dcc.Graph(id={"type": "dynamic-output", "index": f"'{item}_scc_scatt'"}, figure=scatter_fig1)),
-                        dbc.Col(
-                            dcc.Graph(id={"type": "dynamic-output", "index": f"'{item}_scc_histo'"}, figure=histogram_fig1)
-                        ),
+                        dbc.Col(dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_scatt'"}, figure=scatter_fig1)),
+                        dbc.Col(dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_histo'"}, figure=histogram_fig1)),
                     ],
                     align="center",
                 ),
@@ -283,23 +310,23 @@ def Initialize_cf(dict_cf):
     band_opt = [{"label": "", "value": ""}]
 
     # Create_dropdown 메서드를 사용하여 드롭다운 생성
-    drop_TXDC_rat = Create_dropdown("TXDC_RAT", "B", rat_options)
-    drop_IIP2_rat = Create_dropdown("IIP2_RAT", "n", [{"label": "NR", "value": "n"}])
-    drop_Cable_rat = Create_dropdown("Cable_RAT", "n", [{"label": "NR", "value": "n"}])
+    drop_TXDC_r = Create_dropdown("TXDC_r", "B", rat_options)
+    drop_IIP2_r = Create_dropdown("IIP2_r", "n", [{"label": "NR", "value": "n"}])
+    drop_Cable_r = Create_dropdown("Cable_r", "n", [{"label": "NR", "value": "n"}])
 
-    drop_TXDC_band = Create_dropdown("TXDC_band", "", band_opt)
-    drop_IIP2_band = Create_dropdown("IIP2_band", "", band_opt)
-    drop_Cable_band = Create_dropdown("Cable_band", "", band_opt)
+    drop_TXDC_b = Create_dropdown("TXDC_b", "", band_opt)
+    drop_IIP2_b = Create_dropdown("IIP2_b", "", band_opt)
+    drop_Cable_b = Create_dropdown("Cable_b", "", band_opt)
 
     # 페이지 레이아웃을 초기화합니다.
     layout = html.Div(
         [
-            # ! TXDC Cal
+            # ** ================================= TXDC Cal =================================
             dbc.Row(
                 [
                     dbc.Col(html.H2("TXDC Cal", className="display-7"), width="auto"),
-                    dbc.Col(drop_TXDC_rat, width=1),
-                    dbc.Col(drop_TXDC_band, width=1),
+                    dbc.Col(drop_TXDC_r, width=1),
+                    dbc.Col(drop_TXDC_b, width=1),
                 ],
                 align="center",
             ),
@@ -316,12 +343,12 @@ def Initialize_cf(dict_cf):
                 align="center",
             ),
             html.Hr(),
-            # ! IIP2 Cal
+            # ** ================================= IIP2 Cal =================================
             dbc.Row(
                 [
                     dbc.Col(html.H2("IIP2 Cal", className="display-7"), width="auto"),
-                    dbc.Col(drop_IIP2_rat, width=1),
-                    dbc.Col(drop_IIP2_band, width=1),
+                    dbc.Col(drop_IIP2_r, width=1),
+                    dbc.Col(drop_IIP2_b, width=1),
                 ],
                 align="center",
             ),
@@ -338,12 +365,12 @@ def Initialize_cf(dict_cf):
                 align="center",
             ),
             html.Hr(),
-            # ! Cable Check
+            # ** ================================= Cable Check =================================
             dbc.Row(
                 [
                     dbc.Col(html.H2("RF Cable Check", className="display-7"), width="auto"),
-                    dbc.Col(drop_Cable_rat, width=1),
-                    dbc.Col(drop_Cable_band, width=1),
+                    dbc.Col(drop_Cable_r, width=1),
+                    dbc.Col(drop_Cable_b, width=1),
                 ],
                 align="center",
             ),
@@ -363,48 +390,48 @@ def Initialize_cf(dict_cf):
         ]
     )
 
-    # ! TXDC Cal
-    @callback(Output("TXDC_band", "value"), Input("TXDC_RAT", "value"))
-    def TXDC_CF(selected_rat):
-        return Initialize_band(selected_rat, df_TXDC)
+    # ** ================================= TXDC Cal =================================
+    @callback(Output("TXDC_b", "value"), Input("TXDC_r", "value"))
+    def TXDC_CF(selected_r):
+        return Initialize_band(selected_r, df_TXDC)
 
     @callback(
-        [Output("TXDC_band", "options"), Output("TXDC_grp_Scatt", "figure"), Output("TXDC_grp_Histo", "figure")],
-        [Input("TXDC_RAT", "value"), Input("TXDC_band", "value"), Input("sld_TXDC_scat", "value")],
+        [Output("TXDC_b", "options"), Output("TXDC_grp_Scatt", "figure"), Output("TXDC_grp_Histo", "figure")],
+        [Input("TXDC_r", "value"), Input("TXDC_b", "value"), Input("sld_TXDC_scat", "value")],
     )
-    def update_TXDC(selected_rat, selected_band, scatt_range):
-        scatter_fig, histogram_fig = Update_band_and_graph(df_TXDC, selected_rat, selected_band, scatt_range)
-        band_opt = Band_list(df_TXDC, selected_rat)
+    def update_TXDC(selected_r, selected_b, scatt_range):
+        scatter_fig, histogram_fig = Update_band_and_graph(df_TXDC, selected_r, selected_b, scatt_range)
+        band_opt = Band_list(df_TXDC, selected_r)
 
         return band_opt, scatter_fig, histogram_fig
 
-    # ! TXDC Cal
-    @callback(Output("IIP2_band", "value"), Input("IIP2_RAT", "value"))
-    def IIP2_CF(selected_rat):
-        return Initialize_band(selected_rat, df_IIP2)
+    # ** ================================= TXDC Cal =================================
+    @callback(Output("IIP2_b", "value"), Input("IIP2_r", "value"))
+    def IIP2_CF(selected_r):
+        return Initialize_band(selected_r, df_IIP2)
 
     @callback(
-        [Output("IIP2_band", "options"), Output("IIP2_grp_Scatt", "figure"), Output("IIP2_grp_Histo", "figure")],
-        [Input("IIP2_RAT", "value"), Input("IIP2_band", "value"), Input("sld_IIP2_scat", "value")],
+        [Output("IIP2_b", "options"), Output("IIP2_grp_Scatt", "figure"), Output("IIP2_grp_Histo", "figure")],
+        [Input("IIP2_r", "value"), Input("IIP2_b", "value"), Input("sld_IIP2_scat", "value")],
     )
-    def update_IIP2_cal(selected_rat, selected_band, scatt_range):
-        scatter_fig, histogram_fig = Update_band_and_graph(df_IIP2, selected_rat, selected_band, scatt_range)
-        band_opt = Band_list(df_IIP2, selected_rat)
+    def update_IIP2_cal(selected_r, selected_b, scatt_range):
+        scatter_fig, histogram_fig = Update_band_and_graph(df_IIP2, selected_r, selected_b, scatt_range)
+        band_opt = Band_list(df_IIP2, selected_r)
 
         return band_opt, scatter_fig, histogram_fig
 
-    # ! RF Cable Check
-    @callback(Output("Cable_band", "value"), Input("Cable_RAT", "value"))
-    def Cable_CF(selected_rat):
-        return Initialize_band(selected_rat, df_Cable)
+    # ** ================================= RF Cable Check =================================
+    @callback(Output("Cable_b", "value"), Input("Cable_r", "value"))
+    def Cable_CF(selected_r):
+        return Initialize_band(selected_r, df_Cable)
 
     @callback(
-        [Output("Cable_band", "options"), Output("Cable_grp_Scatt", "figure"), Output("Cable_grp_Histo", "figure")],
-        [Input("Cable_RAT", "value"), Input("Cable_band", "value"), Input("sld_IIP2_scat", "value")],
+        [Output("Cable_b", "options"), Output("Cable_grp_Scatt", "figure"), Output("Cable_grp_Histo", "figure")],
+        [Input("Cable_r", "value"), Input("Cable_b", "value"), Input("sld_IIP2_scat", "value")],
     )
-    def update_Cable(selected_rat, selected_band, scatt_range):
-        scatter_fig, histogram_fig = Update_band_and_graph(df_Cable, selected_rat, selected_band, scatt_range)
-        band_opt = Band_list(df_Cable, selected_rat)
+    def update_Cable(selected_r, selected_b, scatt_range):
+        scatter_fig, histogram_fig = Update_band_and_graph(df_Cable, selected_r, selected_b, scatt_range)
+        band_opt = Band_list(df_Cable, selected_r)
 
         return band_opt, scatter_fig, histogram_fig
 
