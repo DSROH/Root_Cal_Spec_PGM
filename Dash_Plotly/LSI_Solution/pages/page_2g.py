@@ -11,7 +11,7 @@ from LSI_Solution.pages.page_cf import (
 )
 
 
-def Initialize_2g(dict_2g):
+def Initialize_2g(dict_2g, rat):
     df_PRX_Gain_2G = df_strip(dict_2g["RXGain"])
     df_Ripple_2G = df_strip(dict_2g["RXRipp"])
     df_GMSK_Mean = df_strip(dict_2g["GMSK"])
