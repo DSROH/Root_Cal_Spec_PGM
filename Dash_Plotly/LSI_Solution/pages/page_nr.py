@@ -13,23 +13,23 @@ from LSI_Solution.pages.page_cf import (
 )
 
 
-def Initialize_nr(dict_nr):
+def Initialize_nr(dict_nr, rat):
     dropdown_keys = [
-        "RX_Gain",
-        "RX_RSRP",
-        "RX_Comp",
-        "RX_Mix",
-        "FBRX_GM",
-        "FBRX_GC",
-        "FBRX_FM",
-        "FBRX_FC",
-        "APT_Meas",
-        "ET_Psat",
-        "ET_Pgain",
-        "ET_Power",
-        "ET_Freq",
+        "rx_gain",
+        "rx_rsrp",
+        "rx_comp",
+        "rx_mix",
+        "fbrx_gm",
+        "fbrx_gc",
+        "fbrx_fm",
+        "fbrx_fc",
+        "apt_meas",
+        "et_psat",
+        "et_pgain",
+        "et_power",
+        "et_freq",
     ]
-    dropdowns, data_frame = Initialize_dropdowns(dict_nr, dropdown_keys)
+    dropdowns, data_frame = Initialize_dropdowns(dict_nr, rat, dropdown_keys)
 
     layout = html.Div(
         [
@@ -40,27 +40,27 @@ def Initialize_nr(dict_nr):
                         html.H2(children=tweet_callback("NR", "RX", "Gain Cal"), id="head_rx_gain", className="display-7"),
                         width="auto",
                     ),
-                    dbc.Col(dropdowns["RX_Gain_r"], width=1),
-                    dbc.Col(dropdowns["RX_Gain_b"], width=1),
+                    dbc.Col(dropdowns["rx_gain_r"], width=1),
+                    dbc.Col(dropdowns["rx_gain_b"], width=1),
                 ],
                 align="center",
             ),
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="NR_RX_Gain_scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_RX_Gain_histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_rx_gain_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_rx_gain_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        Create_range_slider("sld_RX_Gain_scat", data_frame["RX_Gain"], use_min_max=False),
+                        Create_range_slider("sld_rx_gain_scat", data_frame["rx_gain"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                     dbc.Col(
-                        Create_range_slider("sld_RX_Gain_hist", data_frame["RX_Gain"], use_min_max=False),
+                        Create_range_slider("sld_rx_gain_hist", data_frame["rx_gain"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                 ],
@@ -74,27 +74,27 @@ def Initialize_nr(dict_nr):
                         html.H2(children=tweet_callback("NR", "RX", "RSRP Cal"), id="head_rx_rsrp", className="display-7"),
                         width="auto",
                     ),
-                    dbc.Col(dropdowns["RX_RSRP_r"], width=1),
-                    dbc.Col(dropdowns["RX_RSRP_b"], width=1),
+                    dbc.Col(dropdowns["rx_rsrp_r"], width=1),
+                    dbc.Col(dropdowns["rx_rsrp_b"], width=1),
                 ],
                 align="center",
             ),
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="NR_RX_RSRP_scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_RX_RSRP_histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_rx_rsrp_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_rx_rsrp_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        Create_range_slider("sld_RX_RSRP_scat", data_frame["RX_RSRP"], use_min_max=False),
+                        Create_range_slider("sld_rx_rsrp_scat", data_frame["rx_rsrp"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                     dbc.Col(
-                        Create_range_slider("sld_RX_RSRP_hist", data_frame["RX_RSRP"], use_min_max=False),
+                        Create_range_slider("sld_rx_rsrp_hist", data_frame["rx_rsrp"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                 ],
@@ -108,27 +108,27 @@ def Initialize_nr(dict_nr):
                         html.H2(children=tweet_callback("NR", "RX", "Freq Cal"), id="head_rx_comp", className="display-7"),
                         width="auto",
                     ),
-                    dbc.Col(dropdowns["RX_Comp_r"], width=1),
-                    dbc.Col(dropdowns["RX_Comp_b"], width=1),
+                    dbc.Col(dropdowns["rx_comp_r"], width=1),
+                    dbc.Col(dropdowns["rx_comp_b"], width=1),
                 ],
                 align="center",
             ),
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="NR_RX_Comp_scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_RX_Comp_histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_rx_comp_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_rx_comp_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        Create_range_slider("sld_RX_Comp_scat", data_frame["RX_Comp"], use_min_max=False),
+                        Create_range_slider("sld_rx_comp_scat", data_frame["rx_comp"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                     dbc.Col(
-                        Create_range_slider("sld_RX_Comp_hist", data_frame["RX_Comp"], use_min_max=False),
+                        Create_range_slider("sld_rx_comp_hist", data_frame["rx_comp"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                 ],
@@ -146,27 +146,27 @@ def Initialize_nr(dict_nr):
                         ),
                         width="auto",
                     ),
-                    dbc.Col(dropdowns["RX_Mix_r"], width=1),
-                    dbc.Col(dropdowns["RX_Mix_b"], width=1),
+                    dbc.Col(dropdowns["rx_mix_r"], width=1),
+                    dbc.Col(dropdowns["rx_mix_b"], width=1),
                 ],
                 align="center",
             ),
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="NR_RX_Mix_scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_RX_Mix_histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_rx_mix_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_rx_mix_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        Create_range_slider("sld_RX_Mix_scat", data_frame["RX_Mix"], use_min_max=False),
+                        Create_range_slider("sld_rx_mix_scat", data_frame["rx_mix"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                     dbc.Col(
-                        Create_range_slider("sld_RX_Mix_hist", data_frame["RX_Mix"], use_min_max=False),
+                        Create_range_slider("sld_rx_mix_hist", data_frame["rx_mix"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                 ],
@@ -180,29 +180,29 @@ def Initialize_nr(dict_nr):
                         html.H2(children=tweet_callback("NR", "FBRX", "Gain Cal"), id="head_fbrx_gm", className="display-7"),
                         width="auto",
                     ),
-                    dbc.Col(dropdowns["FBRX_GM_r"], width=1),
-                    dbc.Col(dropdowns["FBRX_GM_b"], width=1),
+                    dbc.Col(dropdowns["fbrx_gm_r"], width=1),
+                    dbc.Col(dropdowns["fbrx_gm_b"], width=1),
                 ],
                 align="center",
             ),
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="NR_FBRX_GM_grp_scatt"), width={"size": 3, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_FBRX_GM_grp_histo"), width={"size": 3, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_FBRX_GC_grp_scatt"), width={"size": 3, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_FBRX_GC_grp_histo"), width={"size": 3, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_fbrx_gm_grp_scatt"), width={"size": 3, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_fbrx_gm_grp_histo"), width={"size": 3, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_fbrx_gc_grp_scatt"), width={"size": 3, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_fbrx_gc_grp_histo"), width={"size": 3, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        Create_range_slider("sld_FBRX_GM_scat", data_frame["FBRX_GM"], use_min_max=False),
+                        Create_range_slider("sld_fbrx_gm_scat", data_frame["fbrx_gm"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                     dbc.Col(
-                        Create_range_slider("sld_FBRX_GM_hist", data_frame["FBRX_GM"], use_min_max=False),
+                        Create_range_slider("sld_fbrx_gm_hist", data_frame["fbrx_gm"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                 ],
@@ -217,29 +217,29 @@ def Initialize_nr(dict_nr):
                         html.H2(children=tweet_callback("NR", "FBRX", "Freq Cal"), id="head_fbrx_fm", className="display-7"),
                         width="auto",
                     ),
-                    dbc.Col(dropdowns["FBRX_FM_r"], width=1),
-                    dbc.Col(dropdowns["FBRX_FM_b"], width=1),
+                    dbc.Col(dropdowns["fbrx_fm_r"], width=1),
+                    dbc.Col(dropdowns["fbrx_fm_b"], width=1),
                 ],
                 align="center",
             ),
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="NR_FBRX_FM_grp_scatt"), width={"size": 3, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_FBRX_FM_grp_histo"), width={"size": 3, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_FBRX_FC_grp_scatt"), width={"size": 3, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_FBRX_FC_grp_histo"), width={"size": 3, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_fbrx_fm_grp_scatt"), width={"size": 3, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_fbrx_fm_grp_histo"), width={"size": 3, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_fbrx_fc_grp_scatt"), width={"size": 3, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_fbrx_fc_grp_histo"), width={"size": 3, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        Create_range_slider("sld_FBRX_FM_scat", data_frame["FBRX_FM"], use_min_max=False),
+                        Create_range_slider("sld_fbrx_fm_scat", data_frame["fbrx_fm"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                     dbc.Col(
-                        Create_range_slider("sld_FBRX_FM_hist", data_frame["FBRX_FM"], use_min_max=False),
+                        Create_range_slider("sld_fbrx_fm_hist", data_frame["fbrx_fm"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                 ],
@@ -258,27 +258,27 @@ def Initialize_nr(dict_nr):
                         ),
                         width="auto",
                     ),
-                    dbc.Col(dropdowns["APT_Meas_r"], width=1),
-                    dbc.Col(dropdowns["APT_Meas_b"], width=1),
+                    dbc.Col(dropdowns["apt_meas_r"], width=1),
+                    dbc.Col(dropdowns["apt_meas_b"], width=1),
                 ],
                 align="center",
             ),
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="NR_APT_Meas_scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_APT_Meas_histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_apt_meas_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_apt_meas_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        Create_range_slider("sld_APT_Meas_scat", data_frame["APT_Meas"], use_min_max=False),
+                        Create_range_slider("sld_apt_meas_scat", data_frame["apt_meas"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                     dbc.Col(
-                        Create_range_slider("sld_APT_Meas_hist", data_frame["APT_Meas"], use_min_max=False),
+                        Create_range_slider("sld_apt_meas_hist", data_frame["apt_meas"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                 ],
@@ -293,27 +293,27 @@ def Initialize_nr(dict_nr):
                         html.H2(children=tweet_callback("NR", "ET-SAPT", "Psat"), id="head_et_psat", className="display-7"),
                         width="auto",
                     ),
-                    dbc.Col(dropdowns["ET_Psat_r"], width=1),
-                    dbc.Col(dropdowns["ET_Psat_b"], width=1),
+                    dbc.Col(dropdowns["et_psat_r"], width=1),
+                    dbc.Col(dropdowns["et_psat_b"], width=1),
                 ],
                 align="center",
             ),
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="NR_ET_Psat_scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_ET_Psat_histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_et_psat_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_et_psat_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        Create_range_slider("sld_ET_Psat_scat", data_frame["ET_Psat"], use_min_max=False),
+                        Create_range_slider("sld_et_psat_scat", data_frame["et_psat"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                     dbc.Col(
-                        Create_range_slider("sld_ET_Psat_hist", data_frame["ET_Psat"], use_min_max=False),
+                        Create_range_slider("sld_et_psat_hist", data_frame["et_psat"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                 ],
@@ -328,27 +328,27 @@ def Initialize_nr(dict_nr):
                         html.H2(children=tweet_callback("NR", "ET-SAPT", "Pgain"), id="head_et_pgain", className="display-7"),
                         width="auto",
                     ),
-                    dbc.Col(dropdowns["ET_Pgain_r"], width=1),
-                    dbc.Col(dropdowns["ET_Pgain_b"], width=1),
+                    dbc.Col(dropdowns["et_pgain_r"], width=1),
+                    dbc.Col(dropdowns["et_pgain_b"], width=1),
                 ],
                 align="center",
             ),
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="NR_ET_Pgain_scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_ET_Pgain_histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_et_pgain_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_et_pgain_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        Create_range_slider("sld_ET_Pgain_scat", data_frame["ET_Pgain"], use_min_max=False),
+                        Create_range_slider("sld_et_pgain_scat", data_frame["et_pgain"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                     dbc.Col(
-                        Create_range_slider("sld_ET_Pgain_hist", data_frame["ET_Pgain"], use_min_max=False),
+                        Create_range_slider("sld_et_pgain_hist", data_frame["et_pgain"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                 ],
@@ -363,27 +363,27 @@ def Initialize_nr(dict_nr):
                         html.H2(children=tweet_callback("NR", "ET-SAPT", "Power"), id="head_et_power", className="display-7"),
                         width="auto",
                     ),
-                    dbc.Col(dropdowns["ET_Power_r"], width=1),
-                    dbc.Col(dropdowns["ET_Power_b"], width=1),
+                    dbc.Col(dropdowns["et_power_r"], width=1),
+                    dbc.Col(dropdowns["et_power_b"], width=1),
                 ],
                 align="center",
             ),
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="NR_ET_Power_scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="NR_ET_Power_histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_et_power_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="nr_et_power_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
                 [
                     dbc.Col(
-                        Create_range_slider("sld_ET_Power_scat", data_frame["ET_Power"], use_min_max=False),
+                        Create_range_slider("sld_et_power_scat", data_frame["et_power"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                     dbc.Col(
-                        Create_range_slider("sld_ET_Power_hist", data_frame["ET_Power"], use_min_max=False),
+                        Create_range_slider("sld_et_power_hist", data_frame["et_power"], use_min_max=False),
                         width={"size": 6, "offset": 0},
                     ),
                 ],
@@ -404,27 +404,27 @@ def Initialize_nr(dict_nr):
                                 ),
                                 width="auto",
                             ),
-                            dbc.Col(dropdowns["ET_Freq_r"], width=1),
-                            dbc.Col(dropdowns["ET_Freq_b"], width=1),
+                            dbc.Col(dropdowns["et_freq_r"], width=1),
+                            dbc.Col(dropdowns["et_freq_b"], width=1),
                         ],
                         align="center",
                     ),
                     html.Br(),
                     dbc.Row(
                         [
-                            dbc.Col(dcc.Graph(id="NR_ET_Freq_scatt"), width={"size": 6, "offset": 0}),
-                            dbc.Col(dcc.Graph(id="NR_ET_Freq_histo"), width={"size": 6, "offset": 0}),
+                            dbc.Col(dcc.Graph(id="nr_et_freq_scatt"), width={"size": 6, "offset": 0}),
+                            dbc.Col(dcc.Graph(id="nr_et_freq_histo"), width={"size": 6, "offset": 0}),
                         ],
                         align="center",
                     ),
                     dbc.Row(
                         [
                             dbc.Col(
-                                Create_range_slider("sld_ET_Freq_scat", data_frame["ET_Freq"], use_min_max=False),
+                                Create_range_slider("sld_et_freq_scat", data_frame["et_freq"], use_min_max=False),
                                 width={"size": 6, "offset": 0},
                             ),
                             dbc.Col(
-                                Create_range_slider("sld_ET_Freq_hist", data_frame["ET_Freq"], use_min_max=False),
+                                Create_range_slider("sld_et_freq_hist", data_frame["et_freq"], use_min_max=False),
                                 width={"size": 6, "offset": 0},
                             ),
                         ],
@@ -443,127 +443,127 @@ def Initialize_nr(dict_nr):
     # **
     # ** ======================================================================================
 
-    @callback(Output("NR_RX_Gain_b", "value"), Input("NR_RX_Gain_r", "value"))
+    @callback(Output("nr_rx_gain_b", "value"), Input("nr_rx_gain_r", "value"))
     def RXGain_NR(selected_r):
-        return Initialize_band(selected_r, data_frame["RX_Gain"])
+        return Initialize_band(selected_r, data_frame["rx_gain"])
 
     @callback(
         [
-            Output("NR_RX_Gain_b", "options"),
-            Output("NR_RX_Gain_scatt", "figure"),
-            Output("NR_RX_Gain_histo", "figure"),
+            Output("nr_rx_gain_b", "options"),
+            Output("nr_rx_gain_scatt", "figure"),
+            Output("nr_rx_gain_histo", "figure"),
         ],
         [
-            Input("NR_RX_Gain_r", "value"),
-            Input("NR_RX_Gain_b", "value"),
-            Input("sld_RX_Gain_scat", "value"),
-            Input("sld_RX_Gain_hist", "value"),
+            Input("nr_rx_gain_r", "value"),
+            Input("nr_rx_gain_b", "value"),
+            Input("sld_rx_gain_scat", "value"),
+            Input("sld_rx_gain_hist", "value"),
         ],
     )
-    def update_RX_Gain(selected_r, selected_b, scatt_range, histo_range):
-        scatt_fig, histo_fig = Update_band_and_graph(data_frame["RX_Gain"], selected_r, selected_b, scatt_range, histo_range)
-        band_opt = Band_list(data_frame["RX_Gain"], selected_r)
+    def update_rx_gain(selected_r, selected_b, scatt_range, histo_range):
+        scatt_fig, histo_fig = Update_band_and_graph(data_frame["rx_gain"], selected_r, selected_b, scatt_range, histo_range)
+        band_opt = Band_list(data_frame["rx_gain"], selected_r)
 
         return band_opt, scatt_fig, histo_fig
 
     # ** ================================= Sub6 RX RSRP Cal =================================
-    @callback(Output("NR_RX_RSRP_b", "value"), Input("NR_RX_RSRP_r", "value"))
+    @callback(Output("nr_rx_rsrp_b", "value"), Input("nr_rx_rsrp_r", "value"))
     def RXGain_NR(selected_r):
-        return Initialize_band(selected_r, data_frame["RX_RSRP"])
+        return Initialize_band(selected_r, data_frame["rx_rsrp"])
 
     @callback(
         [
-            Output("NR_RX_RSRP_b", "options"),
-            Output("NR_RX_RSRP_scatt", "figure"),
-            Output("NR_RX_RSRP_histo", "figure"),
+            Output("nr_rx_rsrp_b", "options"),
+            Output("nr_rx_rsrp_scatt", "figure"),
+            Output("nr_rx_rsrp_histo", "figure"),
         ],
         [
-            Input("NR_RX_RSRP_r", "value"),
-            Input("NR_RX_RSRP_b", "value"),
-            Input("sld_RX_RSRP_scat", "value"),
-            Input("sld_RX_RSRP_hist", "value"),
+            Input("nr_rx_rsrp_r", "value"),
+            Input("nr_rx_rsrp_b", "value"),
+            Input("sld_rx_rsrp_scat", "value"),
+            Input("sld_rx_rsrp_hist", "value"),
         ],
     )
-    def update_RX_Gain(selected_r, selected_b, scatt_range, histo_range):
-        scatt_fig, histo_fig = Update_band_and_graph(data_frame["RX_RSRP"], selected_r, selected_b, scatt_range, histo_range)
-        band_opt = Band_list(data_frame["RX_RSRP"], selected_r)
+    def update_rx_gain(selected_r, selected_b, scatt_range, histo_range):
+        scatt_fig, histo_fig = Update_band_and_graph(data_frame["rx_rsrp"], selected_r, selected_b, scatt_range, histo_range)
+        band_opt = Band_list(data_frame["rx_rsrp"], selected_r)
 
         return band_opt, scatt_fig, histo_fig
 
     # ** ================================= Sub6 RX Freq Cal =================================
-    @callback(Output("NR_RX_Comp_b", "value"), Input("NR_RX_Comp_r", "value"))
+    @callback(Output("nr_rx_comp_b", "value"), Input("nr_rx_comp_r", "value"))
     def RXGain_NR(selected_r):
-        return Initialize_band(selected_r, data_frame["RX_Comp"])
+        return Initialize_band(selected_r, data_frame["rx_comp"])
 
     @callback(
         [
-            Output("NR_RX_Comp_b", "options"),
-            Output("NR_RX_Comp_scatt", "figure"),
-            Output("NR_RX_Comp_histo", "figure"),
+            Output("nr_rx_comp_b", "options"),
+            Output("nr_rx_comp_scatt", "figure"),
+            Output("nr_rx_comp_histo", "figure"),
         ],
         [
-            Input("NR_RX_Comp_r", "value"),
-            Input("NR_RX_Comp_b", "value"),
-            Input("sld_RX_Comp_scat", "value"),
-            Input("sld_RX_Comp_hist", "value"),
+            Input("nr_rx_comp_r", "value"),
+            Input("nr_rx_comp_b", "value"),
+            Input("sld_rx_comp_scat", "value"),
+            Input("sld_rx_comp_hist", "value"),
         ],
     )
-    def update_RX_Gain(selected_r, selected_b, scatt_range, histo_range):
-        scatt_fig, histo_fig = Update_band_and_graph(data_frame["RX_Comp"], selected_r, selected_b, scatt_range, histo_range)
-        band_opt = Band_list(data_frame["RX_Comp"], selected_r)
+    def update_rx_gain(selected_r, selected_b, scatt_range, histo_range):
+        scatt_fig, histo_fig = Update_band_and_graph(data_frame["rx_comp"], selected_r, selected_b, scatt_range, histo_range)
+        band_opt = Band_list(data_frame["rx_comp"], selected_r)
 
         return band_opt, scatt_fig, histo_fig
 
     # ** ================================= Sub6 RX Mixer Cal =================================
-    @callback(Output("NR_RX_Mix_b", "value"), Input("NR_RX_Mix_r", "value"))
+    @callback(Output("nr_rx_mix_b", "value"), Input("nr_rx_mix_r", "value"))
     def RXGain_NR(selected_r):
-        return Initialize_band(selected_r, data_frame["RX_Mix"])
+        return Initialize_band(selected_r, data_frame["rx_mix"])
 
     @callback(
         [
-            Output("NR_RX_Mix_b", "options"),
-            Output("NR_RX_Mix_scatt", "figure"),
-            Output("NR_RX_Mix_histo", "figure"),
+            Output("nr_rx_mix_b", "options"),
+            Output("nr_rx_mix_scatt", "figure"),
+            Output("nr_rx_mix_histo", "figure"),
         ],
         [
-            Input("NR_RX_Mix_r", "value"),
-            Input("NR_RX_Mix_b", "value"),
-            Input("sld_RX_Mix_scat", "value"),
-            Input("sld_RX_Mix_hist", "value"),
+            Input("nr_rx_mix_r", "value"),
+            Input("nr_rx_mix_b", "value"),
+            Input("sld_rx_mix_scat", "value"),
+            Input("sld_rx_mix_hist", "value"),
         ],
     )
-    def update_RX_Gain(selected_r, selected_b, scatt_range, histo_range):
-        scatt_fig, histo_fig = Update_band_and_graph(data_frame["RX_Mix"], selected_r, selected_b, scatt_range, histo_range)
-        band_opt = Band_list(data_frame["RX_Mix"], selected_r)
+    def update_rx_gain(selected_r, selected_b, scatt_range, histo_range):
+        scatt_fig, histo_fig = Update_band_and_graph(data_frame["rx_mix"], selected_r, selected_b, scatt_range, histo_range)
+        band_opt = Band_list(data_frame["rx_mix"], selected_r)
 
         return band_opt, scatt_fig, histo_fig
 
     # ** ================================= Sub6 FBRX Gain Cal =================================
 
-    @callback(Output("NR_FBRX_GM_b", "value"), Input("NR_FBRX_GM_r", "value"))
-    def FBRX_GM_NR(selected_r):
-        return Initialize_band(selected_r, data_frame["FBRX_GM"])
+    @callback(Output("nr_fbrx_gm_b", "value"), Input("nr_fbrx_gm_r", "value"))
+    def fbrx_gm_NR(selected_r):
+        return Initialize_band(selected_r, data_frame["fbrx_gm"])
 
     @callback(
         [
-            Output("NR_FBRX_GM_b", "options"),
-            Output("NR_FBRX_GM_grp_scatt", "figure"),
-            Output("NR_FBRX_GM_grp_histo", "figure"),
-            Output("NR_FBRX_GC_grp_scatt", "figure"),
-            Output("NR_FBRX_GC_grp_histo", "figure"),
+            Output("nr_fbrx_gm_b", "options"),
+            Output("nr_fbrx_gm_grp_scatt", "figure"),
+            Output("nr_fbrx_gm_grp_histo", "figure"),
+            Output("nr_fbrx_gc_grp_scatt", "figure"),
+            Output("nr_fbrx_gc_grp_histo", "figure"),
             Output("fbrx_gm_scc", "children"),
         ],
         [
-            Input("NR_FBRX_GM_r", "value"),
-            Input("NR_FBRX_GM_b", "value"),
-            Input("sld_FBRX_GM_scat", "value"),
-            Input("sld_FBRX_GM_hist", "value"),
+            Input("nr_fbrx_gm_r", "value"),
+            Input("nr_fbrx_gm_b", "value"),
+            Input("sld_fbrx_gm_scat", "value"),
+            Input("sld_fbrx_gm_hist", "value"),
             State("fbrx_gm_scc", "children"),
         ],
     )
-    def update_FBRX_GM(selected_r, selected_b, scatt_range, histo_range, children):
-        band_opt = Band_list(data_frame["FBRX_GM"], selected_r)
-        filtered_df = data_frame["FBRX_GM"][data_frame["FBRX_GM"]["Band"] == selected_b].reset_index(drop=True)
+    def update_fbrx_gm(selected_r, selected_b, scatt_range, histo_range, children):
+        band_opt = Band_list(data_frame["fbrx_gm"], selected_r)
+        filtered_df = data_frame["fbrx_gm"][data_frame["fbrx_gm"]["Band"] == selected_b].reset_index(drop=True)
         if filtered_df["Path"].str.contains("Tx2").any():
             scatt_fig_pcc1, histo_fig_pcc1, scatt_fig_pcc2, histo_fig_pcc2 = Drawing_pcc(
                 selected_r, selected_b, filtered_df, scatt_range, histo_range, scatt_range, histo_range
@@ -594,30 +594,30 @@ def Initialize_nr(dict_nr):
             return band_opt, scatt_fig_pcc1, histo_fig_pcc1, scatt_fig_pcc2, histo_fig_pcc2, children
 
     # ** ================================= Sub6 FBRX Freq Cal =================================
-    @callback(Output("NR_FBRX_FM_b", "value"), Input("NR_FBRX_FM_r", "value"))
-    def FBRX_FM_NR(selected_r):
-        return Initialize_band(selected_r, data_frame["FBRX_FM"])
+    @callback(Output("nr_fbrx_fm_b", "value"), Input("nr_fbrx_fm_r", "value"))
+    def fbrx_fm_NR(selected_r):
+        return Initialize_band(selected_r, data_frame["fbrx_fm"])
 
     @callback(
         [
-            Output("NR_FBRX_FM_b", "options"),
-            Output("NR_FBRX_FM_grp_scatt", "figure"),
-            Output("NR_FBRX_FM_grp_histo", "figure"),
-            Output("NR_FBRX_FC_grp_scatt", "figure"),
-            Output("NR_FBRX_FC_grp_histo", "figure"),
+            Output("nr_fbrx_fm_b", "options"),
+            Output("nr_fbrx_fm_grp_scatt", "figure"),
+            Output("nr_fbrx_fm_grp_histo", "figure"),
+            Output("nr_fbrx_fc_grp_scatt", "figure"),
+            Output("nr_fbrx_fc_grp_histo", "figure"),
             Output("fbrx_fm_scc", "children"),
         ],
         [
-            Input("NR_FBRX_FM_r", "value"),
-            Input("NR_FBRX_FM_b", "value"),
-            Input("sld_FBRX_FM_scat", "value"),
-            Input("sld_FBRX_FM_hist", "value"),
+            Input("nr_fbrx_fm_r", "value"),
+            Input("nr_fbrx_fm_b", "value"),
+            Input("sld_fbrx_fm_scat", "value"),
+            Input("sld_fbrx_fm_hist", "value"),
             State("fbrx_fm_scc", "children"),
         ],
     )
     def update_FBRXFreq(selected_r, selected_b, scatt_range, histo_range, children):
-        band_opt = Band_list(data_frame["FBRX_FM"], selected_r)
-        filtered_df = data_frame["FBRX_FM"][data_frame["FBRX_FM"]["Band"] == selected_b].reset_index(drop=True)
+        band_opt = Band_list(data_frame["fbrx_fm"], selected_r)
+        filtered_df = data_frame["fbrx_fm"][data_frame["fbrx_fm"]["Band"] == selected_b].reset_index(drop=True)
         if filtered_df["Path"].str.contains("Tx2").any():
             scatt_fig_pcc1, histo_fig_pcc1, scatt_fig_pcc2, histo_fig_pcc2 = Drawing_pcc(
                 selected_r, selected_b, filtered_df, scatt_range, histo_range, scatt_range, histo_range
@@ -648,28 +648,28 @@ def Initialize_nr(dict_nr):
             return band_opt, scatt_fig_pcc1, histo_fig_pcc1, scatt_fig_pcc2, histo_fig_pcc2, children
 
     # ** ================================= Sub6 APT Measuremnt =================================
-    @callback(Output("NR_APT_Meas_b", "value"), Input("NR_APT_Meas_r", "value"))
+    @callback(Output("nr_apt_meas_b", "value"), Input("nr_apt_meas_r", "value"))
     def APTMeas_NR(selected_r):
-        return Initialize_band(selected_r, data_frame["APT_Meas"])
+        return Initialize_band(selected_r, data_frame["apt_meas"])
 
     @callback(
         [
-            Output("NR_APT_Meas_b", "options"),
-            Output("NR_APT_Meas_scatt", "figure"),
-            Output("NR_APT_Meas_histo", "figure"),
+            Output("nr_apt_meas_b", "options"),
+            Output("nr_apt_meas_scatt", "figure"),
+            Output("nr_apt_meas_histo", "figure"),
             Output("apt_measure_scc", "children"),
         ],
         [
-            Input("NR_APT_Meas_r", "value"),
-            Input("NR_APT_Meas_b", "value"),
-            Input("sld_APT_Meas_scat", "value"),
-            Input("sld_APT_Meas_hist", "value"),
+            Input("nr_apt_meas_r", "value"),
+            Input("nr_apt_meas_b", "value"),
+            Input("sld_apt_meas_scat", "value"),
+            Input("sld_apt_meas_hist", "value"),
             State("apt_measure_scc", "children"),
         ],
     )
     def update_APTMeas(selected_r, selected_b, scatt_range, histo_range, children):
-        band_opt = Band_list(data_frame["APT_Meas"], selected_r)
-        filtered_df = data_frame["APT_Meas"][data_frame["APT_Meas"]["Band"] == selected_b].reset_index(drop=True)
+        band_opt = Band_list(data_frame["apt_meas"], selected_r)
+        filtered_df = data_frame["apt_meas"][data_frame["apt_meas"]["Band"] == selected_b].reset_index(drop=True)
         if filtered_df["Path"].str.contains("Tx2").any():
             scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
@@ -681,28 +681,28 @@ def Initialize_nr(dict_nr):
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
 
     # ** ================================= Sub6 ET-SAPT Psat =================================
-    @callback(Output("NR_ET_Psat_b", "value"), Input("NR_ET_Psat_r", "value"))
-    def ET_Psat_NR(selected_r):
-        return Initialize_band(selected_r, data_frame["ET_Psat"])
+    @callback(Output("nr_et_psat_b", "value"), Input("nr_et_psat_r", "value"))
+    def et_psat_NR(selected_r):
+        return Initialize_band(selected_r, data_frame["et_psat"])
 
     @callback(
         [
-            Output("NR_ET_Psat_b", "options"),
-            Output("NR_ET_Psat_scatt", "figure"),
-            Output("NR_ET_Psat_histo", "figure"),
+            Output("nr_et_psat_b", "options"),
+            Output("nr_et_psat_scatt", "figure"),
+            Output("nr_et_psat_histo", "figure"),
             Output("et_psat_scc", "children"),
         ],
         [
-            Input("NR_ET_Psat_r", "value"),
-            Input("NR_ET_Psat_b", "value"),
-            Input("sld_ET_Psat_scat", "value"),
-            Input("sld_ET_Psat_hist", "value"),
+            Input("nr_et_psat_r", "value"),
+            Input("nr_et_psat_b", "value"),
+            Input("sld_et_psat_scat", "value"),
+            Input("sld_et_psat_hist", "value"),
             State("et_psat_scc", "children"),
         ],
     )
-    def update_ET_Psat(selected_r, selected_b, scatt_range, histo_range, children):
-        band_opt = Band_list(data_frame["ET_Psat"], selected_r)
-        filtered_df = data_frame["ET_Psat"][data_frame["ET_Psat"]["Band"] == selected_b].reset_index(drop=True)
+    def update_et_psat(selected_r, selected_b, scatt_range, histo_range, children):
+        band_opt = Band_list(data_frame["et_psat"], selected_r)
+        filtered_df = data_frame["et_psat"][data_frame["et_psat"]["Band"] == selected_b].reset_index(drop=True)
         if filtered_df["Path"].str.contains("Tx2").any():
             scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
@@ -714,28 +714,28 @@ def Initialize_nr(dict_nr):
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
 
     # ** ================================= Sub6 ET-SAPT Pgain =================================
-    @callback(Output("NR_ET_Pgain_b", "value"), Input("NR_ET_Pgain_r", "value"))
-    def ET_Pgain_NR(selected_r):
-        return Initialize_band(selected_r, data_frame["ET_Pgain"])
+    @callback(Output("nr_et_pgain_b", "value"), Input("nr_et_pgain_r", "value"))
+    def et_pgain_NR(selected_r):
+        return Initialize_band(selected_r, data_frame["et_pgain"])
 
     @callback(
         [
-            Output("NR_ET_Pgain_b", "options"),
-            Output("NR_ET_Pgain_scatt", "figure"),
-            Output("NR_ET_Pgain_histo", "figure"),
+            Output("nr_et_pgain_b", "options"),
+            Output("nr_et_pgain_scatt", "figure"),
+            Output("nr_et_pgain_histo", "figure"),
             Output("et_pgain_scc", "children"),
         ],
         [
-            Input("NR_ET_Pgain_r", "value"),
-            Input("NR_ET_Pgain_b", "value"),
-            Input("sld_ET_Pgain_scat", "value"),
-            Input("sld_ET_Pgain_hist", "value"),
+            Input("nr_et_pgain_r", "value"),
+            Input("nr_et_pgain_b", "value"),
+            Input("sld_et_pgain_scat", "value"),
+            Input("sld_et_pgain_hist", "value"),
             State("et_pgain_scc", "children"),
         ],
     )
-    def update_ET_Pgain(selected_r, selected_b, scatt_range, histo_range, children):
-        band_opt = Band_list(data_frame["ET_Pgain"], selected_r)
-        filtered_df = data_frame["ET_Pgain"][data_frame["ET_Pgain"]["Band"] == selected_b].reset_index(drop=True)
+    def update_et_pgain(selected_r, selected_b, scatt_range, histo_range, children):
+        band_opt = Band_list(data_frame["et_pgain"], selected_r)
+        filtered_df = data_frame["et_pgain"][data_frame["et_pgain"]["Band"] == selected_b].reset_index(drop=True)
         if filtered_df["Path"].str.contains("Tx2").any():
             scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
@@ -747,28 +747,28 @@ def Initialize_nr(dict_nr):
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
 
     # ** ================================= Sub6 ET-SAPT Power =================================
-    @callback(Output("NR_ET_Power_b", "value"), Input("NR_ET_Power_r", "value"))
-    def ET_Power_NR(selected_r):
-        return Initialize_band(selected_r, data_frame["ET_Power"])
+    @callback(Output("nr_et_power_b", "value"), Input("nr_et_power_r", "value"))
+    def et_power_NR(selected_r):
+        return Initialize_band(selected_r, data_frame["et_power"])
 
     @callback(
         [
-            Output("NR_ET_Power_b", "options"),
-            Output("NR_ET_Power_scatt", "figure"),
-            Output("NR_ET_Power_histo", "figure"),
+            Output("nr_et_power_b", "options"),
+            Output("nr_et_power_scatt", "figure"),
+            Output("nr_et_power_histo", "figure"),
             Output("et_power_scc", "children"),
         ],
         [
-            Input("NR_ET_Power_r", "value"),
-            Input("NR_ET_Power_b", "value"),
-            Input("sld_ET_Power_scat", "value"),
-            Input("sld_ET_Power_hist", "value"),
+            Input("nr_et_power_r", "value"),
+            Input("nr_et_power_b", "value"),
+            Input("sld_et_power_scat", "value"),
+            Input("sld_et_power_hist", "value"),
             State("et_power_scc", "children"),
         ],
     )
-    def update_ET_Power(selected_r, selected_b, scatt_range, histo_range, children):
-        band_opt = Band_list(data_frame["ET_Power"], selected_r)
-        filtered_df = data_frame["ET_Power"][data_frame["ET_Power"]["Band"] == selected_b].reset_index(drop=True)
+    def update_et_power(selected_r, selected_b, scatt_range, histo_range, children):
+        band_opt = Band_list(data_frame["et_power"], selected_r)
+        filtered_df = data_frame["et_power"][data_frame["et_power"]["Band"] == selected_b].reset_index(drop=True)
         if filtered_df["Path"].str.contains("Tx2").any():
             scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
@@ -780,28 +780,28 @@ def Initialize_nr(dict_nr):
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
 
     # ** ================================= Sub6 ET-SAPT Freq =================================
-    @callback(Output("NR_ET_Freq_b", "value"), Input("NR_ET_Freq_r", "value"))
-    def ET_Freq_NR(selected_r):
-        return Initialize_band(selected_r, data_frame["ET_Freq"])
+    @callback(Output("nr_et_freq_b", "value"), Input("nr_et_freq_r", "value"))
+    def et_freq_NR(selected_r):
+        return Initialize_band(selected_r, data_frame["et_freq"])
 
     @callback(
         [
-            Output("NR_ET_Freq_b", "options"),
-            Output("NR_ET_Freq_scatt", "figure"),
-            Output("NR_ET_Freq_histo", "figure"),
+            Output("nr_et_freq_b", "options"),
+            Output("nr_et_freq_scatt", "figure"),
+            Output("nr_et_freq_histo", "figure"),
             Output("et_freq_scc", "children"),
         ],
         [
-            Input("NR_ET_Freq_r", "value"),
-            Input("NR_ET_Freq_b", "value"),
-            Input("sld_ET_Freq_scat", "value"),
-            Input("sld_ET_Freq_hist", "value"),
+            Input("nr_et_freq_r", "value"),
+            Input("nr_et_freq_b", "value"),
+            Input("sld_et_freq_scat", "value"),
+            Input("sld_et_freq_hist", "value"),
             State("et_freq_scc", "children"),
         ],
     )
-    def update_ET_Freq(selected_r, selected_b, scatt_range, histo_range, children):
-        band_opt = Band_list(data_frame["ET_Freq"], selected_r)
-        filtered_df = data_frame["ET_Freq"][data_frame["ET_Freq"]["Band"] == selected_b].reset_index(drop=True)
+    def update_et_freq(selected_r, selected_b, scatt_range, histo_range, children):
+        band_opt = Band_list(data_frame["et_freq"], selected_r)
+        filtered_df = data_frame["et_freq"][data_frame["et_freq"]["Band"] == selected_b].reset_index(drop=True)
         if filtered_df["Path"].str.contains("Tx2").any():
             scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
@@ -812,6 +812,6 @@ def Initialize_nr(dict_nr):
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
 
-    dash.register_page(__name__, path="/NR_Sub6", name="NR_Sub6", title="NR_Sub6", layout=layout)
+    dash.register_page(__name__, path="/NR_SUB6", name="NR_SUB6", title="NR_SUB6", layout=layout)
 
     return layout
