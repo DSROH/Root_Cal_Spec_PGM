@@ -56,18 +56,17 @@ def Trans_dataframe(df):
     return df_Transposed
 
 
-def Initialize_dropdowns(dict_nr, keys, band_opt=None):
+def Initialize_dropdowns(dict, rat, keys, band_opt=None):
     if band_opt is None:
         band_opt = [{"label": "", "value": ""}]
 
     dropdowns = {}
     dataframes = {}
     for key in keys:
-        df = dict_nr[key].apply(lambda x: x.map(lambda y: y.strip()) if x.dtype == "object" else x)
+        df = dict[key].apply(lambda x: x.map(lambda y: y.strip()) if x.dtype == "object" else x)
         dataframes[key] = df
-        dropdowns[key + "_r"] = Create_dropdown(f"NR_{key}_r", "n", [{"label": "NR", "value": "n"}])
-        dropdowns[key + "_b"] = Create_dropdown(f"NR_{key}_b", "", band_opt)
-
+        dropdowns[key + "_r"] = Create_dropdown(f"{rat}_{key}_r", "n", [{"label": "NR", "value": "n"}])
+        dropdowns[key + "_b"] = Create_dropdown(f"{rat}_{key}_b", "", band_opt)
     return dropdowns, dataframes
 
 
@@ -301,7 +300,7 @@ def tweet_callback(st1, st2, st3):
     return f"{st1} {st2} {st3} PCC"
 
 
-def Initialize_cf(dict_cf):
+def Initialize_cf(dict_cf, rat):
     df_TXDC = dict_cf["TXDC"]
     df_IIP2 = dict_cf["IIP2"]
     df_Cable = dict_cf["Cable"]
