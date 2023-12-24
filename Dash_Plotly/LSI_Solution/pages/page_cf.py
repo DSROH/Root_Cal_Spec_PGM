@@ -65,8 +65,16 @@ def Initialize_dropdowns(dict, rat, keys, band_opt=None):
     for key in keys:
         df = dict[key].apply(lambda x: x.map(lambda y: y.strip()) if x.dtype == "object" else x)
         dataframes[key] = df
-        dropdowns[key + "_r"] = Create_dropdown(f"{rat}_{key}_r", "n", [{"label": "NR", "value": "n"}])
+
+        if rat == "2g":
+            dropdowns[key + "_r"] = Create_dropdown(f"{rat}_{key}_r", "G", [{"label": "2G", "value": "G"}])
+        elif rat == "3g":
+            dropdowns[key + "_r"] = Create_dropdown(f"{rat}_{key}_r", "B", [{"label": "3G", "value": "B"}])
+        elif rat == "nr":
+            dropdowns[key + "_r"] = Create_dropdown(f"{rat}_{key}_r", "n", [{"label": "NR", "value": "n"}])
+
         dropdowns[key + "_b"] = Create_dropdown(f"{rat}_{key}_b", "", band_opt)
+
     return dropdowns, dataframes
 
 
@@ -174,13 +182,13 @@ def Update_band_and_graph(df, selected_r, selected_b, scatt_range=None, histo_ra
 
     if not filtered_df.empty:
         filtered_df = df[df["Band"] == selected_b].reset_index(drop=True)
-        scatter_fig = go.Figure()
-        histogram_fig = go.Figure()
+        scatt_fig = go.Figure()
+        histo_fig = go.Figure()
 
         df_Transposed = Trans_dataframe(filtered_df).dropna()
 
         for i in df_Transposed.columns:
-            scatter_fig.add_trace(
+            scatt_fig.add_trace(
                 go.Scatter(
                     x=list(range(len(df_Transposed.index))),
                     y=df_Transposed[f"{i}"],
@@ -190,7 +198,7 @@ def Update_band_and_graph(df, selected_r, selected_b, scatt_range=None, histo_ra
                     name=f"{i}",
                 )
             )
-            histogram_fig.add_trace(
+            histo_fig.add_trace(
                 go.Histogram(
                     x=df_Transposed[f"{i}"],
                     showlegend=False,
@@ -201,7 +209,7 @@ def Update_band_and_graph(df, selected_r, selected_b, scatt_range=None, histo_ra
                 )
             )
 
-        # histogram_fig = ff.create_distplot(
+        # histo_fig = ff.create_distplot(
         #     [df_Transposed[c] for c in df_Transposed.columns],
         #     df_Transposed.columns,
         #     # show_hist=False,
@@ -212,7 +220,7 @@ def Update_band_and_graph(df, selected_r, selected_b, scatt_range=None, histo_ra
         #     bin_size=1,
         # )
 
-        scatter_fig.update_layout(
+        scatt_fig.update_layout(
             title="Scatter Plot",
             xaxis=dict(
                 tickmode="linear",
@@ -222,7 +230,7 @@ def Update_band_and_graph(df, selected_r, selected_b, scatt_range=None, histo_ra
             ),
         )
 
-        histogram_fig.update_layout(title="Histogram", barmode="overlay")
+        histo_fig.update_layout(title="Histogram", barmode="overlay")
         value = df_Transposed.values
 
         if (value.mean() == value.min()) or (value.max() == value.mean()):
@@ -233,10 +241,10 @@ def Update_band_and_graph(df, selected_r, selected_b, scatt_range=None, histo_ra
             lsl = round(value.mean() - (12 * value.std() * Cpk))
             usl = round(value.mean() + (12 * value.std() * Cpk))
 
-        Update_axes(scatter_fig, scatt_range, None)
-        Update_axes(histogram_fig, [lsl, usl], None)
+        Update_axes(scatt_fig, scatt_range, None)
+        Update_axes(histo_fig, [lsl, usl], None)
 
-        return scatter_fig, histogram_fig
+        return scatt_fig, histo_fig
     else:
         return go.Figure(data=[]), go.Figure(data=[])
 
@@ -245,32 +253,44 @@ def Drawing_pcc(selected_r, selected_b, df, scatt_range1=None, histo_range1=None
     cols_to_drop = df[df["Path"].str.contains("Tx2")].index
     selected_df = df.drop(cols_to_drop)
     if scatt_range2 is not None:
-        scatter_fig1, histogram_fig1 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range1, histo_range1)
-        scatter_fig2, histogram_fig2 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range2, histo_range2)
-        return scatter_fig1, histogram_fig1, scatter_fig2, histogram_fig2
+        scatt_fig1, histo_fig1 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range1, histo_range1)
+        scatt_fig2, histo_fig2 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range2, histo_range2)
+        return scatt_fig1, histo_fig1, scatt_fig2, histo_fig2
     else:
-        scatter_fig, histogram_fig = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range1, histo_range1)
-        return scatter_fig, histogram_fig
+        scatt_fig, histo_fig = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range1, histo_range1)
+        return scatt_fig, histo_fig
 
 
 def Drawing_scc(
-    selected_r, selected_b, df, st1, children, scatt_range1=None, histo_range1=None, scatt_range2=None, histo_range2=None
+    selected_r, selected_b, df, rat, st1, children, scatt_range1=None, histo_range1=None, scatt_range2=None, histo_range2=None
 ):
     selected_df = df[df["Path"].str.contains("Tx2")]
     item = selected_df.Item.iloc[0]
 
     if scatt_range2 is not None:
-        scatter_fig1, histogram_fig1 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range1, histo_range1)
-        scatter_fig2, histogram_fig2 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range2, histo_range2)
+        scatt_fig1, histo_fig1 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range1, histo_range1)
+        scatt_fig2, histo_fig2 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range2, histo_range2)
         layout = html.Div(
             [
-                dbc.Row([dbc.Col(html.H2(f"NR {st1} {item} SCC", className="display-7"), width="auto")]),
+                dbc.Row([dbc.Col(html.H2(f"{rat.upper()} {st1.upper()} {item} SCC", className="display-7"), width="auto")]),
                 dbc.Row(
                     [
-                        dbc.Col(dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_scatt_1'"}, figure=scatter_fig1)),
-                        dbc.Col(dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_histo_1'"}, figure=histogram_fig1)),
-                        dbc.Col(dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_scatt_2'"}, figure=scatter_fig2)),
-                        dbc.Col(dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_histo_2'"}, figure=histogram_fig2)),
+                        dbc.Col(
+                            dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_scatt_1'"}, figure=scatt_fig1),
+                            width={"size": 3, "offset": 0},
+                        ),
+                        dbc.Col(
+                            dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_histo_1'"}, figure=histo_fig1),
+                            width={"size": 3, "offset": 0},
+                        ),
+                        dbc.Col(
+                            dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_scatt_2'"}, figure=scatt_fig2),
+                            width={"size": 3, "offset": 0},
+                        ),
+                        dbc.Col(
+                            dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_histo_2'"}, figure=histo_fig2),
+                            width={"size": 3, "offset": 0},
+                        ),
                     ],
                     align="center",
                 ),
@@ -278,14 +298,20 @@ def Drawing_scc(
         )
         children.append(layout)
     else:
-        scatter_fig1, histogram_fig1 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range1, histo_range1)
+        scatt_fig1, histo_fig1 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range1, histo_range1)
         layout = html.Div(
             [
-                dbc.Row([dbc.Col(html.H2(f"NR {st1} {item} SCC", className="display-7"), width="auto")]),
+                dbc.Row([dbc.Col(html.H2(f"{rat.upper()} {st1.upper()} {item} SCC", className="display-7"), width="auto")]),
                 dbc.Row(
                     [
-                        dbc.Col(dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_scatt'"}, figure=scatter_fig1)),
-                        dbc.Col(dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_histo'"}, figure=histogram_fig1)),
+                        dbc.Col(
+                            dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_scatt'"}, figure=scatt_fig1),
+                            width={"size": 6, "offset": 0},
+                        ),
+                        dbc.Col(
+                            dcc.Graph(id={"type": "dynamic-grp", "index": f"'{item}_scc_histo'"}, figure=histo_fig1),
+                            width={"size": 6, "offset": 0},
+                        ),
                     ],
                     align="center",
                 ),
@@ -296,14 +322,107 @@ def Drawing_scc(
     return children
 
 
-def tweet_callback(st1, st2, st3):
-    return f"{st1} {st2} {st3} PCC"
+def tweet_callback(st1, st2, st3=None):
+    if st3 is not None:
+        return f"{st1.upper()} {st2.upper()} {st3} PCC"
+    else:
+        return f"{st1.upper()} {st2.upper()} PCC"
+
+
+def Generate_section(key, rat, dropdowns, data_frame):
+    if key in ["fbrx_gc", "fbrx_fc"]:
+        return
+    elif key in ["fbrx_gm", "fbrx_fm"]:
+        section = html.Div(
+            [
+                dbc.Row(
+                    [
+                        dbc.Col(
+                            html.H2(
+                                children=tweet_callback(rat, key),
+                                id=f"head_{key}",
+                                className="display-7",
+                            ),
+                            width="auto",
+                        ),
+                        dbc.Col(dropdowns[f"{key}_r"], width=1),
+                        dbc.Col(dropdowns[f"{key}_b"], width=1),
+                    ],
+                    align="center",
+                ),
+                html.Br(),
+                dbc.Row(
+                    [
+                        dbc.Col(dcc.Graph(id=f"{rat}_{key[:-1]}m_scatt"), width={"size": 3, "offset": 0}),
+                        dbc.Col(dcc.Graph(id=f"{rat}_{key[:-1]}m_histo"), width={"size": 3, "offset": 0}),
+                        dbc.Col(dcc.Graph(id=f"{rat}_{key[:-1]}c_scatt"), width={"size": 3, "offset": 0}),
+                        dbc.Col(dcc.Graph(id=f"{rat}_{key[:-1]}c_histo"), width={"size": 3, "offset": 0}),
+                    ],
+                    align="center",
+                ),
+                dbc.Row(
+                    [
+                        dbc.Col(
+                            Create_range_slider(f"sld_{key}_scat", data_frame[key], use_min_max=False),
+                            width={"size": 6, "offset": 0},
+                        ),
+                        dbc.Col(
+                            Create_range_slider(f"sld_{key}_hist", data_frame[key], use_min_max=False),
+                            width={"size": 6, "offset": 0},
+                        ),
+                    ],
+                    align="center",
+                ),
+                html.Div(id=f"{key}_scc", children=[]),
+                html.Hr(),
+            ]
+        )
+    else:
+        section = html.Div(
+            [
+                dbc.Row(
+                    [
+                        dbc.Col(
+                            html.H2(children=tweet_callback(rat, key), id=f"head_{key}", className="display-7"),
+                            width="auto",
+                        ),
+                        dbc.Col(dropdowns[f"{key}_r"], width=1),
+                        dbc.Col(dropdowns[f"{key}_b"], width=1),
+                    ],
+                    align="center",
+                ),
+                html.Br(),
+                dbc.Row(
+                    [
+                        dbc.Col(dcc.Graph(id=f"{rat}_{key}_scatt"), width={"size": 6, "offset": 0}),
+                        dbc.Col(dcc.Graph(id=f"{rat}_{key}_histo"), width={"size": 6, "offset": 0}),
+                    ],
+                    align="center",
+                ),
+                dbc.Row(
+                    [
+                        dbc.Col(
+                            Create_range_slider(f"sld_{key}_scat", data_frame[key], use_min_max=False),
+                            width={"size": 6, "offset": 0},
+                        ),
+                        dbc.Col(
+                            Create_range_slider(f"sld_{key}_hist", data_frame[key], use_min_max=False),
+                            width={"size": 6, "offset": 0},
+                        ),
+                    ],
+                    align="center",
+                ),
+                html.Div(id=f"{key}_scc", children=[]),
+                html.Hr(),
+            ]
+        )
+    return section
 
 
 def Initialize_cf(dict_cf, rat):
-    df_TXDC = dict_cf["TXDC"]
-    df_IIP2 = dict_cf["IIP2"]
-    df_Cable = dict_cf["Cable"]
+    df_TXDC = dict_cf["txdc"]
+    df_IIP2 = dict_cf["iip2"]
+    df_Cable = dict_cf["cable"]
 
     rat_options = [{"label": "3G", "value": "B"}, {"label": "2G", "value": "GSM"}, {"label": "NR", "value": "n"}]
     band_opt = [{"label": "", "value": ""}]
@@ -434,7 +553,6 @@ def Initialize_cf(dict_cf, rat):
 
         return band_opt, scatter_fig, histogram_fig
 
-    # 페이지 등록
     dash.register_page(__name__, path="/", name="Common Func", title="Common Func", layout=layout)
 
     return layout
