@@ -3,7 +3,7 @@ import dash_bootstrap_components as dbc
 from dash import dcc, html, callback, Output, Input, State
 from LSI_Solution.pages.page_cf import (
     Initialize_dropdowns,
-    generate_section,
+    Generate_section,
     Update_band_and_graph,
     Initialize_band,
     Band_list,
@@ -29,8 +29,7 @@ def Initialize_nr(dict_nr, rat):
         "et_freq",
     ]
     dropdowns, data_frame = Initialize_dropdowns(dict_nr, rat, dropdown_keys)
-
-    layout = html.Div([generate_section(key, rat, dropdowns, data_frame) for key in dropdown_keys])
+    layout = html.Div([Generate_section(key, rat, dropdowns, data_frame) for key in dropdown_keys])
 
     # ** ======================================================================================
     # **
@@ -39,7 +38,7 @@ def Initialize_nr(dict_nr, rat):
     # ** ======================================================================================
 
     @callback(Output("nr_rx_gain_b", "value"), Input("nr_rx_gain_r", "value"))
-    def RXGain_NR(selected_r):
+    def rx_gain(selected_r):
         return Initialize_band(selected_r, data_frame["rx_gain"])
 
     @callback(
@@ -63,7 +62,7 @@ def Initialize_nr(dict_nr, rat):
 
     # ** ================================= Sub6 RX RSRP Cal =================================
     @callback(Output("nr_rx_rsrp_b", "value"), Input("nr_rx_rsrp_r", "value"))
-    def RXGain_NR(selected_r):
+    def rx_rsrp(selected_r):
         return Initialize_band(selected_r, data_frame["rx_rsrp"])
 
     @callback(
@@ -79,7 +78,7 @@ def Initialize_nr(dict_nr, rat):
             Input("sld_rx_rsrp_hist", "value"),
         ],
     )
-    def update_rx_gain(selected_r, selected_b, scatt_range, histo_range):
+    def update_rx_rsrp(selected_r, selected_b, scatt_range, histo_range):
         scatt_fig, histo_fig = Update_band_and_graph(data_frame["rx_rsrp"], selected_r, selected_b, scatt_range, histo_range)
         band_opt = Band_list(data_frame["rx_rsrp"], selected_r)
 
@@ -87,7 +86,7 @@ def Initialize_nr(dict_nr, rat):
 
     # ** ================================= Sub6 RX Freq Cal =================================
     @callback(Output("nr_rx_comp_b", "value"), Input("nr_rx_comp_r", "value"))
-    def RXGain_NR(selected_r):
+    def rx_comp(selected_r):
         return Initialize_band(selected_r, data_frame["rx_comp"])
 
     @callback(
@@ -103,7 +102,7 @@ def Initialize_nr(dict_nr, rat):
             Input("sld_rx_comp_hist", "value"),
         ],
     )
-    def update_rx_gain(selected_r, selected_b, scatt_range, histo_range):
+    def update_rx_comp(selected_r, selected_b, scatt_range, histo_range):
         scatt_fig, histo_fig = Update_band_and_graph(data_frame["rx_comp"], selected_r, selected_b, scatt_range, histo_range)
         band_opt = Band_list(data_frame["rx_comp"], selected_r)
 
@@ -111,7 +110,7 @@ def Initialize_nr(dict_nr, rat):
 
     # ** ================================= Sub6 RX Mixer Cal =================================
     @callback(Output("nr_rx_mix_b", "value"), Input("nr_rx_mix_r", "value"))
-    def RXGain_NR(selected_r):
+    def rx_mix(selected_r):
         return Initialize_band(selected_r, data_frame["rx_mix"])
 
     @callback(
@@ -127,7 +126,7 @@ def Initialize_nr(dict_nr, rat):
             Input("sld_rx_mix_hist", "value"),
         ],
     )
-    def update_rx_gain(selected_r, selected_b, scatt_range, histo_range):
+    def update_rx_mix(selected_r, selected_b, scatt_range, histo_range):
         scatt_fig, histo_fig = Update_band_and_graph(data_frame["rx_mix"], selected_r, selected_b, scatt_range, histo_range)
         band_opt = Band_list(data_frame["rx_mix"], selected_r)
 
@@ -136,7 +135,7 @@ def Initialize_nr(dict_nr, rat):
     # ** ================================= Sub6 FBRX Gain Cal =================================
 
     @callback(Output("nr_fbrx_gm_b", "value"), Input("nr_fbrx_gm_r", "value"))
-    def fbrx_gm_NR(selected_r):
+    def fbrx_gm(selected_r):
         return Initialize_band(selected_r, data_frame["fbrx_gm"])
 
     @callback(
@@ -191,7 +190,7 @@ def Initialize_nr(dict_nr, rat):
 
     # ** ================================= Sub6 FBRX Freq Cal =================================
     @callback(Output("nr_fbrx_fm_b", "value"), Input("nr_fbrx_fm_r", "value"))
-    def fbrx_fm_NR(selected_r):
+    def fbrx_fm(selected_r):
         return Initialize_band(selected_r, data_frame["fbrx_fm"])
 
     @callback(
@@ -211,7 +210,7 @@ def Initialize_nr(dict_nr, rat):
             State("fbrx_fm_scc", "children"),
         ],
     )
-    def update_FBRXFreq(selected_r, selected_b, scatt_range, histo_range, children):
+    def update_fbrx_fm(selected_r, selected_b, scatt_range, histo_range, children):
         band_opt = Band_list(data_frame["fbrx_fm"], selected_r)
         filtered_df = data_frame["fbrx_fm"][data_frame["fbrx_fm"]["Band"] == selected_b].reset_index(drop=True)
         if filtered_df["Path"].str.contains("Tx2").any():
@@ -246,7 +245,7 @@ def Initialize_nr(dict_nr, rat):
 
     # ** ================================= Sub6 APT Measuremnt =================================
     @callback(Output("nr_apt_meas_b", "value"), Input("nr_apt_meas_r", "value"))
-    def APTMeas_NR(selected_r):
+    def apt_meas(selected_r):
         return Initialize_band(selected_r, data_frame["apt_meas"])
 
     @callback(
@@ -264,7 +263,7 @@ def Initialize_nr(dict_nr, rat):
             State("apt_meas_scc", "children"),
         ],
     )
-    def update_APTMeas(selected_r, selected_b, scatt_range, histo_range, children):
+    def update_apt_meas(selected_r, selected_b, scatt_range, histo_range, children):
         band_opt = Band_list(data_frame["apt_meas"], selected_r)
         filtered_df = data_frame["apt_meas"][data_frame["apt_meas"]["Band"] == selected_b].reset_index(drop=True)
         if filtered_df["Path"].str.contains("Tx2").any():
@@ -279,7 +278,7 @@ def Initialize_nr(dict_nr, rat):
 
     # ** ================================= Sub6 ET-SAPT Psat =================================
     @callback(Output("nr_et_psat_b", "value"), Input("nr_et_psat_r", "value"))
-    def et_psat_NR(selected_r):
+    def et_psat(selected_r):
         return Initialize_band(selected_r, data_frame["et_psat"])
 
     @callback(
@@ -312,7 +311,7 @@ def Initialize_nr(dict_nr, rat):
 
     # ** ================================= Sub6 ET-SAPT Pgain =================================
     @callback(Output("nr_et_pgain_b", "value"), Input("nr_et_pgain_r", "value"))
-    def et_pgain_NR(selected_r):
+    def et_pgain(selected_r):
         return Initialize_band(selected_r, data_frame["et_pgain"])
 
     @callback(
@@ -345,7 +344,7 @@ def Initialize_nr(dict_nr, rat):
 
     # ** ================================= Sub6 ET-SAPT Power =================================
     @callback(Output("nr_et_power_b", "value"), Input("nr_et_power_r", "value"))
-    def et_power_NR(selected_r):
+    def et_power(selected_r):
         return Initialize_band(selected_r, data_frame["et_power"])
 
     @callback(
@@ -378,7 +377,7 @@ def Initialize_nr(dict_nr, rat):
 
     # ** ================================= Sub6 ET-SAPT Freq =================================
     @callback(Output("nr_et_freq_b", "value"), Input("nr_et_freq_r", "value"))
-    def et_freq_nr(selected_r):
+    def et_freq(selected_r):
         return Initialize_band(selected_r, data_frame["et_freq"])
 
     @callback(
