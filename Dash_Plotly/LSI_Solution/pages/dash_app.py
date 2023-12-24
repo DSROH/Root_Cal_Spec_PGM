@@ -9,8 +9,7 @@ from LSI_Solution.pages.page_nr import Initialize_nr
 
 
 def MultiPageApp(dict_cf, dict_2g, dict_3g, dict_nr):
-    # app = dash.Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.COSMO])
-    current_directory = os.path.dirname(__file__)  # 현재 파일의 디렉토리 경로
+    current_directory = os.path.dirname(__file__)
     app = dash.Dash(__name__, use_pages=True, pages_folder=current_directory, external_stylesheets=[dbc.themes.COSMO])
 
     Initialize_cf(dict_cf, "cf")
