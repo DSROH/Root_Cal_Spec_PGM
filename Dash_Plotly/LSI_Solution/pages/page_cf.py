@@ -420,136 +420,172 @@ def Generate_section(key, rat, dropdowns, data_frame):
 
 
 def Initialize_cf(dict_cf, rat):
-    df_TXDC = dict_cf["txdc"]
-    df_IIP2 = dict_cf["iip2"]
-    df_Cable = dict_cf["cable"]
+    df_txdc = dict_cf["txdc"]
+    df_iip2 = dict_cf["iip2"]
+    df_cable = dict_cf["cable"]
 
     rat_options = [{"label": "3G", "value": "B"}, {"label": "2G", "value": "GSM"}, {"label": "NR", "value": "n"}]
     band_opt = [{"label": "", "value": ""}]
 
     # Create_dropdown 메서드를 사용하여 드롭다운 생성
-    drop_TXDC_r = Create_dropdown("TXDC_r", "B", rat_options)
-    drop_IIP2_r = Create_dropdown("IIP2_r", "n", [{"label": "NR", "value": "n"}])
-    drop_Cable_r = Create_dropdown("Cable_r", "n", [{"label": "NR", "value": "n"}])
+    drop_txdc_r = Create_dropdown("txdc_r", "B", rat_options)
+    drop_iip2_r = Create_dropdown("iip2_r", "n", [{"label": "NR", "value": "n"}])
+    drop_cable_r = Create_dropdown("cable_r", "n", [{"label": "NR", "value": "n"}])
 
-    drop_TXDC_b = Create_dropdown("TXDC_b", "", band_opt)
-    drop_IIP2_b = Create_dropdown("IIP2_b", "", band_opt)
-    drop_Cable_b = Create_dropdown("Cable_b", "", band_opt)
+    drop_txdc_b = Create_dropdown("txdc_b", "", band_opt)
+    drop_iip2_b = Create_dropdown("iip2_b", "", band_opt)
+    drop_cable_b = Create_dropdown("cable_b", "", band_opt)
 
     # 페이지 레이아웃을 초기화합니다.
     layout = html.Div(
         [
-            # ** ================================= TXDC Cal =================================
+            # ** ================================= txdc Cal =================================
             dbc.Row(
                 [
-                    dbc.Col(html.H2("TXDC Cal", className="display-7"), width="auto"),
-                    dbc.Col(drop_TXDC_r, width=1),
-                    dbc.Col(drop_TXDC_b, width=1),
+                    dbc.Col(html.H2("TXCD Cal", className="display-7"), width="auto"),
+                    dbc.Col(drop_txdc_r, width=1),
+                    dbc.Col(drop_txdc_b, width=1),
                 ],
                 align="center",
             ),
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="TXDC_grp_Scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="TXDC_grp_Histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="txdc_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="txdc_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
-                [dbc.Col(Create_range_slider("sld_TXDC_scat", df_TXDC, use_min_max=False), width={"size": 6, "offset": 0})],
+                [
+                    dbc.Col(Create_range_slider("sld_txdc_scat", df_txdc, use_min_max=False), width={"size": 6, "offset": 0}),
+                    dbc.Col(Create_range_slider("sld_txdc_hist", df_txdc, use_min_max=False), width={"size": 6, "offset": 0}),
+                ],
                 align="center",
             ),
             html.Hr(),
-            # ** ================================= IIP2 Cal =================================
+            # ** ================================= iip2 Cal =================================
             dbc.Row(
                 [
                     dbc.Col(html.H2("IIP2 Cal", className="display-7"), width="auto"),
-                    dbc.Col(drop_IIP2_r, width=1),
-                    dbc.Col(drop_IIP2_b, width=1),
+                    dbc.Col(drop_iip2_r, width=1),
+                    dbc.Col(drop_iip2_b, width=1),
                 ],
                 align="center",
             ),
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="IIP2_grp_Scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="IIP2_grp_Histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="iip2_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="iip2_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
-                [dbc.Col(Create_range_slider("sld_IIP2_scat", df_IIP2, use_min_max=False), width={"size": 6, "offset": 0})],
+                [
+                    dbc.Col(Create_range_slider("sld_iip2_scat", df_iip2, use_min_max=False), width={"size": 6, "offset": 0}),
+                    dbc.Col(Create_range_slider("sld_iip2_hist", df_iip2, use_min_max=False), width={"size": 6, "offset": 0}),
+                ],
                 align="center",
             ),
             html.Hr(),
-            # ** ================================= Cable Check =================================
+            # ** ================================= cable Check =================================
             dbc.Row(
                 [
                     dbc.Col(html.H2("RF Cable Check", className="display-7"), width="auto"),
-                    dbc.Col(drop_Cable_r, width=1),
-                    dbc.Col(drop_Cable_b, width=1),
+                    dbc.Col(drop_cable_r, width=1),
+                    dbc.Col(drop_cable_b, width=1),
                 ],
                 align="center",
             ),
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(dcc.Graph(id="Cable_grp_Scatt"), width={"size": 6, "offset": 0}),
-                    dbc.Col(dcc.Graph(id="Cable_grp_Histo"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="cable_scatt"), width={"size": 6, "offset": 0}),
+                    dbc.Col(dcc.Graph(id="cable_histo"), width={"size": 6, "offset": 0}),
                 ],
                 align="center",
             ),
             dbc.Row(
-                [dbc.Col(Create_range_slider("sld_IIP2_scat", df_Cable, use_min_max=False), width={"size": 6, "offset": 0})],
+                [
+                    dbc.Col(Create_range_slider("sld_cable_scat", df_cable, use_min_max=False), width={"size": 6, "offset": 0}),
+                    dbc.Col(Create_range_slider("sld_cable_hist", df_cable, use_min_max=False), width={"size": 6, "offset": 0}),
+                ],
                 align="center",
             ),
             html.Hr(),
         ]
     )
 
-    # ** ================================= TXDC Cal =================================
-    @callback(Output("TXDC_b", "value"), Input("TXDC_r", "value"))
-    def TXDC_CF(selected_r):
-        return Initialize_band(selected_r, df_TXDC)
+    # ** ================================= txdc Cal =================================
+    @callback(Output("txdc_b", "value"), Input("txdc_r", "value"))
+    def txdc(selected_r):
+        return Initialize_band(selected_r, df_txdc)
 
     @callback(
-        [Output("TXDC_b", "options"), Output("TXDC_grp_Scatt", "figure"), Output("TXDC_grp_Histo", "figure")],
-        [Input("TXDC_r", "value"), Input("TXDC_b", "value"), Input("sld_TXDC_scat", "value")],
+        [
+            Output("txdc_b", "options"),
+            Output("txdc_scatt", "figure"),
+            Output("txdc_histo", "figure"),
+        ],
+        [
+            Input("txdc_r", "value"),
+            Input("txdc_b", "value"),
+            Input("sld_txdc_scat", "value"),
+            Input("sld_txdc_hist", "value"),
+        ],
     )
-    def update_TXDC(selected_r, selected_b, scatt_range):
-        scatter_fig, histogram_fig = Update_band_and_graph(df_TXDC, selected_r, selected_b, scatt_range)
-        band_opt = Band_list(df_TXDC, selected_r)
+    def update_txdc(selected_r, selected_b, scatt_range, histo_range):
+        scatter_fig, histogram_fig = Update_band_and_graph(df_txdc, selected_r, selected_b, scatt_range, histo_range)
+        band_opt = Band_list(df_txdc, selected_r)
 
         return band_opt, scatter_fig, histogram_fig
 
-    # ** ================================= TXDC Cal =================================
-    @callback(Output("IIP2_b", "value"), Input("IIP2_r", "value"))
-    def IIP2_CF(selected_r):
-        return Initialize_band(selected_r, df_IIP2)
+    # ** ================================= txdc Cal =================================
+    @callback(Output("iip2_b", "value"), Input("iip2_r", "value"))
+    def iip2(selected_r):
+        return Initialize_band(selected_r, df_iip2)
 
     @callback(
-        [Output("IIP2_b", "options"), Output("IIP2_grp_Scatt", "figure"), Output("IIP2_grp_Histo", "figure")],
-        [Input("IIP2_r", "value"), Input("IIP2_b", "value"), Input("sld_IIP2_scat", "value")],
+        [
+            Output("iip2_b", "options"),
+            Output("iip2_scatt", "figure"),
+            Output("iip2_histo", "figure"),
+        ],
+        [
+            Input("iip2_r", "value"),
+            Input("iip2_b", "value"),
+            Input("sld_iip2_scat", "value"),
+            Input("sld_iip2_hist", "value"),
+        ],
     )
-    def update_IIP2_cal(selected_r, selected_b, scatt_range):
-        scatter_fig, histogram_fig = Update_band_and_graph(df_IIP2, selected_r, selected_b, scatt_range)
-        band_opt = Band_list(df_IIP2, selected_r)
+    def update_iip2(selected_r, selected_b, scatt_range, histo_range):
+        scatter_fig, histogram_fig = Update_band_and_graph(df_iip2, selected_r, selected_b, scatt_range, histo_range)
+        band_opt = Band_list(df_iip2, selected_r)
 
         return band_opt, scatter_fig, histogram_fig
 
-    # ** ================================= RF Cable Check =================================
-    @callback(Output("Cable_b", "value"), Input("Cable_r", "value"))
-    def Cable_CF(selected_r):
-        return Initialize_band(selected_r, df_Cable)
+    # ** ================================= RF cable Check =================================
+    @callback(Output("cable_b", "value"), Input("cable_r", "value"))
+    def cable(selected_r):
+        return Initialize_band(selected_r, df_cable)
 
     @callback(
-        [Output("Cable_b", "options"), Output("Cable_grp_Scatt", "figure"), Output("Cable_grp_Histo", "figure")],
-        [Input("Cable_r", "value"), Input("Cable_b", "value"), Input("sld_IIP2_scat", "value")],
+        [
+            Output("cable_b", "options"),
+            Output("cable_scatt", "figure"),
+            Output("cable_histo", "figure"),
+        ],
+        [
+            Input("cable_r", "value"),
+            Input("cable_b", "value"),
+            Input("sld_cable_scat", "value"),
+            Input("sld_cable_hist", "value"),
+        ],
     )
-    def update_Cable(selected_r, selected_b, scatt_range):
-        scatter_fig, histogram_fig = Update_band_and_graph(df_Cable, selected_r, selected_b, scatt_range)
-        band_opt = Band_list(df_Cable, selected_r)
+    def update_cable(selected_r, selected_b, scatt_range, histo_range):
+        scatter_fig, histogram_fig = Update_band_and_graph(df_cable, selected_r, selected_b, scatt_range, histo_range)
+        band_opt = Band_list(df_cable, selected_r)
 
         return band_opt, scatter_fig, histogram_fig
 
