@@ -1,9 +1,8 @@
 import dash
-import dash_bootstrap_components as dbc
-from dash import dcc, html, callback, Output, Input, State
+from dash import html, callback, Output, Input, State
 from LSI_Solution.pages.page_cf import (
     Initialize_dropdowns,
-    Generate_section,
+    Generate_layout,
     Update_band_and_graph,
     Initialize_band,
     Band_list,
@@ -29,7 +28,7 @@ def Initialize_nr(dict_nr, rat):
         "et_freq",
     ]
     dropdowns, data_frame = Initialize_dropdowns(dict_nr, rat, dropdown_keys)
-    layout = html.Div([Generate_section(key, rat, dropdowns, data_frame) for key in dropdown_keys])
+    layout = html.Div([Generate_layout(key, rat, dropdowns, data_frame) for key in dropdown_keys])
 
     # ** ======================================================================================
     # **
@@ -157,10 +156,11 @@ def Initialize_nr(dict_nr, rat):
     )
     def update_fbrx_gm(selected_r, selected_b, scatt_range, histo_range, children):
         band_opt = Band_list(data_frame["fbrx_gm"], selected_r)
-        filtered_df = data_frame["fbrx_gm"][data_frame["fbrx_gm"]["Band"] == selected_b].reset_index(drop=True)
-        if filtered_df["Path"].str.contains("Tx2").any():
+        filtered_df1 = data_frame["fbrx_gm"][data_frame["fbrx_gm"]["Band"] == selected_b].reset_index(drop=True)
+        filtered_df2 = data_frame["fbrx_gc"][data_frame["fbrx_gc"]["Band"] == selected_b].reset_index(drop=True)
+        if filtered_df1["Path"].str.contains("Tx2").any():
             scatt_fig_pcc1, histo_fig_pcc1, scatt_fig_pcc2, histo_fig_pcc2 = Drawing_pcc(
-                selected_r, selected_b, filtered_df, scatt_range, histo_range, scatt_range, histo_range
+                selected_r, selected_b, filtered_df1, filtered_df2, scatt_range, histo_range, scatt_range, histo_range
             )
             # * _scc_scatt 포함된 layout 제거
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
@@ -168,10 +168,11 @@ def Initialize_nr(dict_nr, rat):
             children = Drawing_scc(
                 selected_r,
                 selected_b,
-                filtered_df,
                 rat,
                 "fbrx_gm",
                 children,
+                filtered_df1,
+                filtered_df2,
                 scatt_range,
                 histo_range,
                 scatt_range,
@@ -181,7 +182,7 @@ def Initialize_nr(dict_nr, rat):
             return band_opt, scatt_fig_pcc1, histo_fig_pcc1, scatt_fig_pcc2, histo_fig_pcc2, children
         else:
             scatt_fig_pcc1, histo_fig_pcc1, scatt_fig_pcc2, histo_fig_pcc2 = Drawing_pcc(
-                selected_r, selected_b, filtered_df, scatt_range, histo_range, scatt_range, histo_range
+                selected_r, selected_b, filtered_df1, filtered_df2, scatt_range, histo_range, scatt_range, histo_range
             )
             # * _scc_scatt 포함된 layout 제거
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
@@ -212,10 +213,12 @@ def Initialize_nr(dict_nr, rat):
     )
     def update_fbrx_fm(selected_r, selected_b, scatt_range, histo_range, children):
         band_opt = Band_list(data_frame["fbrx_fm"], selected_r)
-        filtered_df = data_frame["fbrx_fm"][data_frame["fbrx_fm"]["Band"] == selected_b].reset_index(drop=True)
-        if filtered_df["Path"].str.contains("Tx2").any():
+        filtered_df1 = data_frame["fbrx_fm"][data_frame["fbrx_fm"]["Band"] == selected_b].reset_index(drop=True)
+        filtered_df2 = data_frame["fbrx_fc"][data_frame["fbrx_fc"]["Band"] == selected_b].reset_index(drop=True)
+
+        if filtered_df1["Path"].str.contains("Tx2").any():
             scatt_fig_pcc1, histo_fig_pcc1, scatt_fig_pcc2, histo_fig_pcc2 = Drawing_pcc(
-                selected_r, selected_b, filtered_df, scatt_range, histo_range, scatt_range, histo_range
+                selected_r, selected_b, filtered_df1, filtered_df2, scatt_range, histo_range, scatt_range, histo_range
             )
             # * _scc_scatt 포함된 layout 제거
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
@@ -223,10 +226,11 @@ def Initialize_nr(dict_nr, rat):
             children = Drawing_scc(
                 selected_r,
                 selected_b,
-                filtered_df,
                 rat,
                 "fbrx_fm",
                 children,
+                filtered_df1,
+                filtered_df2,
                 scatt_range,
                 histo_range,
                 scatt_range,
@@ -236,7 +240,7 @@ def Initialize_nr(dict_nr, rat):
             return band_opt, scatt_fig_pcc1, histo_fig_pcc1, scatt_fig_pcc2, histo_fig_pcc2, children
         else:
             scatt_fig_pcc1, histo_fig_pcc1, scatt_fig_pcc2, histo_fig_pcc2 = Drawing_pcc(
-                selected_r, selected_b, filtered_df, scatt_range, histo_range, scatt_range, histo_range
+                selected_r, selected_b, filtered_df1, filtered_df2, scatt_range, histo_range, scatt_range, histo_range
             )
             # * _scc_scatt 포함된 layout 제거
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
@@ -267,12 +271,14 @@ def Initialize_nr(dict_nr, rat):
         band_opt = Band_list(data_frame["apt_meas"], selected_r)
         filtered_df = data_frame["apt_meas"][data_frame["apt_meas"]["Band"] == selected_b].reset_index(drop=True)
         if filtered_df["Path"].str.contains("Tx2").any():
-            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, scatt_range, histo_range)
+            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, None, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
-            children = Drawing_scc(selected_r, selected_b, filtered_df, rat, "apt_meas", children, scatt_range, histo_range)
+            children = Drawing_scc(
+                selected_r, selected_b, rat, "apt_meas", children, filtered_df, None, scatt_range, histo_range
+            )
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
         else:
-            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, scatt_range, histo_range)
+            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, None, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
 
@@ -300,12 +306,14 @@ def Initialize_nr(dict_nr, rat):
         band_opt = Band_list(data_frame["et_psat"], selected_r)
         filtered_df = data_frame["et_psat"][data_frame["et_psat"]["Band"] == selected_b].reset_index(drop=True)
         if filtered_df["Path"].str.contains("Tx2").any():
-            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, scatt_range, histo_range)
+            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, None, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
-            children = Drawing_scc(selected_r, selected_b, filtered_df, rat, "et_psat", children, scatt_range, histo_range)
+            children = Drawing_scc(
+                selected_r, selected_b, rat, "et_psat", children, filtered_df, None, scatt_range, histo_range
+            )
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
         else:
-            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, scatt_range, histo_range)
+            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, None, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
 
@@ -333,12 +341,14 @@ def Initialize_nr(dict_nr, rat):
         band_opt = Band_list(data_frame["et_pgain"], selected_r)
         filtered_df = data_frame["et_pgain"][data_frame["et_pgain"]["Band"] == selected_b].reset_index(drop=True)
         if filtered_df["Path"].str.contains("Tx2").any():
-            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, scatt_range, histo_range)
+            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, None, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
-            children = Drawing_scc(selected_r, selected_b, filtered_df, rat, "et_pgain", children, scatt_range, histo_range)
+            children = Drawing_scc(
+                selected_r, selected_b, rat, "et_pgain", children, filtered_df, None, scatt_range, histo_range
+            )
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
         else:
-            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, scatt_range, histo_range)
+            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, None, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
 
@@ -366,12 +376,14 @@ def Initialize_nr(dict_nr, rat):
         band_opt = Band_list(data_frame["et_power"], selected_r)
         filtered_df = data_frame["et_power"][data_frame["et_power"]["Band"] == selected_b].reset_index(drop=True)
         if filtered_df["Path"].str.contains("Tx2").any():
-            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, scatt_range, histo_range)
+            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, None, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
-            children = Drawing_scc(selected_r, selected_b, filtered_df, rat, "et_power", children, scatt_range, histo_range)
+            children = Drawing_scc(
+                selected_r, selected_b, rat, "et_power", children, filtered_df, None, scatt_range, histo_range
+            )
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
         else:
-            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, scatt_range, histo_range)
+            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, None, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
 
@@ -399,12 +411,14 @@ def Initialize_nr(dict_nr, rat):
         band_opt = Band_list(data_frame["et_freq"], selected_r)
         filtered_df = data_frame["et_freq"][data_frame["et_freq"]["Band"] == selected_b].reset_index(drop=True)
         if filtered_df["Path"].str.contains("Tx2").any():
-            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, scatt_range, histo_range)
+            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, None, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
-            children = Drawing_scc(selected_r, selected_b, filtered_df, rat, "et_freq", children, scatt_range, histo_range)
+            children = Drawing_scc(
+                selected_r, selected_b, rat, "et_freq", children, filtered_df, None, scatt_range, histo_range
+            )
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
         else:
-            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, scatt_range, histo_range)
+            scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, None, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
 
