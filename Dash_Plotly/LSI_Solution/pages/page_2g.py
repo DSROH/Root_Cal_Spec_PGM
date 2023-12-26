@@ -1,9 +1,8 @@
 import dash
-import dash_bootstrap_components as dbc
-from dash import dcc, html, callback, Output, Input
+from dash import html, callback, Output, Input
 from LSI_Solution.pages.page_cf import (
     Initialize_dropdowns,
-    Generate_section,
+    Generate_layout,
     Initialize_band,
     Band_list,
     Update_band_and_graph,
@@ -22,7 +21,7 @@ def Initialize_2g(dict_2g, rat):
         "epsk_code",
     ]
     dropdowns, data_frame = Initialize_dropdowns(dict_2g, rat, dropdown_keys)
-    layout = html.Div([Generate_section(key, rat, dropdowns, data_frame) for key in dropdown_keys])
+    layout = html.Div([Generate_layout(key, rat, dropdowns, data_frame) for key in dropdown_keys])
 
     # ** ============================== 2G RX Cain cal ==============================
     @callback(Output("2g_rx_gain_b", "value"), Input("2g_rx_gain_r", "value"))
