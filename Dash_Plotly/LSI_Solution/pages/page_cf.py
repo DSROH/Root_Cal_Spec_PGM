@@ -249,27 +249,46 @@ def Update_band_and_graph(df, selected_r, selected_b, scatt_range=None, histo_ra
         return go.Figure(data=[]), go.Figure(data=[])
 
 
-def Drawing_pcc(selected_r, selected_b, df, scatt_range1=None, histo_range1=None, scatt_range2=None, histo_range2=None):
-    cols_to_drop = df[df["Path"].str.contains("Tx2")].index
-    selected_df = df.drop(cols_to_drop)
+def Drawing_pcc(
+    selected_r, selected_b, df1, df2=None, scatt_range1=None, histo_range1=None, scatt_range2=None, histo_range2=None
+):
+    cols_to_drop1 = df1[df1["Path"].str.contains("Tx2")].index
+    selected_df1 = df1.drop(cols_to_drop1)
+
     if scatt_range2 is not None:
-        scatt_fig1, histo_fig1 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range1, histo_range1)
-        scatt_fig2, histo_fig2 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range2, histo_range2)
+        cols_to_drop2 = df2[df2["Path"].str.contains("Tx2")].index
+        selected_df2 = df2.drop(cols_to_drop2)
+        scatt_fig1, histo_fig1 = Update_band_and_graph(selected_df1, selected_r, selected_b, scatt_range1, histo_range1)
+        scatt_fig2, histo_fig2 = Update_band_and_graph(selected_df2, selected_r, selected_b, scatt_range2, histo_range2)
         return scatt_fig1, histo_fig1, scatt_fig2, histo_fig2
     else:
-        scatt_fig, histo_fig = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range1, histo_range1)
+        scatt_fig, histo_fig = Update_band_and_graph(selected_df1, selected_r, selected_b, scatt_range1, histo_range1)
         return scatt_fig, histo_fig
 
 
 def Drawing_scc(
-    selected_r, selected_b, df, rat, st1, children, scatt_range1=None, histo_range1=None, scatt_range2=None, histo_range2=None
+    selected_r,
+    selected_b,
+    rat,
+    st1,
+    children,
+    df1,
+    df2=None,
+    scatt_range1=None,
+    histo_range1=None,
+    scatt_range2=None,
+    histo_range2=None,
 ):
-    selected_df = df[df["Path"].str.contains("Tx2")]
-    item = selected_df.Item.iloc[0]
+    selected_df1 = df1[df1["Path"].str.contains("Tx2")]
+    try:
+        item = selected_df1.Item.iloc[0]
+    except:
+        item = ""
 
     if scatt_range2 is not None:
-        scatt_fig1, histo_fig1 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range1, histo_range1)
-        scatt_fig2, histo_fig2 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range2, histo_range2)
+        selected_df2 = df2[df2["Path"].str.contains("Tx2")]
+        scatt_fig1, histo_fig1 = Update_band_and_graph(selected_df1, selected_r, selected_b, scatt_range1, histo_range1)
+        scatt_fig2, histo_fig2 = Update_band_and_graph(selected_df2, selected_r, selected_b, scatt_range2, histo_range2)
         layout = html.Div(
             [
                 dbc.Row([dbc.Col(html.H2(f"{rat.upper()} {st1.upper()} {item} SCC", className="display-7"), width="auto")]),
@@ -298,7 +317,7 @@ def Drawing_scc(
         )
         children.append(layout)
     else:
-        scatt_fig1, histo_fig1 = Update_band_and_graph(selected_df, selected_r, selected_b, scatt_range1, histo_range1)
+        scatt_fig1, histo_fig1 = Update_band_and_graph(selected_df1, selected_r, selected_b, scatt_range1, histo_range1)
         layout = html.Div(
             [
                 dbc.Row([dbc.Col(html.H2(f"{rat.upper()} {st1.upper()} {item} SCC", className="display-7"), width="auto")]),
@@ -329,11 +348,12 @@ def tweet_callback(st1, st2, st3=None):
         return f"{st1.upper()} {st2.upper()} PCC"
 
 
-def Generate_section(key, rat, dropdowns, data_frame):
+def Generate_layout(key, rat, dropdowns, data_frame):
+    # ** gc, fc는 스킵하고 gm, fm에서 code까지 다 생성한다.
     if key in ["fbrx_gc", "fbrx_fc"]:
         return
-    elif key in ["fbrx_gm", "fbrx_fm"]:
-        section = html.Div(
+    elif (key in ["fbrx_gm"]) or ((rat == "nr") & (key in ["fbrx_fm"])):
+        layout = html.Div(
             [
                 dbc.Row(
                     [
@@ -378,7 +398,7 @@ def Generate_section(key, rat, dropdowns, data_frame):
             ]
         )
     else:
-        section = html.Div(
+        layout = html.Div(
             [
                 dbc.Row(
                     [
@@ -416,7 +436,7 @@ def Generate_section(key, rat, dropdowns, data_frame):
                 html.Hr(),
             ]
         )
-    return section
+    return layout
 
 
 def Initialize_cf(dict_cf, rat):
