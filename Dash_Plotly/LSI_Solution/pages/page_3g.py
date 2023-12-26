@@ -1,9 +1,8 @@
 import dash
-import dash_bootstrap_components as dbc
-from dash import dcc, html, callback, Output, Input
+from dash import html, callback, Output, Input
 from LSI_Solution.pages.page_cf import (
     Initialize_dropdowns,
-    Generate_section,
+    Generate_layout,
     Initialize_band,
     Band_list,
     Update_band_and_graph,
@@ -17,7 +16,7 @@ def Initialize_3g(dict_3g, rat):
         "fbrx_gm",
         "fbrx_gc",
         "fbrx_fm",
-        "fbrx_fm_ch",
+        # "fbrx_fm_ch",
         "apt_meas",
         "txp_cc",
         "et_psat",
@@ -25,7 +24,7 @@ def Initialize_3g(dict_3g, rat):
     ]
 
     dropdowns, data_frame = Initialize_dropdowns(dict_3g, rat, dropdown_keys)
-    layout = html.Div([Generate_section(key, rat, dropdowns, data_frame) for key in dropdown_keys])
+    layout = html.Div([Generate_layout(key, rat, dropdowns, data_frame) for key in dropdown_keys])
 
     # ** ============================== 3G RX Gain Cal ==============================
     @callback(Output("3g_rx_gain_b", "value"), Input("3g_rx_gain_r", "value"))
@@ -118,8 +117,6 @@ def Initialize_3g(dict_3g, rat):
             Output("3g_fbrx_fm_b", "options"),
             Output("3g_fbrx_fm_scatt", "figure"),
             Output("3g_fbrx_fm_histo", "figure"),
-            Output("3g_fbrx_fc_scatt", "figure"),
-            Output("3g_fbrx_fc_histo", "figure"),
         ],
         [
             Input("3g_fbrx_fm_r", "value"),
@@ -129,41 +126,38 @@ def Initialize_3g(dict_3g, rat):
         ],
     )
     def update_fbrx_freq(selected_r, selected_b, scatt_range, histo_range):
-        scatter_fig1, histogram_fig1 = Update_band_and_graph(
+        scatter_fig, histogram_fig = Update_band_and_graph(
             data_frame["fbrx_fm"], selected_r, selected_b, scatt_range, histo_range
         )
-        scatter_fig2, histogram_fig2 = Update_band_and_graph(
-            data_frame["fbrx_fc"], selected_r, selected_b, scatt_range, histo_range
-        )
-        band_opt = Band_list(data_frame["fbrx_fc"], selected_r)
+        band_opt = Band_list(data_frame["fbrx_fm"], selected_r)
 
-        return band_opt, scatter_fig1, histogram_fig1, scatter_fig2, histogram_fig2
+        return band_opt, scatter_fig, histogram_fig
 
     # ** ============================== 3G FBRX Freq Cal - Channel ==============================
-    @callback(Output("3g_fbrx_freq_ch_b", "value"), Input("3g_fbrx_freq_ch_r", "value"))
-    def fbrx_freq_Ch(selected_r):
-        return Initialize_band(selected_r, data_frame["fbrx_freq_ch"])
+    # @callback(Output("3g_fbrx_freq_ch_b", "value"), Input("3g_fbrx_freq_ch_r", "value"))
+    # def fbrx_freq_Ch(selected_r):
+    #     return Initialize_band(selected_r, data_frame["fbrx_freq_ch"])
 
-    @callback(
-        [
-            Output("3g_fbrx_freq_ch_b", "options"),
-            Output("3g_fbrx_fm_ch_scatt", "figure"),
-            Output("3g_fbrx_fm_ch_histo", "figure"),
-        ],
-        [
-            Input("3g_fbrx_freq_ch_r", "value"),
-            Input("3g_fbrx_freq_ch_b", "value"),
-            Input("sld_fbrx_freq_ch_scat", "value"),
-            Input("sld_fbrx_freq_ch_hist", "value"),
-        ],
-    )
-    def update_fbrx_freq_ch(selected_r, selected_b, scatt_range, histo_range):
-        scatter_fig1, scatter_fig2 = Update_band_and_graph(
-            data_frame["fbrx_freq_ch"], selected_r, selected_b, scatt_range, histo_range
-        )
-        band_opt = Band_list(data_frame["fbrx_freq_ch"])
+    # @callback(
+    #     [
+    #         Output("3g_fbrx_freq_ch_b", "options"),
+    #         Output("3g_fbrx_fm_ch_scatt", "figure"),
+    #         Output("3g_fbrx_fm_ch_histo", "figure"),
+    #     ],
+    #     [
+    #         Input("3g_fbrx_freq_ch_r", "value"),
+    #         Input("3g_fbrx_freq_ch_b", "value"),
+    #         Input("sld_fbrx_freq_ch_scat", "value"),
+    #         Input("sld_fbrx_freq_ch_hist", "value"),
+    #     ],
+    # )
+    # def update_fbrx_freq_ch(selected_r, selected_b, scatt_range, histo_range):
+    #     scatter_fig1, scatter_fig2 = Update_band_and_graph(
+    #         data_frame["fbrx_freq_ch"], selected_r, selected_b, scatt_range, histo_range
+    #     )
+    #     band_opt = Band_list(data_frame["fbrx_freq_ch"])
 
-        return band_opt, scatter_fig1, scatter_fig2
+    #     return band_opt, scatter_fig1, scatter_fig2
 
     # ** ============================== 3G APT Measuremnet ==============================
     @callback(Output("3g_apt_meas_b", "value"), Input("3g_apt_meas_r", "value"))
