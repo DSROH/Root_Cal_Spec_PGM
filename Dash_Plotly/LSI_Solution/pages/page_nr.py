@@ -3,8 +3,8 @@ from dash import html, callback, Output, Input, State
 from LSI_Solution.pages.page_cf import (
     Initialize_dropdowns,
     Generate_layout,
-    Update_band_and_graph,
     Initialize_band,
+    Update_band_and_graph,
     Band_list,
     Drawing_pcc,
     Drawing_scc,
@@ -144,20 +144,21 @@ def Initialize_nr(dict_nr, rat):
             Output("nr_fbrx_gm_histo", "figure"),
             Output("nr_fbrx_gc_scatt", "figure"),
             Output("nr_fbrx_gc_histo", "figure"),
-            Output("fbrx_gm_scc", "children"),
+            Output("nr_fbrx_gm_scc", "children"),
         ],
         [
             Input("nr_fbrx_gm_r", "value"),
             Input("nr_fbrx_gm_b", "value"),
             Input("sld_fbrx_gm_scat", "value"),
             Input("sld_fbrx_gm_hist", "value"),
-            State("fbrx_gm_scc", "children"),
+            State("nr_fbrx_gm_scc", "children"),
         ],
     )
     def update_fbrx_gm(selected_r, selected_b, scatt_range, histo_range, children):
         band_opt = Band_list(data_frame["fbrx_gm"], selected_r)
         filtered_df1 = data_frame["fbrx_gm"][data_frame["fbrx_gm"]["Band"] == selected_b].reset_index(drop=True)
         filtered_df2 = data_frame["fbrx_gc"][data_frame["fbrx_gc"]["Band"] == selected_b].reset_index(drop=True)
+
         if filtered_df1["Path"].str.contains("Tx2").any():
             scatt_fig_pcc1, histo_fig_pcc1, scatt_fig_pcc2, histo_fig_pcc2 = Drawing_pcc(
                 selected_r, selected_b, filtered_df1, filtered_df2, scatt_range, histo_range, scatt_range, histo_range
@@ -169,7 +170,7 @@ def Initialize_nr(dict_nr, rat):
                 selected_r,
                 selected_b,
                 rat,
-                "fbrx_gm",
+                "nr_fbrx_gm",
                 children,
                 filtered_df1,
                 filtered_df2,
@@ -201,14 +202,14 @@ def Initialize_nr(dict_nr, rat):
             Output("nr_fbrx_fm_histo", "figure"),
             Output("nr_fbrx_fc_scatt", "figure"),
             Output("nr_fbrx_fc_histo", "figure"),
-            Output("fbrx_fm_scc", "children"),
+            Output("nr_fbrx_fm_scc", "children"),
         ],
         [
             Input("nr_fbrx_fm_r", "value"),
             Input("nr_fbrx_fm_b", "value"),
             Input("sld_fbrx_fm_scat", "value"),
             Input("sld_fbrx_fm_hist", "value"),
-            State("fbrx_fm_scc", "children"),
+            State("nr_fbrx_fm_scc", "children"),
         ],
     )
     def update_fbrx_fm(selected_r, selected_b, scatt_range, histo_range, children):
@@ -227,7 +228,7 @@ def Initialize_nr(dict_nr, rat):
                 selected_r,
                 selected_b,
                 rat,
-                "fbrx_fm",
+                "nr_fbrx_fm",
                 children,
                 filtered_df1,
                 filtered_df2,
@@ -257,14 +258,14 @@ def Initialize_nr(dict_nr, rat):
             Output("nr_apt_meas_b", "options"),
             Output("nr_apt_meas_scatt", "figure"),
             Output("nr_apt_meas_histo", "figure"),
-            Output("apt_meas_scc", "children"),
+            Output("nr_apt_meas_scc", "children"),
         ],
         [
             Input("nr_apt_meas_r", "value"),
             Input("nr_apt_meas_b", "value"),
             Input("sld_apt_meas_scat", "value"),
             Input("sld_apt_meas_hist", "value"),
-            State("apt_meas_scc", "children"),
+            State("nr_apt_meas_scc", "children"),
         ],
     )
     def update_apt_meas(selected_r, selected_b, scatt_range, histo_range, children):
@@ -274,7 +275,7 @@ def Initialize_nr(dict_nr, rat):
             scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, None, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
             children = Drawing_scc(
-                selected_r, selected_b, rat, "apt_meas", children, filtered_df, None, scatt_range, histo_range
+                selected_r, selected_b, rat, "nr_apt_meas", children, filtered_df, None, scatt_range, histo_range
             )
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
         else:
@@ -292,14 +293,14 @@ def Initialize_nr(dict_nr, rat):
             Output("nr_et_psat_b", "options"),
             Output("nr_et_psat_scatt", "figure"),
             Output("nr_et_psat_histo", "figure"),
-            Output("et_psat_scc", "children"),
+            Output("nr_et_psat_scc", "children"),
         ],
         [
             Input("nr_et_psat_r", "value"),
             Input("nr_et_psat_b", "value"),
             Input("sld_et_psat_scat", "value"),
             Input("sld_et_psat_hist", "value"),
-            State("et_psat_scc", "children"),
+            State("nr_et_psat_scc", "children"),
         ],
     )
     def update_et_psat(selected_r, selected_b, scatt_range, histo_range, children):
@@ -309,7 +310,7 @@ def Initialize_nr(dict_nr, rat):
             scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, None, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
             children = Drawing_scc(
-                selected_r, selected_b, rat, "et_psat", children, filtered_df, None, scatt_range, histo_range
+                selected_r, selected_b, rat, "nr_et_psat", children, filtered_df, None, scatt_range, histo_range
             )
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
         else:
@@ -327,14 +328,14 @@ def Initialize_nr(dict_nr, rat):
             Output("nr_et_pgain_b", "options"),
             Output("nr_et_pgain_scatt", "figure"),
             Output("nr_et_pgain_histo", "figure"),
-            Output("et_pgain_scc", "children"),
+            Output("nr_et_pgain_scc", "children"),
         ],
         [
             Input("nr_et_pgain_r", "value"),
             Input("nr_et_pgain_b", "value"),
             Input("sld_et_pgain_scat", "value"),
             Input("sld_et_pgain_hist", "value"),
-            State("et_pgain_scc", "children"),
+            State("nr_et_pgain_scc", "children"),
         ],
     )
     def update_et_pgain(selected_r, selected_b, scatt_range, histo_range, children):
@@ -344,7 +345,7 @@ def Initialize_nr(dict_nr, rat):
             scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, None, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
             children = Drawing_scc(
-                selected_r, selected_b, rat, "et_pgain", children, filtered_df, None, scatt_range, histo_range
+                selected_r, selected_b, rat, "nr_et_pgain", children, filtered_df, None, scatt_range, histo_range
             )
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
         else:
@@ -362,14 +363,14 @@ def Initialize_nr(dict_nr, rat):
             Output("nr_et_power_b", "options"),
             Output("nr_et_power_scatt", "figure"),
             Output("nr_et_power_histo", "figure"),
-            Output("et_power_scc", "children"),
+            Output("nr_et_power_scc", "children"),
         ],
         [
             Input("nr_et_power_r", "value"),
             Input("nr_et_power_b", "value"),
             Input("sld_et_power_scat", "value"),
             Input("sld_et_power_hist", "value"),
-            State("et_power_scc", "children"),
+            State("nr_et_power_scc", "children"),
         ],
     )
     def update_et_power(selected_r, selected_b, scatt_range, histo_range, children):
@@ -379,7 +380,7 @@ def Initialize_nr(dict_nr, rat):
             scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, None, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
             children = Drawing_scc(
-                selected_r, selected_b, rat, "et_power", children, filtered_df, None, scatt_range, histo_range
+                selected_r, selected_b, rat, "nr_et_power", children, filtered_df, None, scatt_range, histo_range
             )
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
         else:
@@ -397,14 +398,14 @@ def Initialize_nr(dict_nr, rat):
             Output("nr_et_freq_b", "options"),
             Output("nr_et_freq_scatt", "figure"),
             Output("nr_et_freq_histo", "figure"),
-            Output("et_freq_scc", "children"),
+            Output("nr_et_freq_scc", "children"),
         ],
         [
             Input("nr_et_freq_r", "value"),
             Input("nr_et_freq_b", "value"),
             Input("sld_et_freq_scat", "value"),
             Input("sld_et_freq_hist", "value"),
-            State("et_freq_scc", "children"),
+            State("nr_et_freq_scc", "children"),
         ],
     )
     def update_et_freq(selected_r, selected_b, scatt_range, histo_range, children):
@@ -414,7 +415,7 @@ def Initialize_nr(dict_nr, rat):
             scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, None, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
             children = Drawing_scc(
-                selected_r, selected_b, rat, "et_freq", children, filtered_df, None, scatt_range, histo_range
+                selected_r, selected_b, rat, "nr_et_freq", children, filtered_df, None, scatt_range, histo_range
             )
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
         else:
