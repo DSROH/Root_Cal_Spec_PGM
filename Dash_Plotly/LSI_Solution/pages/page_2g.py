@@ -1,12 +1,6 @@
 import dash
 from dash import html, callback, Output, Input
-from LSI_Solution.pages.page_cf import (
-    Initialize_dropdowns,
-    Generate_layout,
-    Initialize_band,
-    Band_list,
-    Update_band_and_graph,
-)
+from LSI_Solution.pages.page_cf import Initialize_dropdowns, Generate_layout, Initialize_band, Band_list, Update_band_and_graph
 
 
 def Initialize_2g(dict_2g, rat):
