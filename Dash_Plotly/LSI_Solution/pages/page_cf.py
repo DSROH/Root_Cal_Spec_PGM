@@ -56,28 +56,6 @@ def Trans_dataframe(df):
     return df_Transposed
 
 
-def Initialize_dropdowns(dict, rat, keys, band_opt=None):
-    if band_opt is None:
-        band_opt = [{"label": "", "value": ""}]
-
-    dropdowns = {}
-    dataframes = {}
-    for key in keys:
-        df = dict[key].apply(lambda x: x.map(lambda y: y.strip()) if x.dtype == "object" else x)
-        dataframes[key] = df
-
-        if rat == "2g":
-            dropdowns[key + "_r"] = Create_dropdown(f"{rat}_{key}_r", "G", [{"label": "2G", "value": "G"}])
-        elif rat == "3g":
-            dropdowns[key + "_r"] = Create_dropdown(f"{rat}_{key}_r", "B", [{"label": "3G", "value": "B"}])
-        elif rat == "nr":
-            dropdowns[key + "_r"] = Create_dropdown(f"{rat}_{key}_r", "n", [{"label": "NR", "value": "n"}])
-
-        dropdowns[key + "_b"] = Create_dropdown(f"{rat}_{key}_b", "", band_opt)
-
-    return dropdowns, dataframes
-
-
 def Create_dropdown(drop_id, default_value, options):
     return dcc.Dropdown(
         id=drop_id,
@@ -291,7 +269,7 @@ def Drawing_scc(
         scatt_fig2, histo_fig2 = Update_band_and_graph(selected_df2, selected_r, selected_b, scatt_range2, histo_range2)
         layout = html.Div(
             [
-                dbc.Row([dbc.Col(html.H2(f"{rat.upper()} {st1.upper()} {item} SCC", className="display-7"), width="auto")]),
+                dbc.Row([dbc.Col(html.H2(f"{st1.upper()} SCC", className="display-7"), width="auto")]),
                 dbc.Row(
                     [
                         dbc.Col(
@@ -320,7 +298,7 @@ def Drawing_scc(
         scatt_fig1, histo_fig1 = Update_band_and_graph(selected_df1, selected_r, selected_b, scatt_range1, histo_range1)
         layout = html.Div(
             [
-                dbc.Row([dbc.Col(html.H2(f"{rat.upper()} {st1.upper()} {item} SCC", className="display-7"), width="auto")]),
+                dbc.Row([dbc.Col(html.H2(f"{st1.upper()} SCC", className="display-7"), width="auto")]),
                 dbc.Row(
                     [
                         dbc.Col(
@@ -348,6 +326,28 @@ def tweet_callback(st1, st2, st3=None):
         return f"{st1.upper()} {st2.upper()} PCC"
 
 
+def Initialize_dropdowns(dict, rat, keys, band_opt=None):
+    if band_opt is None:
+        band_opt = [{"label": "", "value": ""}]
+
+    dropdowns = {}
+    dataframes = {}
+    for key in keys:
+        df = dict[key].apply(lambda x: x.map(lambda y: y.strip()) if x.dtype == "object" else x)
+        dataframes[key] = df
+
+        if rat == "2g":
+            dropdowns[f"{rat}_{key}_r"] = Create_dropdown(f"{rat}_{key}_r", "G", [{"label": "2G", "value": "G"}])
+        elif rat == "3g":
+            dropdowns[f"{rat}_{key}_r"] = Create_dropdown(f"{rat}_{key}_r", "B", [{"label": "3G", "value": "B"}])
+        elif rat == "nr":
+            dropdowns[f"{rat}_{key}_r"] = Create_dropdown(f"{rat}_{key}_r", "n", [{"label": "NR", "value": "n"}])
+
+        dropdowns[f"{rat}_{key}_b"] = Create_dropdown(f"{rat}_{key}_b", "", band_opt)
+
+    return dropdowns, dataframes
+
+
 def Generate_layout(key, rat, dropdowns, data_frame):
     # ** gc, fc는 스킵하고 gm, fm에서 code까지 다 생성한다.
     if key in ["fbrx_gc", "fbrx_fc"]:
@@ -358,15 +358,11 @@ def Generate_layout(key, rat, dropdowns, data_frame):
                 dbc.Row(
                     [
                         dbc.Col(
-                            html.H2(
-                                children=tweet_callback(rat, key),
-                                id=f"head_{key}",
-                                className="display-7",
-                            ),
+                            html.H2(children=tweet_callback(rat, key), id=f"head_{key}", className="display-7"),
                             width="auto",
                         ),
-                        dbc.Col(dropdowns[f"{key}_r"], width=1),
-                        dbc.Col(dropdowns[f"{key}_b"], width=1),
+                        dbc.Col(dropdowns[f"{rat}_{key}_r"], width=1),
+                        dbc.Col(dropdowns[f"{rat}_{key}_b"], width=1),
                     ],
                     align="center",
                 ),
@@ -393,7 +389,8 @@ def Generate_layout(key, rat, dropdowns, data_frame):
                     ],
                     align="center",
                 ),
-                html.Div(id=f"{key}_scc", children=[]),
+                html.Br(),
+                html.Div(id=f"{rat}_{key}_scc", children=[]),
                 html.Hr(),
             ]
         )
@@ -406,8 +403,8 @@ def Generate_layout(key, rat, dropdowns, data_frame):
                             html.H2(children=tweet_callback(rat, key), id=f"head_{key}", className="display-7"),
                             width="auto",
                         ),
-                        dbc.Col(dropdowns[f"{key}_r"], width=1),
-                        dbc.Col(dropdowns[f"{key}_b"], width=1),
+                        dbc.Col(dropdowns[f"{rat}_{key}_r"], width=1),
+                        dbc.Col(dropdowns[f"{rat}_{key}_b"], width=1),
                     ],
                     align="center",
                 ),
@@ -432,7 +429,8 @@ def Generate_layout(key, rat, dropdowns, data_frame):
                     ],
                     align="center",
                 ),
-                html.Div(id=f"{key}_scc", children=[]),
+                html.Br(),
+                html.Div(id=f"{rat}_{key}_scc", children=[]),
                 html.Hr(),
             ]
         )
