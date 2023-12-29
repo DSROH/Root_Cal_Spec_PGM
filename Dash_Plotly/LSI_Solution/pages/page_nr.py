@@ -22,6 +22,8 @@ def Initialize_nr(dict_nr, rat):
         "fbrx_fm",
         "fbrx_fc",
         "apt_meas",
+        "therm",
+        "bw_cal",
         "et_psat",
         "et_pgain",
         "et_power",
@@ -54,7 +56,9 @@ def Initialize_nr(dict_nr, rat):
         ],
     )
     def update_rx_gain(selected_r, selected_b, scatt_range, histo_range):
-        scatt_fig, histo_fig = Update_band_and_graph(data_frame["rx_gain"], selected_r, selected_b, scatt_range, histo_range)
+        scatt_fig, histo_fig = Update_band_and_graph(
+            data_frame["rx_gain"], selected_r, selected_b, "meas", scatt_range, histo_range
+        )
         band_opt = Band_list(data_frame["rx_gain"], selected_r)
 
         return band_opt, scatt_fig, histo_fig
@@ -78,7 +82,9 @@ def Initialize_nr(dict_nr, rat):
         ],
     )
     def update_rx_rsrp(selected_r, selected_b, scatt_range, histo_range):
-        scatt_fig, histo_fig = Update_band_and_graph(data_frame["rx_rsrp"], selected_r, selected_b, scatt_range, histo_range)
+        scatt_fig, histo_fig = Update_band_and_graph(
+            data_frame["rx_rsrp"], selected_r, selected_b, "meas", scatt_range, histo_range
+        )
         band_opt = Band_list(data_frame["rx_rsrp"], selected_r)
 
         return band_opt, scatt_fig, histo_fig
@@ -102,7 +108,9 @@ def Initialize_nr(dict_nr, rat):
         ],
     )
     def update_rx_comp(selected_r, selected_b, scatt_range, histo_range):
-        scatt_fig, histo_fig = Update_band_and_graph(data_frame["rx_comp"], selected_r, selected_b, scatt_range, histo_range)
+        scatt_fig, histo_fig = Update_band_and_graph(
+            data_frame["rx_comp"], selected_r, selected_b, "meas", scatt_range, histo_range
+        )
         band_opt = Band_list(data_frame["rx_comp"], selected_r)
 
         return band_opt, scatt_fig, histo_fig
@@ -126,7 +134,9 @@ def Initialize_nr(dict_nr, rat):
         ],
     )
     def update_rx_mix(selected_r, selected_b, scatt_range, histo_range):
-        scatt_fig, histo_fig = Update_band_and_graph(data_frame["rx_mix"], selected_r, selected_b, scatt_range, histo_range)
+        scatt_fig, histo_fig = Update_band_and_graph(
+            data_frame["rx_mix"], selected_r, selected_b, "meas", scatt_range, histo_range
+        )
         band_opt = Band_list(data_frame["rx_mix"], selected_r)
 
         return band_opt, scatt_fig, histo_fig
@@ -282,6 +292,58 @@ def Initialize_nr(dict_nr, rat):
             scatt_fig_pcc, histo_fig_pcc = Drawing_pcc(selected_r, selected_b, filtered_df, None, scatt_range, histo_range)
             children = [layout for layout in children if f"_scc_scatt" not in str(layout)]
             return band_opt, scatt_fig_pcc, histo_fig_pcc, children
+
+    # ** ================================= Sub6 Thermistor =================================
+    @callback(Output("nr_therm_b", "value"), Input("nr_therm_r", "value"))
+    def therm(selected_r):
+        return Initialize_band(selected_r, data_frame["therm"])
+
+    @callback(
+        [
+            Output("nr_therm_b", "options"),
+            Output("nr_therm_scatt", "figure"),
+            Output("nr_therm_histo", "figure"),
+        ],
+        [
+            Input("nr_therm_r", "value"),
+            Input("nr_therm_b", "value"),
+            Input("sld_therm_scat", "value"),
+            Input("sld_therm_hist", "value"),
+        ],
+    )
+    def update_therm(selected_r, selected_b, scatt_range, histo_range):
+        scatt_fig, histo_fig = Update_band_and_graph(
+            data_frame["therm"], selected_r, selected_b, "code", scatt_range, histo_range
+        )
+        band_opt = Band_list(data_frame["therm"], selected_r)
+
+        return band_opt, scatt_fig, histo_fig
+
+    # ** ================================= Sub6 BW Cal =================================
+    @callback(Output("nr_bw_cal_b", "value"), Input("nr_bw_cal_r", "value"))
+    def bw_cal(selected_r):
+        return Initialize_band(selected_r, data_frame["bw_cal"])
+
+    @callback(
+        [
+            Output("nr_bw_cal_b", "options"),
+            Output("nr_bw_cal_scatt", "figure"),
+            Output("nr_bw_cal_histo", "figure"),
+        ],
+        [
+            Input("nr_bw_cal_r", "value"),
+            Input("nr_bw_cal_b", "value"),
+            Input("sld_bw_cal_scat", "value"),
+            Input("sld_bw_cal_hist", "value"),
+        ],
+    )
+    def update_bw_cal(selected_r, selected_b, scatt_range, histo_range):
+        scatt_fig, histo_fig = Update_band_and_graph(
+            data_frame["bw_cal"], selected_r, selected_b, "meas", scatt_range, histo_range
+        )
+        band_opt = Band_list(data_frame["bw_cal"], selected_r)
+
+        return band_opt, scatt_fig, histo_fig
 
     # ** ================================= Sub6 ET-SAPT Psat =================================
     @callback(Output("nr_et_psat_b", "value"), Input("nr_et_psat_r", "value"))
