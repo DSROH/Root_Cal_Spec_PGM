@@ -1,5 +1,6 @@
 import dash
 import plotly.graph_objects as go
+import plotly.figure_factory as ff
 import dash_bootstrap_components as dbc
 from dash import dcc, html, callback, Output, Input
 
@@ -77,7 +78,7 @@ def Create_range_slider(sld_id, df, use_min_max=True):
     if "hist" in sld_id:
         x_min = 0
         x_max = 5
-        x_step = 0.05
+        x_step = 0.125
 
         return dcc.Slider(
             id=sld_id,
@@ -85,7 +86,7 @@ def Create_range_slider(sld_id, df, use_min_max=True):
             min=x_min,
             max=x_max,
             step=x_step,
-            value=2.5,
+            value=0.125,
         )
     else:
         df_Transposed = Trans_dataframe(df)
@@ -115,7 +116,7 @@ def Update_axes(fig, x_range=None, y_range=None):
         ticks="outside",
         showline=True,
         linewidth=1.5,
-        mirror=True,
+        mirror="all",
         linecolor="black",
         gridcolor="lightgrey",
         showgrid=True,
@@ -124,7 +125,7 @@ def Update_axes(fig, x_range=None, y_range=None):
         ticks="outside",
         showline=True,
         linewidth=1.5,
-        mirror=True,
+        mirror="all",
         linecolor="black",
         gridcolor="lightgrey",
         showgrid=True,
@@ -155,7 +156,7 @@ def Band_list(df, selected_r):
     return band_opt_out
 
 
-def Update_band_and_graph(df, selected_r, selected_b, scatt_range=None, histo_range=None):
+def Update_band_and_graph(df, selected_r, selected_b, type, scatt_range=None, histo_range=None):
     filtered_df = df[df["Band"].str.contains(selected_r)].reset_index(drop=True)
 
     if not filtered_df.empty:
@@ -176,27 +177,26 @@ def Update_band_and_graph(df, selected_r, selected_b, scatt_range=None, histo_ra
                     name=f"{i}",
                 )
             )
-            histo_fig.add_trace(
-                go.Histogram(
-                    x=df_Transposed[f"{i}"],
-                    showlegend=False,
-                    autobinx=False,
-                    xbins=dict(size=histo_range),
-                    opacity=0.75,
-                    name=f"{i}",
-                )
-            )
+            # histo_fig.add_trace(
+            #     go.Histogram(
+            #         x=df_Transposed[f"{i}"],
+            #         autobinx=False,
+            #         xbins=dict(size=histo_range),
+            #         opacity=0.75,
+            #         name=f"{i}",
+            #     )
+            # )
 
-        # histo_fig = ff.create_distplot(
-        #     [df_Transposed[c] for c in df_Transposed.columns],
-        #     df_Transposed.columns,
-        #     # show_hist=False,
-        #     show_curve=False,
-        #     # curve_type="normal",
-        #     show_rug=False,
-        #     histnorm="",
-        #     bin_size=1,
-        # )
+        histo_fig = ff.create_distplot(
+            [df_Transposed[c] for c in df_Transposed.columns],
+            df_Transposed.columns,
+            bin_size=histo_range,
+            curve_type="normal",
+            histnorm="",
+            # show_hist=False,
+            show_curve=False,
+            show_rug=True,
+        )
 
         scatt_fig.update_layout(
             title="Scatter Plot",
@@ -208,9 +208,8 @@ def Update_band_and_graph(df, selected_r, selected_b, scatt_range=None, histo_ra
             ),
         )
 
-        histo_fig.update_layout(title="Histogram", barmode="overlay")
+        histo_fig.update_layout(title="Histogram", showlegend=False, barmode="overlay")
         value = df_Transposed.values
-
         if (value.mean() == value.min()) or (value.max() == value.mean()):
             lsl = round(value.mean() - (12 * value.std()))
             usl = round(value.mean() + (12 * value.std()))
@@ -219,7 +218,11 @@ def Update_band_and_graph(df, selected_r, selected_b, scatt_range=None, histo_ra
             lsl = round(value.mean() - (12 * value.std() * Cpk))
             usl = round(value.mean() + (12 * value.std() * Cpk))
 
-        Update_axes(scatt_fig, scatt_range, None)
+        spec_range = 3
+        if type == "code":
+            Update_axes(scatt_fig, scatt_range, [(value.min() - spec_range * 100), (value.max() + spec_range * 100)])
+        else:
+            Update_axes(scatt_fig, scatt_range, [(value.min() - spec_range), (value.max() + spec_range)])
         Update_axes(histo_fig, [lsl, usl], None)
 
         return scatt_fig, histo_fig
@@ -236,11 +239,11 @@ def Drawing_pcc(
     if scatt_range2 is not None:
         cols_to_drop2 = df2[df2["Path"].str.contains("Tx2")].index
         selected_df2 = df2.drop(cols_to_drop2)
-        scatt_fig1, histo_fig1 = Update_band_and_graph(selected_df1, selected_r, selected_b, scatt_range1, histo_range1)
-        scatt_fig2, histo_fig2 = Update_band_and_graph(selected_df2, selected_r, selected_b, scatt_range2, histo_range2)
+        scatt_fig1, histo_fig1 = Update_band_and_graph(selected_df1, selected_r, selected_b, "meas", scatt_range1, histo_range1)
+        scatt_fig2, histo_fig2 = Update_band_and_graph(selected_df2, selected_r, selected_b, "code", scatt_range2, histo_range2)
         return scatt_fig1, histo_fig1, scatt_fig2, histo_fig2
     else:
-        scatt_fig, histo_fig = Update_band_and_graph(selected_df1, selected_r, selected_b, scatt_range1, histo_range1)
+        scatt_fig, histo_fig = Update_band_and_graph(selected_df1, selected_r, selected_b, "meas", scatt_range1, histo_range1)
         return scatt_fig, histo_fig
 
 
@@ -265,8 +268,8 @@ def Drawing_scc(
 
     if scatt_range2 is not None:
         selected_df2 = df2[df2["Path"].str.contains("Tx2")]
-        scatt_fig1, histo_fig1 = Update_band_and_graph(selected_df1, selected_r, selected_b, scatt_range1, histo_range1)
-        scatt_fig2, histo_fig2 = Update_band_and_graph(selected_df2, selected_r, selected_b, scatt_range2, histo_range2)
+        scatt_fig1, histo_fig1 = Update_band_and_graph(selected_df1, selected_r, selected_b, "meas", scatt_range1, histo_range1)
+        scatt_fig2, histo_fig2 = Update_band_and_graph(selected_df2, selected_r, selected_b, "code", scatt_range2, histo_range2)
         layout = html.Div(
             [
                 dbc.Row([dbc.Col(html.H2(f"{st1.upper()} SCC", className="display-7"), width="auto")]),
@@ -295,7 +298,7 @@ def Drawing_scc(
         )
         children.append(layout)
     else:
-        scatt_fig1, histo_fig1 = Update_band_and_graph(selected_df1, selected_r, selected_b, scatt_range1, histo_range1)
+        scatt_fig1, histo_fig1 = Update_band_and_graph(selected_df1, selected_r, selected_b, "meas", scatt_range1, histo_range1)
         layout = html.Div(
             [
                 dbc.Row([dbc.Col(html.H2(f"{st1.upper()} SCC", className="display-7"), width="auto")]),
@@ -554,7 +557,7 @@ def Initialize_cf(dict_cf, rat):
         ],
     )
     def update_txdc(selected_r, selected_b, scatt_range, histo_range):
-        scatter_fig, histogram_fig = Update_band_and_graph(df_txdc, selected_r, selected_b, scatt_range, histo_range)
+        scatter_fig, histogram_fig = Update_band_and_graph(df_txdc, selected_r, selected_b, "meas", scatt_range, histo_range)
         band_opt = Band_list(df_txdc, selected_r)
 
         return band_opt, scatter_fig, histogram_fig
@@ -578,7 +581,7 @@ def Initialize_cf(dict_cf, rat):
         ],
     )
     def update_iip2(selected_r, selected_b, scatt_range, histo_range):
-        scatter_fig, histogram_fig = Update_band_and_graph(df_iip2, selected_r, selected_b, scatt_range, histo_range)
+        scatter_fig, histogram_fig = Update_band_and_graph(df_iip2, selected_r, selected_b, "meas", scatt_range, histo_range)
         band_opt = Band_list(df_iip2, selected_r)
 
         return band_opt, scatter_fig, histogram_fig
@@ -602,7 +605,7 @@ def Initialize_cf(dict_cf, rat):
         ],
     )
     def update_cable(selected_r, selected_b, scatt_range, histo_range):
-        scatter_fig, histogram_fig = Update_band_and_graph(df_cable, selected_r, selected_b, scatt_range, histo_range)
+        scatter_fig, histogram_fig = Update_band_and_graph(df_cable, selected_r, selected_b, "meas", scatt_range, histo_range)
         band_opt = Band_list(df_cable, selected_r)
 
         return band_opt, scatter_fig, histogram_fig
