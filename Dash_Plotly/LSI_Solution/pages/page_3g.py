@@ -40,7 +40,7 @@ def Initialize_3g(dict_3g, rat):
     )
     def update_rx_gain(selected_r, selected_b, scatt_range, histo_range):
         scatter_fig, histogram_fig = Update_band_and_graph(
-            data_frame["rx_gain"], selected_r, selected_b, scatt_range, histo_range
+            data_frame["rx_gain"], selected_r, selected_b, "meas", scatt_range, histo_range
         )
         band_opt = Band_list(data_frame["rx_gain"], selected_r)
 
@@ -66,7 +66,7 @@ def Initialize_3g(dict_3g, rat):
     )
     def update_rx_comp(selected_r, selected_b, scatt_range, histo_range):
         scatter_fig, histogram_fig = Update_band_and_graph(
-            data_frame["rx_comp"], selected_r, selected_b, scatt_range, histo_range
+            data_frame["rx_comp"], selected_r, selected_b, "meas", scatt_range, histo_range
         )
         band_opt = Band_list(data_frame["rx_comp"], selected_r)
 
@@ -95,9 +95,11 @@ def Initialize_3g(dict_3g, rat):
         ],
     )
     def update_fbrx_gain(selected_r, selected_b, scatt_range, histo_range):
-        scatt_fig1, histo_fig1 = Update_band_and_graph(data_frame["fbrx_gm"], selected_r, selected_b, scatt_range)
-        scatt_fig2, histo_fig2 = Update_band_and_graph(data_frame["fbrx_gc"], selected_r, selected_b, None, histo_range)
         band_opt = Band_list(data_frame["fbrx_gm"], selected_r)
+        scatt_fig1, histo_fig1 = Update_band_and_graph(
+            data_frame["fbrx_gm"], selected_r, selected_b, "meas", scatt_range, histo_range
+        )
+        scatt_fig2, histo_fig2 = Update_band_and_graph(data_frame["fbrx_gc"], selected_r, selected_b, "code", None, histo_range)
 
         return band_opt, scatt_fig1, histo_fig1, scatt_fig2, histo_fig2
 
@@ -121,7 +123,7 @@ def Initialize_3g(dict_3g, rat):
     )
     def update_fbrx_freq(selected_r, selected_b, scatt_range, histo_range):
         scatter_fig, histogram_fig = Update_band_and_graph(
-            data_frame["fbrx_fm"], selected_r, selected_b, scatt_range, histo_range
+            data_frame["fbrx_fm"], selected_r, selected_b, "meas", scatt_range, histo_range
         )
         band_opt = Band_list(data_frame["fbrx_fm"], selected_r)
 
@@ -173,7 +175,7 @@ def Initialize_3g(dict_3g, rat):
     )
     def update_apt_meas(selected_r, selected_b, scatt_range, histo_range):
         scatter_fig, histogram_fig = Update_band_and_graph(
-            data_frame["apt_meas"], selected_r, selected_b, scatt_range, histo_range
+            data_frame["apt_meas"], selected_r, selected_b, "meas", scatt_range, histo_range
         )
         band_opt = Band_list(data_frame["apt_meas"], selected_r)
 
@@ -199,7 +201,7 @@ def Initialize_3g(dict_3g, rat):
     )
     def update_txp_cc(selected_r, selected_b, scatt_range, histo_range):
         scatter_fig, histogram_fig = Update_band_and_graph(
-            data_frame["txp_cc"], selected_r, selected_b, scatt_range, histo_range
+            data_frame["txp_cc"], selected_r, selected_b, "meas", scatt_range, histo_range
         )
         band_opt = Band_list(data_frame["txp_cc"], selected_r)
 
@@ -225,7 +227,7 @@ def Initialize_3g(dict_3g, rat):
     )
     def update_et_psat(selected_r, selected_b, scatt_range, histo_range):
         scatter_fig, histogram_fig = Update_band_and_graph(
-            data_frame["et_psat"], selected_r, selected_b, scatt_range, histo_range
+            data_frame["et_psat"], selected_r, selected_b, "meas", scatt_range, histo_range
         )
         band_opt = Band_list(data_frame["et_psat"], selected_r)
 
@@ -251,7 +253,7 @@ def Initialize_3g(dict_3g, rat):
     )
     def update_et_power(selected_r, selected_b, scatt_range, histo_range):
         scatter_fig, histogram_fig = Update_band_and_graph(
-            data_frame["et_power"], selected_r, selected_b, scatt_range, histo_range
+            data_frame["et_power"], selected_r, selected_b, "meas", scatt_range, histo_range
         )
         band_opt = Band_list(data_frame["et_power"], selected_r)
 
