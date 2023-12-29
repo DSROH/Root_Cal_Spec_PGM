@@ -250,7 +250,7 @@ def sub6_bwcal(line, band, BWCal_Spec, BW_Cal):
     return New_String
 
 
-def sub6_bw_cal_average(df_Meas, Save_data, text_area):
+def Sub6_bw_cal_ave(df_Meas, Save_data, text_area):
     df_bwcal = df_Meas[df_Meas["Test Conditions"].str.contains("CH_BW_").to_list()]
 
     if df_bwcal.empty:
@@ -259,12 +259,12 @@ def sub6_bw_cal_average(df_Meas, Save_data, text_area):
         df_bwcal_Value = df_bwcal.iloc[:, 1:].astype(float)
         df_bwcal_Item = df_bwcal["Test Conditions"].str.split("_", expand=True)
         # 의미없는 컬럼 삭제
-        df_bwcal_Item.drop(columns=[0, 3, 4, 5], inplace=True)
+        df_bwcal_Item.drop(columns=[2, 3], inplace=True)
         # groupby 실행을 위한 컬럼명 변경
-        df_bwcal_Item.columns = ["Band", "Path"]
+        df_bwcal_Item.columns = ["RAT", "Band", "Item", "BW"]
         df_bw_cal = pd.merge(df_bwcal_Item, df_bwcal_Value, left_index=True, right_index=True)
-        df_bw_cal_mean = round(df_bw_cal.groupby(["Band", "Path"], sort=False).mean(), 1)
-        # df_bw_cal_data = round(df_bw_cal.groupby(["Band", "Path"], sort=False).agg(["mean", "max", "min"]), 1)
+        df_bw_cal_mean = round(df_bw_cal.groupby(["RAT", "Band", "Item", "BW"], sort=False).mean(), 1)
+        # df_bw_cal_data = round(df_bw_cal.groupby(["RAT", "Band", "Item", "BW"], sort=False).agg(["mean", "max", "min"]), 1)
         df_bw_cal_mean = pd.concat([df_bw_cal_mean, round(df_bw_cal_mean.mean(axis=1), 1).rename("Average")], axis=1)
         df_bw_cal_mean = pd.concat([df_bw_cal_mean, round(df_bw_cal_mean.max(axis=1), 1).rename("Max")], axis=1)
         df_bw_cal_mean = pd.concat([df_bw_cal_mean, round(df_bw_cal_mean.min(axis=1), 1).rename("Min")], axis=1)
@@ -275,32 +275,27 @@ def sub6_bw_cal_average(df_Meas, Save_data, text_area):
                 df_bw_cal_mean.to_excel(writer, sheet_name="Sub6_BW_Cal_Mean")
             func.WB_Format(filename, 2, 3, 0, text_area)
 
+            df_bw_cal_mean.to_csv("CSV_BW_Cal.csv", encoding="utf-8-sig")
+
     return df_bw_cal_mean["Average"]
 
 
-def therm_average(df_Code, Save_data, text_area):
+def Therm_ave(df_Code, Save_data, text_area):
     df_Therm = df_Code[df_Code["Test Conditions"].str.contains("Thermistor ADC").to_list()]
 
     if df_Therm.empty:
         return pd.DataFrame()
     else:
         df_Therm_Value = df_Therm.iloc[:, 1:].astype(float)
-        df_Therm_Item = df_Therm["Test Conditions"].str.split("_", expand=True)
-        if len(df_Therm_Item.columns) == 4:  # Thermistor ADC 2 있을 경우 (TX2 지원)
-            df_Therm_Item.fillna("1", inplace=True)
-            # 의미없는 컬럼 삭제
-            df_Therm_Item.drop(columns=[0, 2], inplace=True)
-            df_Therm_Item.columns = ["Band", "Therm_CH"]
-            df_Therm_Item["Therm_CH"] = df_Therm_Item["Therm_CH"].str.replace(" ", "")
-        else:
-            df_Therm_Item.drop(columns=[0], inplace=True)
-            df_Therm_Item.columns = ["Band", "Therm_CH"]
-            df_Therm_Item["Therm_CH"] = df_Therm_Item["Therm_CH"].str.replace("Thermistor ADC", "1")
-            df_Therm_Item["Therm_CH"] = df_Therm_Item["Therm_CH"].str.replace(" ", "")
-
+        df_Therm_Item = df_Therm["Test Conditions"].str.split("_| ", expand=True)
+        df_Therm_Item.dropna(axis=1, inplace=True)
+        df_Therm_Item = df_Therm_Item.replace({2: {"Thermistor": "Therm"}})
+        df_Therm_Item = df_Therm_Item.replace({4: {"": "1"}})
+        df_Therm_Item.drop(columns=[3], inplace=True)
         # groupby 실행을 위한 컬럼명 변경
+        df_Therm_Item.columns = ["RAT", "Band", "Item", "CH"]
         df_Therm = pd.merge(df_Therm_Item, df_Therm_Value, left_index=True, right_index=True)
-        df_Therm_mean = round(df_Therm.groupby(["Band", "Therm_CH"], sort=False).mean())
+        df_Therm_mean = round(df_Therm.groupby(["RAT", "Band", "Item", "CH"], sort=False).mean())
         df_Therm_mean = pd.concat([df_Therm_mean, round(df_Therm_mean.mean(axis=1)).rename("Average")], axis=1)
         df_Therm_mean = pd.concat([df_Therm_mean, round(df_Therm_mean.max(axis=1)).rename("Max")], axis=1)
         df_Therm_mean = pd.concat([df_Therm_mean, round(df_Therm_mean.min(axis=1)).rename("Min")], axis=1)
@@ -310,5 +305,7 @@ def therm_average(df_Code, Save_data, text_area):
             with pd.ExcelWriter(filename) as writer:
                 df_Therm_mean.to_excel(writer, sheet_name="Thermistor_GPADC")
             func.WB_Format(filename, 2, 2, 0, text_area)
+
+            df_Therm_mean.to_csv("CSV_Thermistor.csv", encoding="utf-8-sig")
 
     return df_Therm_mean["Average"]
