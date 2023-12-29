@@ -37,7 +37,7 @@ def Initialize_2g(dict_2g, rat):
     )
     def update_rx_gain_2g(selected_r, selected_b, scatt_range, histo_range):
         scatter_fig, histogram_fig = Update_band_and_graph(
-            data_frame["rx_gain"], selected_r, selected_b, scatt_range, histo_range
+            data_frame["rx_gain"], selected_r, selected_b, "meas", scatt_range, histo_range
         )
         band_opt = Band_list(data_frame["rx_gain"], selected_r)
         return band_opt, scatter_fig, histogram_fig
@@ -62,7 +62,7 @@ def Initialize_2g(dict_2g, rat):
     )
     def update_rx_ripp_2g(selected_r, selected_b, scatt_range, histo_range):
         scatter_fig, histogram_fig = Update_band_and_graph(
-            data_frame["rx_ripp"], selected_r, selected_b, scatt_range, histo_range
+            data_frame["rx_ripp"], selected_r, selected_b, "meas", scatt_range, histo_range
         )
         band_opt = Band_list(data_frame["rx_ripp"], selected_r)
 
@@ -87,7 +87,9 @@ def Initialize_2g(dict_2g, rat):
         ],
     )
     def update_gmsk(selected_r, selected_b, scatt_range, histo_range):
-        scatter_fig, histogram_fig = Update_band_and_graph(data_frame["gmsk"], selected_r, selected_b, scatt_range, histo_range)
+        scatter_fig, histogram_fig = Update_band_and_graph(
+            data_frame["gmsk"], selected_r, selected_b, "meas", scatt_range, histo_range
+        )
         band_opt = Band_list(data_frame["gmsk"], selected_r)
 
         return band_opt, scatter_fig, histogram_fig
@@ -112,7 +114,7 @@ def Initialize_2g(dict_2g, rat):
     )
     def update_gmsk_txl(selected_r, selected_b, scatt_range, histo_range):
         scatter_fig, histogram_fig = Update_band_and_graph(
-            data_frame["gmsk_txl"], selected_r, selected_b, scatt_range, histo_range
+            data_frame["gmsk_txl"], selected_r, selected_b, "meas", scatt_range, histo_range
         )
         band_opt = Band_list(data_frame["gmsk_txl"], selected_r)
 
@@ -138,7 +140,7 @@ def Initialize_2g(dict_2g, rat):
     )
     def update_gmsk_code(selected_r, selected_b, scatt_range, histo_range):
         scatter_fig, histogram_fig = Update_band_and_graph(
-            data_frame["gmsk_code"], selected_r, selected_b, scatt_range, histo_range
+            data_frame["gmsk_code"], selected_r, selected_b, "meas", scatt_range, histo_range
         )
         band_opt = Band_list(data_frame["gmsk_code"], selected_r)
 
@@ -163,7 +165,9 @@ def Initialize_2g(dict_2g, rat):
         ],
     )
     def update_epsk(selected_r, selected_b, scatt_range, histo_range):
-        scatter_fig, histogram_fig = Update_band_and_graph(data_frame["epsk"], selected_r, selected_b, scatt_range, histo_range)
+        scatter_fig, histogram_fig = Update_band_and_graph(
+            data_frame["epsk"], selected_r, selected_b, "meas", scatt_range, histo_range
+        )
         band_opt = Band_list(data_frame["epsk"], selected_r)
 
         return band_opt, scatter_fig, histogram_fig
@@ -188,7 +192,7 @@ def Initialize_2g(dict_2g, rat):
     )
     def update_epsk_txl(selected_r, selected_b, scatt_range, histo_range):
         scatter_fig, histogram_fig = Update_band_and_graph(
-            data_frame["epsk_txl"], selected_r, selected_b, scatt_range, histo_range
+            data_frame["epsk_txl"], selected_r, selected_b, "meas", scatt_range, histo_range
         )
         band_opt = Band_list(data_frame["epsk_txl"], selected_r)
 
@@ -214,7 +218,7 @@ def Initialize_2g(dict_2g, rat):
     )
     def update_epsk_code(selected_r, selected_b, scatt_range, histo_range):
         scatter_fig, histogram_fig = Update_band_and_graph(
-            data_frame["epsk_code"], selected_r, selected_b, scatt_range, histo_range
+            data_frame["epsk_code"], selected_r, selected_b, "meas", scatt_range, histo_range
         )
         band_opt = Band_list(data_frame["epsk_code"], selected_r)
 
