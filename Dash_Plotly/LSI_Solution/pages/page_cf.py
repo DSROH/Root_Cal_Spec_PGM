@@ -142,17 +142,29 @@ def Update_axes(fig, x_range=None, y_range=None):
 
 
 def Initialize_band(selected_r, df):
-    filtered_df = df[df["Band"].str.contains(selected_r)].reset_index(drop=True)
+    # selected_r 값이 정확히 Band 열에 포함되는지 확인
+    filtered_df = df[df["Band"].str.contains(selected_r, case=False, na=False)].reset_index(drop=True)
+    
+    # 유니크한 밴드 값 리스트를 반환
     band_opt = filtered_df["Band"].unique()
-
+    
+    # 밴드 값이 있을 경우 첫 번째 값을 반환, 없으면 빈 문자열 반환
     return band_opt[0] if len(band_opt) > 0 else ""
 
 
 def Band_list(df, selected_r):
-    filtered_df = df[df["Band"].str.contains(selected_r)].reset_index(drop=True)
+    # selected_r 값이 정확히 Band 열에 포함되는지 확인
+    filtered_df = df[df["Band"].str.contains(selected_r, case=False, na=False)].reset_index(drop=True)
+    
+    # 밴드 값이 필터링된 결과로 유니크한 값을 반환
     band_opt = filtered_df["Band"].unique()
+    
+    # 디버깅: band_opt가 비어 있는지 확인
+    print(f"Filtered Bands for '{selected_r}': {band_opt}")
+    
+    # 유니크한 밴드 값을 반환하는 리스트로 변환
     band_opt_out = [{"label": i, "value": i} for i in band_opt]
-
+    
     return band_opt_out
 
 
@@ -541,6 +553,7 @@ def Initialize_cf(dict_cf, rat):
     # ** ================================= txdc Cal =================================
     @callback(Output("txdc_b", "value"), Input("txdc_r", "value"))
     def txdc(selected_r):
+        print(f"selected_r: {selected_r}")  # 디버깅
         return Initialize_band(selected_r, df_txdc)
 
     @callback(
