@@ -68,7 +68,7 @@ def Common_daseul_log(list_file):
     files = filedialog.askopenfilenames(
         title="Cal log 파일을 선택하세요",
         filetypes=(("CSV 파일", "*.csv"), ("모든 파일", "*.*")),
-        initialdir=r"C:\DGS\LOGS",
+        initialdir=r"C:\\DGS\\LOGS",
     )
     # 사용자가 선택한 파일 목록
     for file in files:
@@ -80,18 +80,18 @@ def Common_mtm_log(list_file):
     files = filedialog.askopenfilenames(
         title="MTM log 파일을 선택하세요",
         filetypes=(("CSV 파일", "*.csv"), ("모든 파일", "*.*")),
-        initialdir=(r"D:\\DATA\\Project_DATA\\@_S23_FE\\TOOL\\2_MTM Calibration\\SM-S711B_MTM3_3.76.02_20230411_4Rx_Enable"),
+        initialdir=r"D:\\DATA\\Project_DATA\\@_SM-S936B_S25\\TOOLS\\2_MTM_Calibration",
     )
     # 사용자가 선택한 파일 목록
     for file in files:
         list_file.insert(tk.END, file)
 
 
-def browse_spc_path(path_spc_file, daseul_select, text_area):
+def browse_spc_path(path_spc_file, text_area):
     spc_file_name = filedialog.askopenfilename(
         title="SPC 파일을 선택하세요",
         filetypes=(("SPC 파일", "*.dec"), ("모든 파일", "*.*")),
-        initialdir=r"D:\\DATA\\TOOLS\\@_Python\\Auto_Cal_Spec",
+        initialdir=r"C:\\DGS\\LOGS",
     )
 
     if spc_file_name == "":  # 사용자가 취소를 누를 때
@@ -101,13 +101,12 @@ def browse_spc_path(path_spc_file, daseul_select, text_area):
     # print(folder_selected)
     path_spc_file.delete(0, tk.END)
     path_spc_file.insert(0, spc_file_name)
-    daseul_select.set(True)
 
 
-def browse_mtm_path(mtm_spc_file, mtm_select, text_area):
+def browse_mtm_path(mtm_spc_file, text_area):
     mtm_folder_name = filedialog.askdirectory(
         title="MTM 폴더를 선택하세요",
-        initialdir=r"D:\\DATA\\Project_DATA\\@_S23_FE\\TOOL\\2_MTM Calibration\\SM-S711B_MTM3_3.76.02_20230411_4Rx_Enable",
+        initialdir=r"D:\\DATA\\Project_DATA\\@_SM-S936B_S25\\TOOLS\\2_MTM_Calibration",
     )
 
     if mtm_folder_name == "":  # 사용자가 취소를 누를 때
@@ -117,7 +116,6 @@ def browse_mtm_path(mtm_spc_file, mtm_select, text_area):
     # print(folder_selected)
     mtm_spc_file.delete(0, tk.END)
     mtm_spc_file.insert(0, mtm_folder_name)
-    mtm_select.set(True)
 
 
 def NR_channel_converter(band, channel):
