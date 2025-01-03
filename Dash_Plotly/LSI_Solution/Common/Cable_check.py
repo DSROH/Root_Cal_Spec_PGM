@@ -6,35 +6,61 @@ import pandas as pd
 import LSI_Solution.Common.Function as func
 
 
-def daseul_cable_average(df_Meas, Save_data, text_area):
-    df_CableCheck = df_Meas[df_Meas["Test Conditions"].str.contains("CableCheck_").to_list()]
-    df_CableCheck_Value = df_CableCheck.iloc[:, 1:].astype(float)
-    # New_String = re.split("[_=,\n]", line)
-    df_CableCheck_Item = df_CableCheck["Test Conditions"].str.split("_| |\[MHz]|CH", expand=True)
-    # 의미없는 컬럼 삭제
-    df_CableCheck_Item.drop(columns=[0, 5, 6, 7, 8, 9], inplace=True)
-    # groupby 실행을 위한 컬럼명 변경
-    df_CableCheck_Item.columns = ["RAT", "Band", "Path", "CH_MHz"]
-    df_CableCheck = pd.merge(df_CableCheck_Item, df_CableCheck_Value, left_index=True, right_index=True)
-    df_CableCheck_Mean = round(df_CableCheck.groupby(["RAT", "Band", "Path", "CH_MHz"]).mean(), 1)
+def Daseul_cable_ave(df_Meas, Save_data, text_area):
+    df_CableCheck = df_Meas[df_Meas["Test Conditions"].str.contains("CableCheck").to_list()]
+    if any(df_CableCheck["Test Conditions"].iloc[0:1].str.startswith("CableCheck")):
+        df_CableCheck_Value = df_CableCheck.iloc[:, 1:].astype(float)
+        df_CableCheck_Item = df_CableCheck["Test Conditions"].str.split(r"_| |\[MHz]|CH", expand=True)
+        # 의미없는 컬럼 삭제
+        df_CableCheck_Item.drop(columns=[0, 5, 6, 7, 8, 9], inplace=True)
+        # groupby 실행을 위한 컬럼명 변경
+        df_CableCheck_Item.columns = ["RAT", "Band", "Path", "CH_MHz"]
+        df_CableCheck = pd.merge(df_CableCheck_Item, df_CableCheck_Value, left_index=True, right_index=True)
+        df_CableCheck_Mean = round(df_CableCheck.groupby(["RAT", "Band", "Path", "CH_MHz"]).mean(), 1)
+        Old_V = True
+    else:
+        df_CableCheck_Value = df_CableCheck.iloc[:, 1:].astype(float)
+        df_CableCheck_Item = df_CableCheck["Test Conditions"].str.split(r"_|\[MHz]|CH", expand=True)
+        # 의미없는 컬럼 삭제
+        df_CableCheck_Item.drop(columns=[2, 4, 6], inplace=True)
+        # groupby 실행을 위한 컬럼명 변경
+        df_CableCheck_Item.columns = ["RAT", "Band", "CH_MHz", "Path"]
+        df_CableCheck = pd.merge(df_CableCheck_Item, df_CableCheck_Value, left_index=True, right_index=True)
+        df_CableCheck_Mean = round(df_CableCheck.groupby(["RAT", "Band", "Path", "CH_MHz"]).mean(), 1)
+        Old_V = False
 
-    df_CableCheck_Mean = pd.concat([df_CableCheck_Mean, round(df_CableCheck_Mean.mean(axis=1), 1).rename("Average")], axis=1)
+    df_CableCheck_Mean = pd.concat(
+        [
+            df_CableCheck_Mean,
+            round(df_CableCheck_Mean.mean(axis=1), 1).rename("Average"),
+        ],
+        axis=1,
+    )
     df_CableCheck_Mean = pd.concat([df_CableCheck_Mean, round(df_CableCheck_Mean.max(axis=1), 1).rename("Max")], axis=1)
     df_CableCheck_Mean = pd.concat([df_CableCheck_Mean, round(df_CableCheck_Mean.min(axis=1), 1).rename("Min")], axis=1)
     df_CableCheck_Mean = pd.concat(
-        [df_CableCheck_Mean, round((df_CableCheck_Mean["Max"] - df_CableCheck_Mean["Min"]).rename("Max-Min"), 1)], axis=1
+        [
+            df_CableCheck_Mean,
+            round(
+                (df_CableCheck_Mean["Max"] - df_CableCheck_Mean["Min"]).rename("Max-Min"),
+                1,
+            ),
+        ],
+        axis=1,
     )
 
     if Save_data:
         filename = "Excel_CableCheck.xlsx"
         with pd.ExcelWriter(filename) as writer:
             df_CableCheck_Mean.to_excel(writer, sheet_name="CableCheck")
-        func.WB_Format(filename, 2, 5, 0, text_area)
+        func.WB_Format(filename, 2, 3, 0, text_area)
+        # df_CableCheck_Mean.to_csv("CSV_CableCheck.csv", encoding="utf-8-sig")
 
-    return df_CableCheck_Mean["Average"]
+    return df_CableCheck_Mean, Old_V
 
 
-def chng_cable_spec(Selected_spc, CableCheck, Cable_Spec_var, text_area):
+def chng_cable_spec(Selected_spc, df_CableCheck, Cable_Spec_var, Old_Ver, text_area):
+    CableCheck = df_CableCheck["Average"]
     Cable_Spec = int(Cable_Spec_var.get())
     target_word = "[INSERT_RF_CABLE_CHECK]"
     new_text_content = ""
@@ -54,12 +80,22 @@ def chng_cable_spec(Selected_spc, CableCheck, Cable_Spec_var, text_area):
             New_String = Old_String = line
             Numofturn = re.split(f"Test Band|=|\n", line)[1]
             Test_Path = re.split(f"Test Band|=|\n", line)[2]
-            if Test_Path == "SUB6_RX":
-                path = "RX"
-            elif Test_Path == "SUB6_2TX":
-                path = "2TX"
+
+            if Old_Ver:
+                if Test_Path == "SUB6_RX":
+                    path = "RX"
+                elif Test_Path == "SUB6_2TX":
+                    path = "2TX"
+                else:
+                    path = "TX"
             else:
-                path = "TX"
+                if Test_Path == "SUB6_RX":
+                    path = "RX"
+                elif Test_Path == "SUB6_TX1CA1":
+                    path = "TX1 CA1"
+                else:
+                    path = "TX1"
+
             Test_Band = re.split(f"Band Number{Numofturn}=|\n", data_lines[index + 1])
             Test_Band = ",".join([v for v in Test_Band if v])
             Test_Freq = re.split(f"Test TxFreq{Numofturn}=|\n", data_lines[index + 2])
@@ -168,7 +204,8 @@ def chng_cable_spec_only(Selected_spc, Cable_Spec_var, text_area):
             New_String = [v for v in New_String if v]
             New_String[1] = str(round(Cable_mean + Cable_Spec, 1))
             text_area.insert(
-                tk.END, f"                              | UPPER_LIMIT : {float(UPPER_LIMIT):>5} \u2192 {New_String[1]:>5}\n\n"
+                tk.END,
+                f"                              | UPPER_LIMIT : {float(UPPER_LIMIT):>5} \u2192 {New_String[1]:>5}\n\n",
             )
             New_String = "=".join(New_String) + "\n"
             new_string = line.replace(Old_String, New_String)
